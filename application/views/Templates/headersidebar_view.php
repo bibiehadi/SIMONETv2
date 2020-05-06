@@ -287,7 +287,12 @@
 			<ul class="acc-menu">
 				<li class="nav-separator"><span>Explore</span></li>
 				<li><a href="<?php echo site_url('dashboard'); ?>"><i class="ti ti-dashboard"></i><span>Dashboard</span><span class="badge badge-teal">2</span></a></li>	
-				<li><a href="<?php echo site_url('survey'); ?>"><i class="ti ti-harddrive"></i><span>Survey</span></a>
+				<li><a href="javascript:;"><i class="ti ti-harddrive"></i><span>Hotspot</span></a>
+					<ul class="acc-menu">
+							<li><a href="<?php echo site_url('hotspot/userhotspot'); ?>">User Hotspot</a></li>
+							<li><a href="<?php echo site_url('hotspot/userprofile'); ?>">User Profile</a></li>
+							<li><a href="<?php echo site_url('hotspot/useractive'); ?>">User Active</a></li>
+						</ul>
 				</li>
 				<li><a href="<?php echo site_url('pasar'); ?>"><i class="ti ti-rss-alt"></i><span>Pasar</span></a>
 				</li>

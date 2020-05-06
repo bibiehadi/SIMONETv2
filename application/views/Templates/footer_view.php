@@ -124,7 +124,12 @@
 <!-- <script type="text/javascript" src="<?php echo base_url('') ?>assets/demo/demo-pickers.js"></script> -->
 <!-- End loading site level scripts -->
     
-    <!-- Load page level scripts -->
+<!-- Load page level scripts -->
+<script type="text/javascript" src="<?php echo base_url('') ?>assets/plugins/datatables/jquery.dataTables.js"></script>
+<script type="text/javascript" src="<?php echo base_url('') ?>assets/plugins/datatables/dataTables.bootstrap.js"></script>
+<script type="text/javascript" src="<?php echo base_url('') ?>assets/demo/demo-datatables.js"></script>
+
+
 <script>
 //$(document).ready(function(){
 //    $('.bootstrap-switch').switch();
