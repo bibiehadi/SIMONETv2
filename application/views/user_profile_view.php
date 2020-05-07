@@ -20,8 +20,8 @@
                                     </div>
                                     <div class="panel-body no-padding">
                                         <div class="col-md-12" style="padding: 15px">
-                                            <a class="btn btn-success pull-right" data-aksi="add" style="margin-left: 10px;"><i class="glyphicon glyphicon-plus"></i>Add</a>
-                                            <a class="btn btn-success pull-right" data-aksi="sync" href="javascript:;"><i class="glyphicon glyphicon-plus"></i>Resync</a>
+                                            <a class="btn btn-success pull-right" data-aksi="add" style="margin-left: 10px;"><i class="fa fa-plus"></i></a>
+                                            <a class="btn btn-success pull-right" data-aksi="sync" href="javascript:;"><i class="fa fa-refresh"></i> Refresh</a>
                                         </div>
                                         <table id="tb_profile" class="table table-striped table-bordered" cellspacing="0" width="100%">
                                             <thead>
@@ -77,7 +77,7 @@
                 </div>
                 <div class="form-group">
                     <label class="control-label">Status-AutoRefresh</label>
-                    <input type="input" name="autorefresh" class="form-control" placeholder='example : 1d 1h12m12s'>
+                    <input type="input" name="status" class="form-control" placeholder='example : 1d 1h12m12s'>
                 </div>
                 <div class="form-group">
                     <label class="control-label">Shared-Users</label>
@@ -85,10 +85,10 @@
                 </div>
                 <div class="form-group">
                     <label class="control-label">Add-Mac-Cookie</label>
-                    <select name="pasar" id="selector2" class="form-control">
+                    <select name="cookie" id="selector2" class="form-control">
                         <option value="">--- Select ---</option>
-                        <option value="true">True</option>
-                        <option value="false">False</option>
+                        <option value="yes">True</option>
+                        <option value="no">False</option>
                     </select>
                 </div>
                 <div class="form-group">
@@ -135,6 +135,11 @@
         addProfile();
     })
     
+    $('body').on('click','a[data-aksi="edit"]',function(){
+        var id= $(this).attr('data-id');
+        editProfile(id);
+    })
+
     $('body').on('click','a[data-aksi="sync"]',function(){
         syncProfile();
     })
@@ -145,26 +150,92 @@
     });
 
     function addProfile(){
-        // save_method= 'add';
+        save_method= 'add';
         $('#form')[0].reset();
         $('.form-group').removeClass('has-error');
         $('.help-block').empty();
         $('#modal_form').modal('show');
-        // $('.modal-title').text('Add Data Pasar');
+        $('.modal-title').text('Add User Profile');
+    }
+
+    function editProfile(id){
+        save_method = 'update';
+        var data = {id : id};
+        $('#form')[0].reset();
+        $('.form-group').removeClass('has-error');
+        $('.help-block').empty(); 
+
+
+        $.post('<?php echo site_url('hotspot/getUserProfileByID/') ?>',data,function(respon){
+            if(respon){
+                $('[name="id"]').val(respon.id);
+                $('[name="name"]').val(respon.name);
+                $('[name="session"]').val(respon.session_timeout);
+                $('[name="status"]').val(respon.status_autorefresh);
+                $('[name="shared"]').val(respon.shared_users);
+                if(respon.add_mac_cookie){
+                    $('[name="cookie"]').val('yes');
+                }else{
+                    $('[name="cookie"]').val('no');
+                }
+                $('[name="limit"]').val(respon.rate_limit);
+                $('#modal_form').modal('show');
+                $('.modal-title').text('Edit User Profile');
+            }
+            else{ alert('error delete this data');
+            }
+        },'json').fail(function(){
+            alert('error get data form ajax');
+        })
     }
 
     function syncProfile(){
-            $.ajax({
-                url: "<?php echo site_url('hotspot/syncUserProfile/') ?>",
-                type: "POST",
-                dataType: "JSON",
-                success: function(data){
-                    reload_table();
-                },
-                error: function (jqXHR, textStatus, errorThrown){
-                    alert('Error!!');
+        $.ajax({
+            url: "<?php echo site_url('hotspot/syncUserProfile/') ?>",
+            type: "POST",
+            dataType: "JSON",
+            success: function(data){
+                reload_table();
+            },
+            error: function (jqXHR, textStatus, errorThrown){
+                alert('Error!!');
+            }
+        })
+    }
+
+    function save(){
+        $('#btnSave').text('saving...'); //change button text
+        $('#btnSave').attr('disabled',true); //set button disable 
+        var url;
+    
+        if(save_method == 'add') {
+            url = "<?php echo site_url('hotspot/adduserprofile')?>";
+        } else {
+            url = "<?php echo site_url('hotspot/setuserprofile')?>";
+        }
+
+        $.ajax({
+            url : url,
+            type: "POST",
+            data: $('#form').serialize(),
+            dataType: "JSON",
+            success: function(data)
+            {
+                if(data.status) 
+                {
+                    $('#modal_form').modal('hide');
+                    syncProfile();
                 }
-            })
+                $('#btnSave').text('save'); 
+                $('#btnSave').attr('disabled',false); 
+            },
+            error: function (jqXHR, textStatus, errorThrown)
+            {
+                alert('Gagal menyimpan user profile');
+                $('#btnSave').text('save'); 
+                $('#btnSave').attr('disabled',false); 
+            }
+        });
     }
 
     function deleteUser(id){

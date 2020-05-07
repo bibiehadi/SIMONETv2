@@ -22,7 +22,8 @@ class Hotspot extends CI_Controller {
     }
 
     public function userHotspot(){
-        $this->load->view('user_hotspot_view');
+        $data['profile'] = $data = $this->hotspot->getuserprofile();
+        $this->load->view('user_hotspot_view',$data);
     }
 
     function userHotspotJSON(){
@@ -85,7 +86,8 @@ class Hotspot extends CI_Controller {
         $data = $this->hotspot->getuserprofile();
         $_data = array();
             foreach($data as $r){
-                $r['aksi'] = "<a href='javascript:;' data-aksi='hapus' data-id='".$r['id']."'><i class='fa fa-trash-o'></i></a>";
+                $r['aksi'] = "<a href='javascript:;' data-aksi='edit' data-id='".$r['id']."'><i class='fa fa-pencil-square-o'></i></a>
+                <a href='javascript:;' data-aksi='hapus' data-id='".$r['id']."'><i class='fa fa-trash-o'></i></a>";
                 $_data[] = $r;
             }
         $output = array(
@@ -95,15 +97,70 @@ class Hotspot extends CI_Controller {
         echo json_encode($output);
     }
 
-    function addUserProfile(){
+    function getUserProfileByID(){
+        $id = $this->input->post('id');
+        $data = $this->hotspot->getuserprofilebyid(array('id'=> $id));
+        if($data){
+            echo json_encode($data);
+        }
+    }
+
+    function setUserProfile(){
+        $data = array(
+            'id' => $this->input->post('id'),
+            'name' => $this->input->post('name'),
+            'session_timeout' => $this->input->post('session'),
+            'status_autorefresh' => $this->input->post('status'),
+            'shared_users' => $this->input->post('shared'),
+            'add_mac_cookie' => $this->input->post('cookie'),
+            'rate_limit' => $this->input->post('limit')
+        );
         try{
             $api = $this->routerosapi;
             if($api->connect("192.168.10.1","api","stikimonitor","62148")){
-                $api->write('/ip/hotspot/user/profile/print');
-			    // $api->write('=.id=', '*C');
+                $api->write('/ip/hotspot/user/profile/set',false);
+			    $api->write('=.id='.$data['id'],false);
+			    $api->write('=name='.$data['name'], false );
+			    $api->write('=session-timeout='.$data['session_timeout'], false );
+			    $api->write('=status-autorefresh='.$data['status_autorefresh'], false );
+			    $api->write('=shared-users='.$data['shared_users'], false );
+			    $api->write('=add-mac-cookie='.$data['add_mac_cookie'], false );
+			    $api->write('=rate-limit='.$data['rate_limit']);
                 $write = $api->read();
                 $api->disconnect();
-                echo json_encode($write);
+                echo json_encode(array("status" => TRUE));
+            }else{
+                echo json_encode(array("status" => FALSE));
+            }
+        }catch(exeption $e){
+            echo $e;
+        }
+    }
+
+    function addUserProfile(){
+        $data = array(
+            'name' => $this->input->post('name'),
+            'session_timeout' => $this->input->post('session'),
+            'status_autorefresh' => $this->input->post('status'),
+            'shared_users' => $this->input->post('shared'),
+            'add_mac_cookie' => $this->input->post('cookie'),
+            'rate_limit' => $this->input->post('limit')
+        );
+        try{
+            $api = $this->routerosapi;
+            if($api->connect("192.168.10.1","api","stikimonitor","62148")){
+                $api->write('/ip/hotspot/user/profile/add',false);
+			    $api->write('=name='.$data['name'], false );
+			    $api->write('=session-timeout='.$data['session_timeout'], false );
+			    $api->write('=status-autorefresh='.$data['status_autorefresh'], false );
+			    $api->write('=shared-users='.$data['shared_users'], false );
+			    $api->write('=add-mac-cookie='.$data['add_mac_cookie'], false );
+			    $api->write('=rate-limit='.$data['rate_limit']);
+                $write = $api->read();
+                $api->disconnect();
+                echo json_encode(array("status" => TRUE, "data" => $data));
+            }else{
+                echo json_encode(array("status" => FALSE));
             }
         }catch(exeption $e){
             echo $e;

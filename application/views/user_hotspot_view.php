@@ -69,31 +69,20 @@
                 <input type="hidden" value="" name="id"/> 
                 <div class="form-group">
                     <label class="control-label">Name</label>
-                    <input type="input" name="name" class="form-control" placeholder='User Profile Name' require>
+                    <input type="input" name="name" class="form-control" placeholder='User Hotspot Name' required>
                 </div>
                 <div class="form-group">
-                    <label class="control-label">Session-Timeout</label>
-                    <input type="input" name="session" class="form-control" placeholder='example : 1d 1h12m12s'>
+                    <label class="control-label">Password</label>
+                    <input type="password" name="password" class="form-control" placeholder='Enter the password' required>
                 </div>
                 <div class="form-group">
-                    <label class="control-label">Status-AutoRefresh</label>
-                    <input type="input" name="autorefresh" class="form-control" placeholder='example : 1d 1h12m12s'>
-                </div>
-                <div class="form-group">
-                    <label class="control-label">Shared-Users</label>
-                    <input type="input" name="shared" class="form-control" placeholder=''>
-                </div>
-                <div class="form-group">
-                    <label class="control-label">Add-Mac-Cookie</label>
-                    <select name="pasar" id="selector2" class="form-control">
+                    <label class="control-label">Profile</label>
+                    <select name="profile" id="selector2" class="form-control">
                         <option value="">--- Select ---</option>
-                        <option value="true">True</option>
-                        <option value="false">False</option>
+                        <?php foreach ($profile as $row) : ?>
+                            <option value="<?php echo $row['name']; ?>"><?php echo $row['name'];?></option>
+                        <?php endforeach; ?>
                     </select>
-                </div>
-                <div class="form-group">
-                    <label class="control-label">Rate-Limit</label>
-                    <input type="input" name="limit" class="form-control" placeholder='5M/5M'>
                 </div>
             </form>
             </div>

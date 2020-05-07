@@ -40,6 +40,20 @@ class Hotspot_Model extends CI_Model {
 		}
     }
 
+    function getUserProfileByID($id){
+        $this->db->where($id);
+        if($data = $this->db->get('user_profile')){
+			return $data->row();
+		}else{
+			return false;
+		}
+    }
+
+    function addUserProfile($data){
+        $this->db->insert('user_profile', $data);
+        return $this->db->insert_id();
+    }
+    
     function delUserProfile($id){
         $this->db->delete('user_profile',array('id' => $id));
         
