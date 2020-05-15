@@ -18,7 +18,6 @@
 
     <link type="text/css" href="<?php echo base_url('') ?>assets/plugins/codeprettifier/prettify.css" rel="stylesheet">                <!-- Code Prettifier -->
     <link type="text/css" href="<?php echo base_url('') ?>assets/plugins/iCheck/skins/minimal/blue.css" rel="stylesheet">              <!-- iCheck -->
-
     <!--[if lt IE 10]>
         <script type="text/javascript" src="assets/js/media.match.min.js"></script>
         <script type="text/javascript" src="assets/js/respond.min.js"></script>
@@ -26,9 +25,12 @@
     <![endif]-->
     <!-- The following CSS are included as plugins and can be removed if unused-->
     
-<link type="text/css" href="<?php echo base_url('') ?>assets/plugins/fullcalendar/fullcalendar.css" rel="stylesheet"> 						<!-- FullCalendar -->
-<link type="text/css" href="<?php echo base_url('') ?>assets/plugins/jvectormap/jquery-jvectormap-2.0.2.css" rel="stylesheet"> 			<!-- jVectorMap -->
-<link type="text/css" href="<?php echo base_url('') ?>assets/plugins/switchery/switchery.css" rel="stylesheet">   							<!-- Switchery -->
+	<link type="text/css" href="<?php echo base_url('') ?>assets/plugins/fullcalendar/fullcalendar.css" rel="stylesheet"> 						<!-- FullCalendar -->
+	<link type="text/css" href="<?php echo base_url('') ?>assets/plugins/jvectormap/jquery-jvectormap-2.0.2.css" rel="stylesheet"> 			<!-- jVectorMap -->
+	<link type="text/css" href="<?php echo base_url('') ?>assets/plugins/switchery/switchery.css" rel="stylesheet">   							<!-- Switchery -->
+	<link rel="stylesheet" href="<?php echo base_url('') ?>assets/plugins/datatables/dataTables.bootstrap.css">
+	<link rel="stylesheet" href="<?php echo base_url('') ?>assets/plugins/datatables/dataTables.css">
+	<link type="text/css" href="<?php echo base_url('') ?>assets/plugins/progress-skylo/skylo.css" rel="stylesheet">
     </head>
 
     <body class="animated-content">
@@ -45,35 +47,9 @@
 		</span>
 		
 		<a class="navbar-brand" href="<?php echo site_url() ?>"></a>
-
-		<div class="toolbar-icon-bg hidden-xs" id="toolbar-search">
-            <div class="input-group">
-            	<span class="input-group-btn"><button class="btn" type="button"><i class="ti ti-search"></i></button></span>
-				<input type="text" class="form-control" placeholder="Search...">
-				<span class="input-group-btn"><button class="btn" type="button"><i class="ti ti-close"></i></button></span>
-			</div>
-        </div>
-
 	</div><!-- logo-area -->
 
 	<ul class="nav navbar-nav toolbar pull-right">
-
-		<li class="toolbar-icon-bg visible-xs-block" id="trigger-toolbar-search">
-			<a href="#"><span class="icon-bg"><i class="ti ti-search"></i></span></a>
-		</li>
-        
-		<li class="toolbar-icon-bg hidden-xs">
-            <a href="#"><span class="icon-bg"><i class="ti ti-world"></i></span></i></a>
-        </li>
-
-        <li class="toolbar-icon-bg hidden-xs">
-            <a href="#"><span class="icon-bg"><i class="ti ti-view-grid"></i></span></i></a>
-        </li>
-
-        <li class="toolbar-icon-bg hidden-xs" id="trigger-fullscreen">
-            <a href="#" class="toggle-fullscreen"><span class="icon-bg"><i class="ti ti-fullscreen"></i></span></i></a>
-        </li>
-
         <li class="dropdown toolbar-icon-bg hidden-xs">
 			<a href="#" class="hasnotifications dropdown-toggle" data-toggle='dropdown'><span class="icon-bg"><i class="ti ti-email"></i></span><span
 			class="badge badge-deeporange">2</span></a>

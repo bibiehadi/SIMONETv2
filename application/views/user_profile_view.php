@@ -16,13 +16,12 @@
                                     <div class="panel-heading">
                                         <h2>Data User Profile</h2>
                                         <div class="panel-ctrls"></div>
-                                        
-                                    </div>
-                                    <div class="panel-body no-padding">
                                         <div class="col-md-12" style="padding: 15px">
                                             <a class="btn btn-success pull-right" data-aksi="add" style="margin-left: 10px;"><i class="fa fa-plus"></i></a>
-                                            <a class="btn btn-success pull-right" data-aksi="sync" href="javascript:;"><i class="fa fa-refresh"></i> Refresh</a>
+                                            <a class="btn btn-info pull-right" data-aksi="sync" href="javascript:;"><i class="fa fa-refresh"></i> Refresh</a>
                                         </div>
+                                    </div>
+                                    <div class="panel-body no-padding">
                                         <table id="tb_profile" class="table table-striped table-bordered" cellspacing="0" width="100%">
                                             <thead>
                                                 <tr>
@@ -65,35 +64,47 @@
                 <h4 class="modal-title" id="modal-title">Add User Profile</h4>
             </div>
             <div class="modal-body form">
-            <form id="form" action="＃" method="post">
+            <form id="form" action="＃" method="post" class="form-horizontal row-border">
                 <input type="hidden" value="" name="id"/> 
                 <div class="form-group">
-                    <label class="control-label">Name</label>
-                    <input type="input" name="name" class="form-control" placeholder='User Profile Name' require>
+                    <label class="col-sm-3 control-label">Name</label>
+                    <div class="col-sm-7">
+                        <input type="input" name="name" class="form-control" placeholder='User Profile Name' require>
+                    </div>
                 </div>
                 <div class="form-group">
-                    <label class="control-label">Session-Timeout</label>
-                    <input type="input" name="session" class="form-control" placeholder='example : 1d 1h12m12s'>
+                    <label class="col-sm-3 control-label">Session-Timeout</label>
+                    <div class="col-sm-7">
+                        <input type="input" name="session" class="form-control" placeholder='example : 1d 1h12m12s'>
+                    </div>
                 </div>
                 <div class="form-group">
-                    <label class="control-label">Status-AutoRefresh</label>
-                    <input type="input" name="status" class="form-control" placeholder='example : 1d 1h12m12s'>
+                    <label class="col-sm-3 control-label">Status-Autorefresh</label>
+                    <div class="col-sm-7">
+                        <input type="input" name="status" class="form-control" placeholder='example : 1d 1h12m12s'>
+                    </div>
                 </div>
                 <div class="form-group">
-                    <label class="control-label">Shared-Users</label>
-                    <input type="input" name="shared" class="form-control" placeholder=''>
+                    <label class="col-sm-3 control-label">Shared-Users</label>
+                    <div class="col-sm-7">
+                        <input type="input" name="shared" class="form-control" placeholder=''>
+                    </div>
                 </div>
                 <div class="form-group">
-                    <label class="control-label">Add-Mac-Cookie</label>
-                    <select name="cookie" id="selector2" class="form-control">
-                        <option value="">--- Select ---</option>
-                        <option value="yes">True</option>
-                        <option value="no">False</option>
-                    </select>
+                    <label class="col-sm-3 control-label">Add-Mac-Cookie</label>
+                    <div class="col-sm-7">
+                        <select name="cookie" id="selector2" class="form-control">
+                            <option value="">--- Select ---</option>
+                            <option value="yes">True</option>
+                            <option value="no">False</option>
+                        </select>
+                    </div>
                 </div>
                 <div class="form-group">
-                    <label class="control-label">Rate-Limit</label>
-                    <input type="input" name="limit" class="form-control" placeholder='5M/5M'>
+                    <label class="col-sm-3 control-label">Rate-Limit</label>
+                    <div class="col-sm-7">
+                        <input type="input" name="limit" class="form-control" placeholder='5M/5M'>
+                    </div>
                 </div>
             </form>
             </div>
@@ -118,6 +129,7 @@
             "url" : "<?php echo site_url('hotspot/userprofileJSON')?>",
             "type" : "POST"
             // "dataSrc" : ""
+            
         },
         "columns" : [
             // {"data" : "id"},
@@ -190,11 +202,13 @@
     }
 
     function syncProfile(){
+        $.skylo('start');
         $.ajax({
             url: "<?php echo site_url('hotspot/syncUserProfile/') ?>",
             type: "POST",
             dataType: "JSON",
             success: function(data){
+                $.skylo('end');
                 reload_table();
             },
             error: function (jqXHR, textStatus, errorThrown){

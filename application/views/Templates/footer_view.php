@@ -84,8 +84,8 @@
 
 <!-- Load site level scripts -->
 
-<!-- <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
-<script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.9.2/jquery-ui.min.js"></script> -->
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+<script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.9.2/jquery-ui.min.js"></script>
 
 <script type="text/javascript" src="<?php echo base_url('') ?>assets/js/jquery-1.10.2.min.js"></script> 							<!-- Load jQuery -->
 <script type="text/javascript" src="<?php echo base_url('') ?>assets/js/jqueryui-1.10.3.min.js"></script> 							<!-- Load jQueryUI -->
@@ -112,11 +112,8 @@
 <script type="text/javascript" src="<?php echo base_url('') ?>assets/plugins/form-daterangepicker/moment.min.js"></script>              			<!-- Moment.js for Date Range Picker -->
 
 <script type="text/javascript" src="<?php echo base_url('') ?>assets/plugins/form-colorpicker/js/bootstrap-colorpicker.min.js"></script> 			<!-- Color Picker -->
-
-<!-- <script type="text/javascript" src="<?php echo base_url('') ?>assets/plugins/form-daterangepicker/daterangepicker.js"></script>     				Date Range Picker -->
 <script type="text/javascript" src="<?php echo base_url('') ?>assets/plugins/bootstrap-datepicker/bootstrap-datepicker.js"></script>      			<!-- Datepicker -->
 <script type="text/javascript" src="<?php echo base_url('') ?>assets/plugins/bootstrap-timepicker/bootstrap-timepicker.js"></script>      			<!-- Timepicker -->
-<!-- <script type="text/javascript" src="<?php echo base_url('') ?>assets/plugins/bootstrap-datetimepicker/js/bootstrap-datetimepicker.js"></script> DateTime Picker -->
 
 <!-- <script type="text/javascript" src="<?php echo base_url('') ?>assets/plugins/clockface/js/clockface.js"></script>     								Clockface -->
 
@@ -128,7 +125,7 @@
 <script type="text/javascript" src="<?php echo base_url('') ?>assets/plugins/datatables/jquery.dataTables.js"></script>
 <script type="text/javascript" src="<?php echo base_url('') ?>assets/plugins/datatables/dataTables.bootstrap.js"></script>
 <script type="text/javascript" src="<?php echo base_url('') ?>assets/demo/demo-datatables.js"></script>
-
+<script type="text/javascript" src="<?php echo base_url('') ?>assets/plugins/progress-skylo/skylo.js"></script>
 
 <script>
 //$(document).ready(function(){

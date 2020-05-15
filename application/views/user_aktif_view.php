@@ -5,8 +5,8 @@
         <div class="static-content">
             <div class="page-content">
                 <ol class="breadcrumb">
-                    <li><a href="index.html">Dashboard</a></li>
-                    <li class="active"><a href="#">Pasar</a></li>
+                    <li><a href="#">Hotspot</a></li>
+                    <li class="active"><a href="#">User Active</a></li>
                 </ol>
                 <div class="container-fluid">
                     <div data-widget-group="group1">
@@ -14,13 +14,13 @@
                             <div class="col-md-12">
                                 <div class="panel panel-default">
                                     <div class="panel-heading">
-                                        <h2>Data Tables</h2>
+                                        <h2>Data User Active</h2>
                                         <div class="panel-ctrls"></div>
+                                        <div class="col-sm-12" style="padding: 10px">
+                                            <a class="btn btn-info pull-right" data-aksi="reload" href="javascript:;"><i class="fa fa-refresh"></i></a>
+                                        </div>
                                     </div>
                                     <div class="panel-body no-padding">
-                                        <div class="col-md-12" style="padding: 15px">
-                                            <a class="btn btn-success pull-right" data-aksi="reload" href="javascript:;"><i class="glyphicon glyphicon-plus"></i>Reload</a>
-                                        </div>
                                         <table id="tb_aktif" class="table table-striped table-bordered" cellspacing="0" width="100%">
                                             <thead>
                                                 <tr>
@@ -104,7 +104,9 @@
     }
 
     function reload_table(){
+        $.skylo('start');
         table.ajax.reload(null,false);
+        $.skylo('end');
     }
 </script>
 

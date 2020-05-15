@@ -5,8 +5,8 @@
         <div class="static-content">
             <div class="page-content">
                 <ol class="breadcrumb">
-                    <li><a href="index.html">Dashboard</a></li>
-                    <li class="active"><a href="#">Pasar</a></li>
+                    <li><a href="index.html">Hotspot</a></li>
+                    <li class="active"><a href="#">User Hotspot</a></li>
                 </ol>
                 <div class="container-fluid">
                     <div data-widget-group="group1">
@@ -17,8 +17,8 @@
                                         <h2>Data User Hotspot</h2>
                                         <div class="panel-ctrls"></div>
                                         <div class="col-md-12" style="padding: 15px">
-                                            <a class="btn btn-success pull-right" data-aksi="add" style="margin-left: 10px;" href="javasript:;"><i class="glyphicon glyphicon-plus"></i>Add</a>
-                                            <a class="btn btn-success pull-right" data-aksi="sync" href="javascript:;"><i class="glyphicon glyphicon-plus"></i>Resync</a>
+                                        <a class="btn btn-success pull-right" data-aksi="add" style="margin-left: 10px;"><i class="fa fa-plus"></i></a>
+                                            <a class="btn btn-info pull-right" data-aksi="sync" href="javascript:;"><i class="fa fa-refresh"></i> Refresh</a>
                                         </div>
                                     </div>
                                     <div class="panel-body no-padding">
@@ -65,24 +65,31 @@
                 <h4 class="modal-title" id="modal-title">Add User Profile</h4>
             </div>
             <div class="modal-body form">
-            <form id="form" action="＃" method="post">
+            <form id="form" action="＃" method="post" class="form-horizontal row-border">
                 <input type="hidden" value="" name="id"/> 
+               
                 <div class="form-group">
-                    <label class="control-label">Name</label>
-                    <input type="input" name="name" class="form-control" placeholder='User Hotspot Name' required>
+                    <label class="col-sm-2 control-label">Name</label>
+                    <div class="col-sm-8">
+                        <input type="input" name="name" class="form-control" placeholder='User Hotspot Name' required>
+                    </div>
                 </div>
                 <div class="form-group">
-                    <label class="control-label">Password</label>
-                    <input type="password" name="password" class="form-control" placeholder='Enter the password' required>
+                    <label class="col-sm-2 control-label">Password</label>
+                    <div class="col-sm-8">
+                        <input type="password" name="password" class="form-control" placeholder='Enter the password' required>
+                    </div>
                 </div>
                 <div class="form-group">
-                    <label class="control-label">Profile</label>
-                    <select name="profile" id="selector2" class="form-control">
-                        <option value="">--- Select ---</option>
-                        <?php foreach ($profile as $row) : ?>
-                            <option value="<?php echo $row['name']; ?>"><?php echo $row['name'];?></option>
-                        <?php endforeach; ?>
-                    </select>
+                    <label class="col-sm-2 control-label">Name</label>
+                    <div class="col-sm-8">
+                        <select name="profile" id="selector2" class="form-control">
+                            <option value="">--- Select ---</option>
+                            <?php foreach ($profile as $row) : ?>
+                                <option value="<?php echo $row['name']; ?>"><?php echo $row['name'];?></option>
+                            <?php endforeach; ?>
+                        </select>
+                    </div>
                 </div>
             </form>
             </div>
@@ -101,6 +108,7 @@
     table = $('#tb_hotspot').DataTable({
         // "processing" : true,
         // "serverSide" : true,
+        "responsive" : true,
         // "order" : [],
         "ajax" : {
             "url" : "<?php echo site_url('hotspot/userhotspotJSON')?>",
@@ -132,22 +140,73 @@
         syncProfile();
     });
 
+    $('table#tb_hotspot').on('click','tbody tr',function(){
+        var username = $(this).find('td:eq(0)').html();
+        var res = username.split("@",1);
+        // location.href='<?php echo site_url('hotspot/userhotspotdetail')?>/'+res;
+        
+        // var id= $(this).attr('data-id');
+        var url = '<?php echo site_url('hotspot/userhotspotdetail')?>';
+        var form = $('<form action="' + url + '" method="post">' +
+        '<input type="hidden" name="name" value="'+username+'" />' +
+        '</form>');
+        $('body').append(form);
+        form.submit();
+    })
+
     function addUser(){
-        // save_method= 'add';
+        save_method= 'add';
         $('#form')[0].reset();
         $('.form-group').removeClass('has-error');
         $('.help-block').empty();
         $('#modal_form').modal('show');
-        // $('.modal-title').text('Add Data Pasar');
+        $('.modal-title').text('Add User Profile');
+    }
+
+    function save(){
+        $('#btnSave').text('saving...'); //change button text
+        $('#btnSave').attr('disabled',true); //set button disable 
+        var url;
+    
+        if(save_method == 'add') {
+            url = "<?php echo site_url('hotspot/adduserhotspot')?>";
+        } else {
+            url = "<?php echo site_url('hotspot/setuserhotspot')?>";
+        }
+
+        $.ajax({
+            url : url,
+            type: "POST",
+            data: $('#form').serialize(),
+            dataType: "JSON",
+            success: function(data)
+            {
+                if(data.status) 
+                {
+                    $('#modal_form').modal('hide');
+                    syncProfile();
+                }
+                $('#btnSave').text('save'); 
+                $('#btnSave').attr('disabled',false); 
+            },
+            error: function (jqXHR, textStatus, errorThrown)
+            {
+                alert('Gagal menyimpan user profile');
+                $('#btnSave').text('save'); 
+                $('#btnSave').attr('disabled',false); 
+            }
+        });
     }
 
     function syncProfile(){
+            $.skylo('start');
             $.ajax({
                 url: "<?php echo site_url('hotspot/syncUserHotspot/') ?>",
                 type: "POST",
                 dataType: "JSON",
                 success: function(data){
                     reload_table();
+                    $.skylo('end');
                 },
                 error: function (jqXHR, textStatus, errorThrown){
                     alert('Error!!');

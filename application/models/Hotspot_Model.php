@@ -11,6 +11,24 @@ class Hotspot_Model extends CI_Model {
 		}
     }
 
+    function getUserHotspotByName($name){
+        $this->db->where($name);
+        if($data = $this->db->get('user_hotspot')){
+			return $data->row_array();
+		}else{
+			return false;
+		}
+    }
+
+    function getUserHotspotByID($id){
+        $this->db->like($id);
+        if($data = $this->db->get('user_hotspot')){
+			return $data->row();
+		}else{
+			return false;
+		}
+    }
+
     function delUserHotspot($id){
         $this->db->delete('user_hotspot',array('id' => $id));
         

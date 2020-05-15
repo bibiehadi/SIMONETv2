@@ -22,17 +22,30 @@ class Hotspot extends CI_Controller {
     }
 
     public function userHotspot(){
+        // function untuk menampilkan halaman user hotspot
         $data['profile'] = $data = $this->hotspot->getuserprofile();
         $this->load->view('user_hotspot_view',$data);
     }
 
+    public function userHotspotDetail()
+    {
+        // function untuk menampilkan halaman detail user hotspot 
+        $name = $this->input->post('name');
+        $user = $this->hotspot->getuserhotspotbyname(array('name'=> $name));
+        $data1['profile_all'] = $data = $this->hotspot->getuserprofile();
+        $data = array_merge($user,$data1);
+        $this->load->view('user_hotspot_detail_view',$data);
+        
+    }
+
     function userHotspotJSON(){
+        // function untuk mengget semua data user hotspot dari database
         $data = $this->hotspot->getuserhotspot();
         foreach($data as $r){
             $r['password'] = '************************';
             $r['bytes_in'] = $this->formatBytes2($r['bytes_in']); 
             $r['bytes_out'] = $this->formatBytes2($r['bytes_out']); 
-            $r['aksi'] = "<a href='javascript:;' data-aksi='hapus' data-id='".$r['id']."'><i class='fa fa-trash-o'></i></a>";
+            $r['aksi'] = "<a href='javascript:;' data-aksi='hapus' data-id='".$r['id']."' style='color : rgb(218,86,80)'><i class='fa fa-trash-o'></i></a>";
             $_data[] = $r;
         }
         $output = array(
@@ -42,7 +55,69 @@ class Hotspot extends CI_Controller {
         echo json_encode($output);
     }
 
+    function addUserHotspot(){
+        // funtion untuk menyimpan data user hotspot ke mikrotik
+        $data = array(
+            'name' => $this->input->post('name'),
+            'password' => $this->input->post('password'),
+            'profile' => $this->input->post('profile')
+        );
+        try{
+            $api = $this->routerosapi;
+            if($api->connect("192.168.10.1","api","stikimonitor","62148")){
+                $api->write('/ip/hotspot/user/add',false);
+			    $api->write('=name='.$data['name'], false );
+			    $api->write('=password='.$data['password'], false );
+			    $api->write('=profile='.$data['profile'] );
+                $write = $api->read();
+                $api->disconnect();
+                echo json_encode(array("status" => TRUE, "data" => $data));
+            }else{
+                echo json_encode(array("status" => FALSE));
+            }
+        }catch(exeption $e){
+            echo $e;
+        }
+    }
+
+    function getUserHotspotByID(){
+        // function untuk mengget data user hotspot by id
+        $id = $this->input->post('id');
+        $data = $this->hotspot->getuserhotspotbyid(array('id'=> $id.'%'));
+        if($data){
+            echo json_encode($data);
+        }
+    }
+
+    function setUserhotspot(){
+        // function untuk merubah data user hotspot dan menyimpannya ke mikrotik
+        $data = array(
+            'id' => $this->input->post('id'),
+            'name' => $this->input->post('name'),
+            'password' => $this->input->post('password'),
+            'profile' => $this->input->post('profile')  
+        );
+        try{
+            $api = $this->routerosapi;
+            if($api->connect("192.168.10.1","api","stikimonitor","62148")){
+                $api->write('/ip/hotspot/user/set',false);
+			    $api->write('=.id='.$data['id'],false);
+			    $api->write('=name='.$data['name'], false );
+			    $api->write('=password='.$data['password'], false );
+			    $api->write('=profile='.$data['profile']);
+                $write = $api->read();
+                $api->disconnect();
+                echo json_encode(array("status" => TRUE));
+            }else{
+                echo json_encode(array("status" => FALSE));
+            }
+        }catch(exeption $e){
+            echo $e;
+        }
+    }
+
     function delUserHotspot(){
+        // funtion menghapus data user hotspot di mikrotik dan database
         $id = $this->input->post('id');
         try{
             $api = $this->routerosapi;
@@ -62,6 +137,7 @@ class Hotspot extends CI_Controller {
     }
 
     function syncUserHotspot(){
+        // function untuk mensyncronise data dari mikrotik ke database
         try{
             $api = $this->routerosapi;
             if($api->connect("192.168.10.1","api","stikimonitor","62148")){
@@ -78,16 +154,19 @@ class Hotspot extends CI_Controller {
         }
     }
 
+    // FITUR USER PROFILE 
     public function userProfile(){
+        // funtion untuk menampilkan halaman user profile
         $this->load->view('user_profile_view');
     }
 
     function userProfileJSON(){
+        // funtion untuk mengget semua data user profile dari database
         $data = $this->hotspot->getuserprofile();
         $_data = array();
             foreach($data as $r){
                 $r['aksi'] = "<a href='javascript:;' data-aksi='edit' data-id='".$r['id']."'><i class='fa fa-pencil-square-o'></i></a>
-                <a href='javascript:;' data-aksi='hapus' data-id='".$r['id']."'><i class='fa fa-trash-o'></i></a>";
+                <a href='javascript:;' data-aksi='hapus' data-id='".$r['id']."' style='color : rgb(218,86,80)'><i class='fa fa-trash-o'></i></a>";
                 $_data[] = $r;
             }
         $output = array(
@@ -98,6 +177,7 @@ class Hotspot extends CI_Controller {
     }
 
     function getUserProfileByID(){
+        // funtion untuk mengget data user profile by id
         $id = $this->input->post('id');
         $data = $this->hotspot->getuserprofilebyid(array('id'=> $id));
         if($data){
@@ -106,6 +186,7 @@ class Hotspot extends CI_Controller {
     }
 
     function setUserProfile(){
+        // funtion untuk merubah data user profile di mikrotik
         $data = array(
             'id' => $this->input->post('id'),
             'name' => $this->input->post('name'),
@@ -138,6 +219,7 @@ class Hotspot extends CI_Controller {
     }
 
     function addUserProfile(){
+        // funtion untuk menambah data user profile di mikrotik 
         $data = array(
             'name' => $this->input->post('name'),
             'session_timeout' => $this->input->post('session'),
@@ -168,6 +250,7 @@ class Hotspot extends CI_Controller {
     }
 
     function delUserProfile(){
+        // funtion untuk menghapust user profile di mikrotik dan database
         $id = $this->input->post('id');
         try{
             $api = $this->routerosapi;
@@ -187,6 +270,7 @@ class Hotspot extends CI_Controller {
     }
 
     function syncUserProfile(){
+        // funtion untuk mensyncronise data dari mikrotik ke database
         try{
             $api = $this->routerosapi;
             if($api->connect("192.168.10.1","api","stikimonitor","62148")){
@@ -203,23 +287,29 @@ class Hotspot extends CI_Controller {
         }
     }
 
+    // FITUR USER ACTIVE
+
     public function userActive(){
+        // function untuk menampilkan halaman user active
         $this->load->view('user_aktif_view');
     }
 
     function userActiveJSON(){
+        // function untuk mengget semua data user active dari Mikrotik
         try{
             $api = $this->routerosapi;
+            $_read = array();
             if($api->connect("192.168.10.1","api","stikimonitor","62148")){
                 $api->write('/ip/hotspot/active/print');
                 $read = $api->read();
-                $api->disconnect();        
-            }
-            $_read = array();
-            foreach($read as $r){
-                $r['id'] = $r['.id'];
-                $r['aksi'] = "<a href='javascript:;' data-aksi='hapus' data-id='".$r['id']."'><i class='fa fa-trash-o'></i></a>";
-                $_read[] = $r;
+                $api->disconnect();
+                foreach($read as $r){
+                    $r['id'] = $r['.id'];
+                    $r['bytes-in'] = $this->formatBytes2($r['bytes-in']); 
+                    $r['bytes-out'] = $this->formatBytes2($r['bytes-out']);     
+                    $r['aksi'] = "<a href='javascript:;' data-aksi='hapus' data-id='".$r['id']."' style='color : rgb(218,86,80)'><i class='fa fa-trash-o'></i></a>";
+                    $_read[] = $r;
+                }        
             }
             $output = array(
                 // "draw" => $this->input->post('draw'),
@@ -232,6 +322,7 @@ class Hotspot extends CI_Controller {
     }
 
     function delUserActive(){
+        // funtion untuk menghapus user active di mikrotik
         $id = $this->input->post('id');
         try{
             $api = $this->routerosapi;
@@ -249,7 +340,9 @@ class Hotspot extends CI_Controller {
         }
     }
 
+    // Addtional Function 
     function formatBites($size, $decimals = 0){
+        // funtion untuk mengkonversi data menjadi bit / second
         $unit = array(
         '0' => 'bps',
         '1' => 'kbps',
@@ -270,6 +363,7 @@ class Hotspot extends CI_Controller {
     }
 
     function formatBytes2($size, $decimals = 0){
+        // funtion untuk mengkonversi data menjadi Byte
         $unit = array(
         '0' => 'Byte',
         '1' => 'KB',
