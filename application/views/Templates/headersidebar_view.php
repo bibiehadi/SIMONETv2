@@ -262,17 +262,17 @@
         <nav role="navigation" class="widget-body">
 			<ul class="acc-menu">
 				<li class="nav-separator"><span>Explore</span></li>
-				<li><a href="<?php echo site_url('dashboard'); ?>"><i class="ti ti-dashboard"></i><span>Dashboard</span><span class="badge badge-teal">2</span></a></li>	
-				<li><a href="javascript:;"><i class="ti ti-harddrive"></i><span>Hotspot</span></a>
+				<li><a href="<?php echo site_url('dashboard'); ?>"><i class="fa fa-tachometer"></i><span>Dashboard</span></a></li>	
+				<li><a href="<?php echo site_url('devices'); ?>"><i class="fa fa-hdd-o"></i><span>Devices</span></a></li>	
+				<li><a href="#"><i class="fa fa-area-chart" style="bold"></i><span>Statistic</span></a></li>	
+				<li><a href="javascript:;"><i class="fa fa-users"></i><span>Hotspot</span></a>
 					<ul class="acc-menu">
 							<li><a href="<?php echo site_url('hotspot/userhotspot'); ?>">User Hotspot</a></li>
 							<li><a href="<?php echo site_url('hotspot/userprofile'); ?>">User Profile</a></li>
 							<li><a href="<?php echo site_url('hotspot/useractive'); ?>">User Active</a></li>
 						</ul>
 				</li>
-				<li><a href="<?php echo site_url('pasar'); ?>"><i class="ti ti-rss-alt"></i><span>Pasar</span></a>
-				</li>
-				<li><a href="<?php echo site_url('komoditas')?>"><i class="ti ti-pie-chart"></i><span>Komoditas</span></a>
+				<li><a href="<?php echo site_url('pasar'); ?>"><i class="ti ti-rss-alt"></i><span>Log Activity</span></a>
 				</li>
 			</ul>
 		</nav>
