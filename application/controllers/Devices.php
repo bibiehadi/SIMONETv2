@@ -196,6 +196,35 @@ class Devices extends CI_Controller {
         }
     }
 
+    function reboot(){
+        $ip = $this->input->post('ip');
+        $user = $this->devices->getUserRouter(array('id' => '2222'));
+        try{
+            $api = $this->routerosapi;
+            $api->port = 8728;
+            if($api->connect($ip,$user['username'],$user['password'])){
+                $api->comm('/system/reboot');
+                $api->disconnect();
+                $this->devices->updateStatus($ip,array('status' => 'Reboot'));
+                echo json_encode(array("status" => TRUE));
+            }
+        }catch(Exeption $error){
+            echo json_encode(array("status" => FALSE));
+        }
+    }
+
+    function delDevice(){
+        // funtion menghapus data user hotspot di mikrotik dan database
+        $serial = $this->input->post('serial');
+        if($this->devices->delDevice($serial)){
+            if($this->devices->delInterfaces($serial)){
+                echo json_encode(array("status" => TRUE));
+            }
+        }else{
+            echo json_encode(array("status" => FALSE));
+        }
+        
+    }
 }
 
 /* End of file Devices.php */

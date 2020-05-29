@@ -83,6 +83,27 @@ class Devices_Model extends CI_Model {
         $this->db->update('interfaces', array('address' => $data['address']));
     }
 
+    function updateStatus($ip,$data){
+        $this->db->where('main_address4', $ip);
+        $this->db->update('devices', $data);
+    }
+
+    function delDevice($serial){
+        if ($this->db->delete('devices',array('serial_number' => $serial))){
+            return true;
+        }else{
+            return false;
+        }
+    }
+
+
+    function delInterfaces($serial){
+        if($this->db->delete('interfaces',array('serial_number' => $serial))){
+            return true;
+        }else{
+            return false;
+        }
+    }
 }
 
 /* End of file Devices_Model.php */

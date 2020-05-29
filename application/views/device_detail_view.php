@@ -29,7 +29,17 @@
                                 <div class="tab-pane active" id="tab-about">
                                     <div class="panel panel-default">
                                         <div class="panel-heading">
-                                            <h2>Device Detail</h2>
+                                            <div class="row">
+                                                <div class="col-md-4" >
+                                                    <h2>Detail Device</h2>
+                                                </div>
+                                                <div class="col-md-8">
+                                                    <?php if($status == 'Connected'){?>
+                                                        <a class="btn btn-warning pull-right" data-aksi="reboot" href="javascript:;" style="margin: 10px 20px 10px 0px">Reboot</a>
+                                                    <? }?>
+                                                    <a class="btn btn-danger pull-right" data-aksi="remove" href="javascript:;" style="margin: 10px"><i class="fa fa-trash"></i></a>
+                                                </div>
+                                            </div>
                                         </div>
                                         <div class="panel-body">
                                             <div class="about-area">
@@ -177,6 +187,14 @@
 
 <script type="text/javascript">
 
+    $('body').on('click','a[data-aksi="reboot"]',function(){
+        rebootDevice('<? echo $main_address4; ?>');
+    });
+
+    $('body').on('click','a[data-aksi="remove"]',function(){
+        removeDevice(<? echo $serial_number; ?>);
+    });
+    
     $('body').on('click','a[data-aksi="sync"]',function(){
         syncInterfaces();
         syncIP();
@@ -185,8 +203,8 @@
 
     function syncInterfaces(){
             $.skylo('start');
-            var data = {ip : '<? echo $main_address4?>',
-                        serial: <? echo $serial_number?>};
+            var data = {ip : '<? echo $main_address4; ?>',
+                        serial: <? echo $serial_number; ?>};
             $.post('<?php echo site_url('devices/getInterfaces/') ?>',data,function(respon){
                 if(respon.status){
                 }
@@ -212,6 +230,36 @@
                 alert('error sync devices data');
             })
             $.skylo('end');
+    }
+
+    function rebootDevice(ip){
+        var data = {ip : ip};
+        if(confirm('Anda yakin ingin mereboot device ini ?')){
+            $.post('<?php echo site_url('devices/reboot/') ?>',data,function(respon){
+                if(respon.status){
+                    location.href='<?php echo site_url('devices')?>/';
+                }
+                else{ alert('error reboot this device');
+                }
+            },'json').fail(function(){
+                alert('error reboot this device');
+            })
+        }
+    }
+
+    function removeDevice(serial){
+        var data = {serial : serial};
+        if(confirm('Anda yakin ingin menghapus data ini ?')){
+            $.post('<?php echo site_url('devices/delDevice/') ?>',data,function(respon){
+                if(respon.status){
+                    location.href='<?php echo site_url('devices')?>/';
+                }
+                else{ alert('error delete this data');
+                }
+            },'json').fail(function(){
+                alert('error delete this data');
+            })
+        }
     }
 
     function reload_table(){
