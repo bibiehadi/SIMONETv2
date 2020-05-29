@@ -17,8 +17,7 @@
                                         <h2>Devices</h2>
                                         <div class="panel-ctrls"></div>
                                         <div class="col-md-12" style="padding: 15px">
-                                        <a class="btn btn-success pull-right" data-aksi="add" style="margin-left: 10px;"><i class="fa fa-plus"></i></a>
-                                            <a class="btn btn-info pull-right" data-aksi="sync" href="javascript:;"><i class="fa fa-refresh"></i> Refresh</a>
+                                            <a class="btn btn-success pull-right" data-aksi="add" style="margin-left: 10px;"><i class="fa fa-plus"></i></a>
                                         </div>
                                     </div>
                                     <div class="panel-body no-padding">
@@ -135,22 +134,12 @@
         addDevice();
     })
 
-    $('body').on('click','a[data-aksi="hapus"]',function(){
-        var id= $(this).attr('data-id');
-        deleteUser(id);
-    })
-
     $('body').on('click','a[data-aksi="sync"]',function(){
         syncIdentity();
     });
 
     $('table#tb_devices').on('click','tbody tr',function(){
         var ip = $(this).find('td:eq(0)').html();
-        // alert(ip);
-        // location.href='<?php echo site_url('devices/detaildevice')?>/'+ip;
-        // location.href='<?php echo site_url('devices/detaildevice')?>/';
-        
-        // var id= $(this).attr('data-id');
         var url = '<?php echo site_url('devices/detaildevice')?>';
         var form = $('<form action="' + url + '" method="post">' +
         '<input type="hidden" name="serial" value="'+ip+'" />' +
@@ -202,59 +191,6 @@
                 $('#btnSave').attr('disabled',false); 
             }
         });
-    }
-
-    function syncIdentity(){
-            $.skylo('start');
-            $.post('<?php echo site_url('devices/syncidentities/') ?>',function(respon){
-                if(respon.status){
-                    reload_table();
-                    $.skylo('end');
-                }
-                else{ alert('error delete this data');
-                }
-            },'json').fail(function(){
-                alert('error sync devices data');
-            })
-            //     success: function(data){
-            //         reload_table();
-                  
-            //     },
-            //     error: function (jqXHR, textStatus, errorThrown){
-            //         alert(jqXHR+textStatus);
-            //     }
-            // })
-    }
-
-    function cekDevice(ip){
-            $.skylo('start');
-            $.ajax({
-                url: "<?php echo site_url('devices/cek/') ?>"+ip,
-                type: "POST",
-                dataType: "JSON",
-                success: function(data){
-                    reload_table();
-                    $.skylo('end');
-                },
-                error: function (jqXHR, textStatus, errorThrown){
-                    alert('Error!!');
-                }
-            })
-    }
-
-    function deleteUser(id){
-        var data = {id : id};
-        if(confirm('Anda yakin ingin menghapus data ini ?')){
-            $.post('<?php echo site_url('hotspot/delUserHotspot/') ?>',data,function(respon){
-                if(respon.status){
-                    reload_table();
-                }
-                else{ alert('error delete this data');
-                }
-            },'json').fail(function(){
-                alert('error delete this data');
-            })
-        }
     }
 
     function reload_table(){

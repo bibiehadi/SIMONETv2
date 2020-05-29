@@ -29,7 +29,8 @@ class Devices_Model extends CI_Model {
         try{
             foreach($data as $device){
                 $this->db->where('serial_number', $identity['serial_number']);
-                $this->db->update('devices', array('uptime' => $device['uptime'], 'version' => $device['version'], 'model' => $device['board-name'], 'platform' => $device['platform'], 'identity' => $identity['identity']));
+                $this->db->update('devices', array('uptime' => $device['uptime'], 'version' => $device['version'], 
+                'model' => $device['board-name'], 'platform' => $device['platform'], 'identity' => $identity['identity']));
             }
         }catch(Exception $e){
             return $e;
@@ -53,18 +54,33 @@ class Devices_Model extends CI_Model {
 		}
     }
 
+    function getInterfaces($serial){
+        $this->db->where($serial);
+        if($data = $this->db->get('interfaces')){
+			return $data->result_array();
+		}else{
+			return false;
+		}
+    }
+
     function syncInterfaces($data,$serial){
         try{
             foreach($data as $interface){
                 if(!isset($interface['default'])){
-                    $this->db->query("insert into interfaces(name,mac_address,serial_number)
-                    values ('".$interface['name']."','".$interface['mac-address']."','".$serial."') 
-                    ON DUPLICATE KEY UPDATE name = '".$interface['name']."', mac_address = '".$interface['mac-address']."', serial_number = '".$serial."';");
+                    $this->db->query("insert into interfaces(name,mac_address,serial_number,rx_byte,tx_byte)
+                    values ('".$interface['name']."','".$interface['mac-address']."','".$serial."','".$interface['rx-byte']."','".$interface['tx-byte']."') 
+                    ON DUPLICATE KEY UPDATE name = '".$interface['name']."', mac_address = '".$interface['mac-address']."', serial_number = '".$serial."', rx_byte = '".$interface['rx-byte']."', tx_byte = '".$interface['tx-byte']."'");
                 }
             }
         }catch(Exception $e){
             return $e;
         }
+    }
+
+    function updateIP($data){
+        $this->db->where('serial_number', $data['serial']);
+        $this->db->where('name', $data['name']);
+        $this->db->update('interfaces', array('address' => $data['address']));
     }
 
 }

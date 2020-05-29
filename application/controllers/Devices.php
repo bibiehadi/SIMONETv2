@@ -28,6 +28,7 @@ class Devices extends CI_Controller {
         // function untuk menampilkan halaman detail user hotspot 
         $serial = $this->input->post('serial');
         $data = $this->devices->getDevice(array('serial_number'=> $serial));
+        $data['interfaces'] = $this->devices->getInterfaces(array('serial_number'=> $serial));
         if($data['status'] == 'Connected'){
             $this->syncIdentities($data['main_address4'],$serial);
         }
@@ -78,48 +79,12 @@ class Devices extends CI_Controller {
                 if($identity['identity']!='error'){
                     $this->devices->syncdatadevice($identity,$read);
                 }
-                echo json_encode(array("status" => TRUE));
+                // echo json_encode(array("status" => TRUE));
             }else{
-                echo json_encode(array("status" => FALSE, "msg" => 'Gagal terhubung ke Router'.$device['main_address4']));
+                // echo json_encode(array("status" => FALSE, "msg" => 'Gagal terhubung ke Router'.$device['main_address4']));
             }
         }catch(Exeption $error){
             echo json_encode(array("status" => FALSE, "msg" => $error));
-        }
-    }
-
-    function cek(){
-        // funtion untuk menyimpan data user hotspot ke mikrotik
-        $data = $this->devices->getdevices();
-        try{
-            foreach($data as $device){
-                $connect = 0; $disconnect =0;
-                $api = $this->routerosapi;
-                if($api->connect("192.168.10.1","api","stikimonitor","62148")){
-                    $api->write('/ping',false);
-                    $api->write('=address='.$device['main_address4'],false);
-                    $api->write('=count=5',false);
-                    $api->write('=interval=0.3');
-                    $read = $api->read();
-                    $api->disconnect();
-                    foreach($read as $result){
-                        if($result['packet-loss']>0){
-                            $disconnect++;
-                        }else{
-                            $connect++;
-                        }
-                    }
-                    if($connect>=1){
-                        $this->db->where('serial_number', $device['serial_number']);
-                        $this->db->update('devices', array('status' => 'connect'));
-                    }else{
-                        $this->db->where('serial_number', $device['serial_number']);
-                        $this->db->update('devices', array('status' => 'disconnect'));
-                    }
-                    echo json_encode(array("status" => TRUE));
-                }
-            }
-        }catch(exeption $e){
-            echo $e;
         }
     }
 
@@ -173,7 +138,9 @@ class Devices extends CI_Controller {
         }
     }
 
-    function getInterfaces($ip,$serial){
+    function getInterfaces(){
+        $ip = $this->input->post('ip');
+        $serial = $this->input->post('serial');
         $user = $this->devices->getUserRouter(array('id' => '2222'));
         try{
             $api = $this->routerosapi;
@@ -182,39 +149,50 @@ class Devices extends CI_Controller {
                 $api->write('/interface/print');
                 $read = $api->read();
                 $api->disconnect();
-                $mac='';
+                $mac=array();
                 $same = 0;
                 foreach($read as $result){
-                    $_mac = $result['mac-address'];
-                    if($result['mac-address']==$mac){
+                    // if($result['mac-address']==$mac){
+                    if(in_array($result['mac-address'], $mac)){
                         $same++;
                         $result['mac-address'] = $result['mac-address'].':0'.$same;
+                    
+                    }else{
+                        $mac[] = $result['mac-address'];
                     }
-                    $mac = $_mac;
                     $_read[]=$result;
                 }
                 $this->devices->syncinterfaces($_read,$serial);
+                echo json_encode(array("status" => TRUE));
             }
         }catch(Exeption $error){
-            return 'error';
+            echo json_encode(array("status" => FALSE));
         }
     }
 
-    function getIP($ip){
+    function getIP(){
+        $serial = $this->input->post('serial');
+        $ip = $this->input->post('ip');
         $user = $this->devices->getUserRouter(array('id' => '2222'));
         try{
             $api = $this->routerosapi;
             $api->port = 8728;
             if($api->connect($ip,$user['username'],$user['password'])){
                 $api->write('/ip/address/print');
-                // $api->write('?interface=ether1');
-                // $api->write('print');
                 $read = $api->read();
                 $api->disconnect();
-                print_r($read);
+                foreach($read as $interface){
+                    if($interface['disabled'] == 'false'){
+                        $_data['address'] = $interface['address'];
+                        $_data['name'] = $interface['actual-interface'];
+                        $_data['serial'] = $serial;
+                        $this->devices->updateIP($_data);
+                    }
+                }
+                echo json_encode(array("status" => TRUE));
             }
         }catch(Exeption $error){
-            return 'error';
+            echo json_encode(array("status" => FALSE));
         }
     }
 
