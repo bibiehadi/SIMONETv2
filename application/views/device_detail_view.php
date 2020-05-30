@@ -5,8 +5,21 @@
         <div class="static-content">
             <div class="page-content">
                 <ol class="breadcrumb">
-                    <li><a href="index.html">Device</a></li>
-                    <li class="active"><a href="#"></a></li>
+                    <li><a href="<?php echo site_url('Devices'); ?>">Devices</a></li>
+                    <li><a href="#">List Devices</a></li>
+                    <li>
+                    <form action="<?php echo site_url('devices/detaildevice');?>" method="post" id="deviceForm" >
+                        <select name="serial" id="device" class="custom-select custom-select-sm" style="width: 120px;color: rgb(80,135,190);">
+                            <?php foreach ($list_devices as $row) {
+                                if($row['serial_number'] == $serial_number){?>
+                                    <option selected value="<?php echo $row['serial_number']; ?> "><?php echo $row['identity'];?></option>
+                                <?} else { ?>
+                                    <option value="<?php echo $row['serial_number']; ?>"><?php echo $row['identity'];?></option>
+                            <?php } 
+                            } ?>
+                        </select>
+                    </form>
+                    </li>
                 </ol>
                 <div class="container-fluid">
                 <div data-widget-group="group1">
@@ -61,6 +74,10 @@
                                                         <tr>
                                                             <th>Version</th>
                                                             <td><?php echo $version?></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <th>Uptime</th>
+                                                            <td><?php echo $uptime?></td>
                                                         </tr>
                                                         <tr>
                                                             <th>Location</th>
@@ -187,9 +204,14 @@
 
 <script type="text/javascript">
 
+
     $('body').on('click','a[data-aksi="reboot"]',function(){
         rebootDevice('<? echo $main_address4; ?>');
     });
+
+    $('#device').change(function(){
+        $('#deviceForm').submit();
+    })
 
     $('body').on('click','a[data-aksi="remove"]',function(){
         removeDevice(<? echo $serial_number; ?>);

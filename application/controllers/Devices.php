@@ -28,6 +28,7 @@ class Devices extends CI_Controller {
         // function untuk menampilkan halaman detail user hotspot 
         $serial = $this->input->post('serial');
         $data = $this->devices->getDevice(array('serial_number'=> $serial));
+        $data['list_devices'] = $this->devices->getdevices();
         $data['interfaces'] = $this->devices->getInterfaces(array('serial_number'=> $serial));
         if($data['status'] == 'Connected'){
             $this->syncIdentities($data['main_address4'],$serial);

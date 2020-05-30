@@ -5,7 +5,7 @@
         <div class="static-content">
             <div class="page-content">
                 <ol class="breadcrumb">
-                    <li><a href="index.html">Devices</a></li>
+                    <li><a href="#">Devices</a></li>
                     <li class="active"><a href="#">List Devices</a></li>
                 </ol>
                 <div class="container-fluid">
