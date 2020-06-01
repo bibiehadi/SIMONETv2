@@ -43,8 +43,8 @@ class Hotspot extends CI_Controller {
         $data = $this->hotspot->getuserhotspot();
         foreach($data as $r){
             $r['password'] = '************************';
-            $r['bytes_in'] = $this->formatBytes2($r['bytes_in']); 
-            $r['bytes_out'] = $this->formatBytes2($r['bytes_out']); 
+            $r['bytes_in'] = byte_format($r['bytes_in']); 
+            $r['bytes_out'] = byte_format($r['bytes_out']); 
             $r['aksi'] = "<a href='javascript:;' data-aksi='hapus' data-id='".$r['id']."' style='color : rgb(218,86,80)'><i class='fa fa-trash-o'></i></a>";
             $_data[] = $r;
         }
@@ -305,8 +305,8 @@ class Hotspot extends CI_Controller {
                 $api->disconnect();
                 foreach($read as $r){
                     $r['id'] = $r['.id'];
-                    $r['bytes-in'] = $this->formatBytes2($r['bytes-in']); 
-                    $r['bytes-out'] = $this->formatBytes2($r['bytes-out']);     
+                    $r['bytes-in'] = byte_format($r['bytes-in']); 
+                    $r['bytes-out'] = byte_format($r['bytes-out']);     
                     $r['aksi'] = "<a href='javascript:;' data-aksi='hapus' data-id='".$r['id']."' style='color : rgb(218,86,80)'><i class='fa fa-trash-o'></i></a>";
                     $_read[] = $r;
                 }        
@@ -339,49 +339,6 @@ class Hotspot extends CI_Controller {
             echo $e;
         }
     }
-
-    // Addtional Function 
-    function formatBites($size, $decimals = 0){
-        // funtion untuk mengkonversi data menjadi bit / second
-        $unit = array(
-        '0' => 'bps',
-        '1' => 'kbps',
-        '2' => 'Mbps',
-        '3' => 'Gbps',
-        '4' => 'Tbps',
-        '5' => 'Pbps',
-        '6' => 'Ebps',
-        '7' => 'Zbps',
-        '8' => 'Ybps'
-        );
-        
-        for($i = 0; $size >= 1000 && $i <= count($unit); $i++){
-        $size = $size/1000;
-        }
-        
-        return round($size, $decimals).' '.$unit[$i];
-    }
-
-    function formatBytes2($size, $decimals = 0){
-        // funtion untuk mengkonversi data menjadi Byte
-        $unit = array(
-        '0' => 'Byte',
-        '1' => 'KB',
-        '2' => 'MB',
-        '3' => 'GB',
-        '4' => 'TB',
-        '5' => 'PB',
-        '6' => 'EB',
-        '7' => 'ZB',
-        '8' => 'YB'
-        );
-        
-        for($i = 0; $size >= 1000 && $i <= count($unit); $i++){
-        $size = $size/1000;
-        }
-        return round($size, $decimals).' '.$unit[$i];
-    }
-
 }
 
 /* End of file Hotspot.php */

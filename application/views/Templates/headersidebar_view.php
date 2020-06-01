@@ -31,6 +31,10 @@
 	<link rel="stylesheet" href="<?php echo base_url('') ?>assets/plugins/datatables/dataTables.bootstrap.css">
 	<link rel="stylesheet" href="<?php echo base_url('') ?>assets/plugins/datatables/dataTables.css">
 	<link type="text/css" href="<?php echo base_url('') ?>assets/plugins/progress-skylo/skylo.css" rel="stylesheet">
+    
+	<link href="https://cdn.datatables.net/responsive/2.2.4/css/responsive.bootstrap.min.css" rel="stylesheet" type="text/css" />
+
+
     </head>
 
     <body class="animated-content">
