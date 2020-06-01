@@ -104,7 +104,7 @@
 <script type="text/javascript" src="<?php echo base_url('') ?>assets/plugins/nanoScroller/js/jquery.nanoscroller.min.js"></script>
 
 <script type="text/javascript" src="<?php echo base_url('') ?>assets/js/application.js"></script>
-<script type="text/javascript" src="<?php echo base_url('') ?>assets/demo/demo.js"></script>
+<!-- <script type="text/javascript" src="<?php echo base_url('') ?>assets/demo/demo.js"></script> -->
 <script type="text/javascript" src="<?php echo base_url('') ?>assets/demo/demo-switcher.js"></script>
 <!-- <script type="text/javascript" src="<?php echo base_url('') ?>assets/plugins/form-daterangepicker/moment.min.js"></script>              			
 
@@ -119,7 +119,7 @@
 <!-- End loading site level scripts -->
     
 <!-- Load page level scripts -->
-<script type="text/javascript" src="<?php echo base_url('') ?>assets/demo/demo-datatables.js"></script>
+<!-- <script type="text/javascript" src="<?php echo base_url('') ?>assets/demo/demo-datatables.js"></script> -->
 <script type="text/javascript" src="<?php echo base_url('') ?>assets/plugins/progress-skylo/skylo.js"></script>
 
 <script src="https://nightly.datatables.net/js/jquery.dataTables.js"></script>
