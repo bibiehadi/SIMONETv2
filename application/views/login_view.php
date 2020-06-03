@@ -34,9 +34,9 @@
 		<?php echo $this->session->flashdata('login') ?>
 			<div class="col-md-4 col-md-offset-4">
 				<div class="panel panel-default">
-					<div class="panel-heading">
+					<!-- <div class="panel-heading">
 						<h2>Login Form</h2>
-					</div>
+					</div> -->
 					<div class="panel-body">
 						
 						<form action="<?php echo site_url('login/auth');?>" method="post" class="form-horizontal" id="validate-form" >
@@ -74,11 +74,10 @@
 								</div>
 							</div>
 						
-					</div>
-					<div class="panel-footer">
+					<!-- </div> -->
+					<!-- <div class="panel-footer"> -->
 						<div class="clearfix">
-							<a href="extras-registration.html" class="btn btn-default pull-left">Register</a>
-							<input type="submit" class="btn btn-primary pull-right" value="Login">
+							<input type="submit" class="btn btn-primary pull-right" value="Login" style="width : 100%">
 						</div>
 						</form>
 					</div>

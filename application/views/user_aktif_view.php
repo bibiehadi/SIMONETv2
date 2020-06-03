@@ -15,12 +15,9 @@
                                 <div class="panel panel-default">
                                     <div class="panel-heading">
                                         <h2>Data User Active</h2>
-                                        <div class="panel-ctrls"></div>
-                                        <div class="col-sm-12" style="padding: 10px">
-                                            <a class="btn btn-info pull-right" data-aksi="reload" href="javascript:;"><i class="fa fa-refresh"></i></a>
-                                        </div>
+                                        <a class="btn btn-info pull-right" data-aksi="reload" href="javascript:;" style="margin : 10px"><i class="fa fa-refresh"></i></a>
                                     </div>
-                                    <div class="panel-body no-padding">
+                                    <div class="panel-body ">
                                         <table id="tb_aktif" class="table table-striped table-bordered" cellspacing="0" width="100%">
                                             <thead>
                                                 <tr>
@@ -59,15 +56,17 @@
 <?php $this->load->view('templates/footer_view'); ?>
 <script type="text/javascript">
     table = $('#tb_aktif').DataTable({
-        // "processing" : true,
-        // "serverSide" : true,
-        // "order" : [],
-        "ajax" : {
+        responsive : true,
+        oLanguage: {
+        "sLengthMenu": " _MENU_ ",
+        "sSearch": "Search..."
+        },
+        ajax : {
             "url" : "<?php echo site_url('hotspot/useractiveJSON')?>",
             "type" : "POST"
             // "dataSrc" : ""
         },
-        "columns" : [
+        columns : [
             // {"data" : "id"},
             {"data" : "server"},
             {"data" : "user"},

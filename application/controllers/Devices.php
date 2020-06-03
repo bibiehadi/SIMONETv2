@@ -32,7 +32,7 @@ class Devices extends CI_Controller {
         $data['location'] = $this->devices->getLocation();
         $data['list_devices'] = $this->devices->getdevices();
         $data['interfaces'] = $this->devices->getInterfaces(array('id_device'=> $id));
-        if($data['status'] == 'Connected'){
+        if($data['status'] == 'Connected' && $data['platform']=="MikroTik"){
             $this->syncIdentities($data['main_address4'],$id);
         }
         // print_r($data);
@@ -71,6 +71,20 @@ class Devices extends CI_Controller {
         echo json_encode(array("status" => TRUE));
     }
 
+    function addDeviceByDiscovery(){
+        $data = array(
+            'main_address4' => $this->input->post('address'),
+            'identity' => $this->input->post('identity'),
+            'version' => $this->input->post('version'),
+            'uptime' => $this->input->post('uptime'),
+            'model' => $this->input->post('board'),
+            'platform' => $this->input->post('platform'),
+            'status' => $this->input->post('status')
+        );
+        $this->devices->addDevice($data);
+        echo json_encode(array("status" => TRUE));
+    }
+
     function discoveryDevices(){
         $user = $this->devices->getUserRouter(array('id' => '1111'));
         try{
@@ -87,11 +101,16 @@ class Devices extends CI_Controller {
                 $ip = $this->devices->getIPDevices();
                 foreach($read as $r){
                     if(isset($r['address']) && !in_array($r['address'], $ip)){
-                        $r['aksi'] = "<a href='javascript:;' data-aksi='edit' data-address='".$r['address']."'><i class='fa fa-plus'></i></a>";
+                        $version = explode('.',$r['version']);
+                        if($version[0] == '1'){
+                            $r['platform'] = "MikroTik Switch";
+                        }
+                        $r['aksi'] = "<a href='javascript:;' data-aksi='discovery' data-identity='".$r['identity']."' data-uptime='".$r['uptime']."' data-board='".$r['board']."' data-version='".$r['version']."' data-address='".$r['address']."' data-platform='".$r['platform']."' data-status='Connected'><i class='fa fa-plus'></i></a>";
                         $_data[] = $r;
                     }
                 }    
                 return $_data;
+                
                 // $output = array(
                 //     "draw" => $this->input->post('draw'),
                 //     "data" => $_data,
@@ -100,6 +119,45 @@ class Devices extends CI_Controller {
             }
         }catch(Exeption $error){
             echo json_encode(array("status" => FALSE));
+        }
+    }
+
+    function setDevice(){
+        // function untuk merubah data user hotspot dan menyimpannya ke mikrotik
+        $user = $this->devices->getUserRouter(array('id' => '2222'));
+        if($this->input->post('identity') != null){
+            $data = array(
+                'id' => $this->input->post('id'),
+                'identity' => $this->input->post('identity'),
+                'serial_number' => $this->input->post('serial'),
+                'main_address4' => $this->input->post('address'),
+                'id_location' => $this->input->post('location')  
+            );
+            try{
+                $api = $this->routerosapi;
+                $api->port = 8728;
+                if($api->connect($data['main_address4'],$user['username'],$user['password'])){
+                    $api->write('/system/identity/set',false);
+                    $api->write('=name='.$data['identity']);
+                    $write = $api->read();
+                    $api->disconnect();
+                    $this->devices->setDevice($data);
+                    echo json_encode(array("status" => TRUE, "identity" => $write));
+                }else{
+                    echo json_encode(array("status" => FALSE));
+                }
+            }catch(exeption $e){
+                echo $e;
+            }
+        }else{
+            $data = array(
+                'id' => $this->input->post('id'),
+                'serial_number' => $this->input->post('serial'),
+                'main_address4' => $this->input->post('address'),
+                'id_location' => $this->input->post('location')  
+            );
+            $this->devices->setDevice($data);
+            echo json_encode(array("status" => TRUE));
         }
     }
 
@@ -128,34 +186,17 @@ class Devices extends CI_Controller {
         }
     }
 
-    function cekDevice($ip){
+    function cekDevice(){
         // funtion untuk menyimpan data user hotspot ke mikrotik
         $data = $this->devices->getdevices();
         try{
             $connect = 0; $disconnect =0;
             $api = $this->routerosapi;
             if($api->connect("192.168.10.1","api","stikimonitor","62148")){
-                $api->write('/ping',false);
-                $api->write('=address='.$ip,false);
-                $api->write('=count=5',false);
-                $api->write('=interval=0.3');
+                $api->write('/system/resource/print');
                 $read = $api->read();
                 $api->disconnect();
-                foreach($read as $result){
-                    if($result['packet-loss']>0){
-                        $disconnect++;
-                    }else{
-                        $connect++;
-                    }
-                }
-                if($connect>=1){
-                    $this->db->where('serial_number', $device['serial_number']);
-                    $this->db->update('devices', array('status' => 'connect'));
-                }else{
-                    $this->db->where('serial_number', $device['serial_number']);
-                    $this->db->update('devices', array('status' => 'disconnect'));
-                }
-                echo json_encode(array("status" => TRUE));
+                echo json_encode(array("status" => $read[0]['platform']));
             }
         }catch(exeption $e){
             echo $e;
@@ -255,9 +296,9 @@ class Devices extends CI_Controller {
 
     function delDevice(){
         // funtion menghapus data user hotspot di mikrotik dan database
-        $serial = $this->input->post('id');
-        if($this->devices->delDevice(array('id' =>$id))){
-            if($this->devices->delInterfaces(array('id_device' => $id))){
+        $id = $this->input->post('id');
+        if($this->devices->delDevice($id)){
+            if($this->devices->delInterfaces($id)){
                 echo json_encode(array("status" => TRUE));
             }
         }else{

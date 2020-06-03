@@ -22,7 +22,9 @@
                             </div><!-- panel -->
                             <div class="list-group list-group-alternate mb-n nav nav-tabs">
                                 <a href="#tab-about" role="tab" data-toggle="tab" class="list-group-item active"><i class="ti ti-user"></i> Detail Device</a>
-                                <a href="#tab-interfaces" role="tab" data-toggle="tab" class="list-group-item"><i class="ti ti-pencil"></i> Interfaces</a>
+                                <?php if($status == 'Connected' && $platform == 'MikroTik'){?>
+                                    <a href="#tab-interfaces" role="tab" data-toggle="tab" class="list-group-item"><i class="ti ti-pencil"></i> Interfaces</a>
+                                <?}?>
                             </div>
                         </div><!-- col-sm-3 -->
                         <div class="col-sm-9">
@@ -34,19 +36,19 @@
                                                 <div class="col-md-4" >
                                                     <h2>Detail Device</h2>
                                                     <form class="form-inline" action="<?php echo site_url('devices/detaildevice');?>" method="post" id="deviceForm" style="">
-                                                        <select name="serial" id="device" class="custom-select custom-select-sm" style="width: 120px;color: #03a9f4; border: 0px; outline: 0px; background: #fafafa; margin-left :10px">
+                                                        <select name="id" id="device" class="custom-select custom-select-sm" style="width: 120px;color: #03a9f4; border: 0px; outline: 0px; background: #fafafa; margin-left :10px">
                                                             <?php foreach ($list_devices as $row) {
-                                                                if($row['serial_number'] == $serial_number){?>
-                                                                    <option selected value="<?php echo $row['serial_number']; ?> "><?php echo $row['identity'];?></option>
+                                                                if($row['id'] == $id){?>
+                                                                    <option selected value="<?php echo $row['id']; ?> "><?php echo $row['identity'];?></option>
                                                                 <?} else { ?>
-                                                                    <option value="<?php echo $row['serial_number']; ?>"><?php echo $row['identity'];?></option>
+                                                                    <option value="<?php echo $row['id']; ?>"><?php echo $row['identity'];?></option>
                                                             <?php } 
                                                             } ?>
                                                         </select>
                                                     </form>
                                                 </div>
                                                 <div class="col-md-8">
-                                                    <?php if($status == 'Connected'){?>
+                                                    <?php if($status == 'Connected' && $platform == 'MikroTik'){?>
                                                         <a class="btn btn-warning pull-right" data-aksi="reboot" href="javascript:;" style="margin: 10px 20px 10px 0px">Reboot</a>
                                                     <? }?>
                                                     <a href="#tab-edit" role="tab" data-toggle="tab" class="btn btn-primary pull-right" style="margin: 10px 10px 10px 0px"><i class="fa fa-pencil-square-o"></i></a>
@@ -110,23 +112,37 @@
                                         <div class="panel-body">
                                             <div class="row">
                                                 <div class="col-md-12">
-                                                    <form class="form-horizontal tabular-form">
+                                                    <form class="form-horizontal tabular-form" id="editDevice">
+                                                        <div class="form-group">
+                                                            <label for="form-serial" class="col-sm-2 control-label">ID Device</label>
+                                                            <div class="col-sm-8 tabular-border">
+                                                                <input type="text" class="form-control" name="id" id="form-serial" value="<?php echo $id;?>" readonly>
+                                                            </div>
+                                                        </div>
+                                                        <?php if($status == 'Connected' && $platform == 'MikroTik'){?>
+                                                        <div class="form-group">
+                                                            <label for="form-serial" class="col-sm-2 control-label">Identity</label>
+                                                            <div class="col-sm-8 tabular-border">
+                                                                <input type="text" class="form-control" name="identity" id="identity" value="<?php echo $identity;?>">
+                                                            </div>
+                                                        </div>
+                                                        <?}?>
                                                         <div class="form-group">
                                                             <label for="form-serial" class="col-sm-2 control-label">Serial Number</label>
                                                             <div class="col-sm-8 tabular-border">
-                                                                <input type="text" class="form-control" id="form-serial" value="<?php echo $serial_number;?>">
+                                                                <input type="text" class="form-control" name="serial" id="form-serial" value="<?php echo $serial_number;?>">
                                                             </div>
                                                         </div>
                                                         <div class="form-group">
                                                             <label for="form-address" class="col-sm-2 control-label">Main IP Address</label>
                                                             <div class="col-sm-8 tabular-border">
-                                                                <input type="text" class="form-control" id="form-address" value="<?php echo $main_address4; ?>">
+                                                                <input type="text" class="form-control" name="address" id="form-address" value="<?php echo $main_address4; ?>">
                                                             </div>
                                                         </div>
                                                         <div class="form-group">
                                                             <label class="col-sm-2 control-label">Location</label>
                                                             <div class="col-sm-8">
-                                                                <select name="profile" id="location" class="form-control">
+                                                                <select name="location" id="location" class="form-control">
                                                                     <option value="">--- Select ---</option>
                                                                     <? foreach($location as $loc){ 
                                                                         if ($loc['id'] == $id_location) {?>
@@ -143,7 +159,7 @@
                                             </div>
                                             <div class="row">
                                                 <div class="col-sm-offset-2 pull-right" style="margin: 20px 20px 0px 0px">
-                                                       <button class="btn-primary btn">Save</button>
+                                                       <button id="btnSave" class="btn-primary btn" onclick="save()">Save</button>
                                                 </div>
                                             </div>
                                         </div>
@@ -218,7 +234,11 @@
 
 <script type="text/javascript">
     $('#tb_interfaces').DataTable({
-        responsive : true
+        responsive : true,
+        oLanguage: {
+        "sLengthMenu": " _MENU_ ",
+        "sSearch": "Search..."
+        }
     });
 
     $('body').on('click','a[data-aksi="reboot"]',function(){
@@ -230,13 +250,13 @@
     })
 
     $('body').on('click','a[data-aksi="remove"]',function(){
-        removeDevice(<? echo $serial_number; ?>);
+        removeDevice(<? echo $id; ?>);
+        // alert(<? echo $id?>);
     });
     
     $('body').on('click','a[data-aksi="sync"]',function(){
         syncInterfaces();
         syncIP();
-        location.reload();
     });
 
     function syncInterfaces(){
@@ -261,6 +281,7 @@
             $.post('<?php echo site_url('devices/getIP/') ?>',data,function(respon){
                 if(respon.status){
                     // alert('sinkron data interfaces berhasil');
+                    location.reload();
                 }
                 else{ alert('error delete this data');
                 }
@@ -300,21 +321,47 @@
         }
     }
 
-    function reload_table(){
-        table.ajax.reload(null,false);
+    function save(){
+        $.skylo('start');
+        $('#btnSave').text('saving...'); //change button text
+        $('#btnSave').attr('disabled',true); //set button disable 
+        var url = "<?php echo site_url('devices/setDevice')?>";
+
+        $.ajax({
+            url : url,
+            type: "POST",
+            data: $('#editDevice').serialize(),
+            dataType: "JSON",
+            success: function(data)
+            {
+                if(data.status) 
+                {
+                    location.reload();
+                }
+                $.skylo('end');
+                $('#btnSave').text('save'); 
+                $('#btnSave').attr('disabled',false); 
+            },
+            error: function (jqXHR, textStatus, errorThrown)
+            {
+                alert('Gagal menyimpan data device');
+                $('#btnSave').text('save'); 
+                $('#btnSave').attr('disabled',false); 
+            }
+        });
     }
 
-    function formatBytes(bytes, decimals = 2) {
-        if (bytes === 0) return '0 Bytes';
+    // function formatBytes(bytes, decimals = 2) {
+    //     if (bytes === 0) return '0 Bytes';
 
-        const k = 1024;
-        const dm = decimals < 0 ? 0 : decimals;
-        const sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB'];
+    //     const k = 1024;
+    //     const dm = decimals < 0 ? 0 : decimals;
+    //     const sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB'];
 
-        const i = Math.floor(Math.log(bytes) / Math.log(k));
+    //     const i = Math.floor(Math.log(bytes) / Math.log(k));
 
-        return parseFloat((bytes / Math.pow(k, i)).toFixed(dm)) + ' ' + sizes[i];
-    }
+    //     return parseFloat((bytes / Math.pow(k, i)).toFixed(dm)) + ' ' + sizes[i];
+    // }
 </script>
 
 

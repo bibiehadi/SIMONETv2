@@ -1,18 +1,10 @@
 
     <div class="demo-options">
         <div class="demo-options-icon"><i class="ti ti-paint-bucket"></i></div>
-        <div class="demo-heading">Demo Settings</div>
+        <div class="demo-heading">Settings</div>
 
         <div class="demo-body">
             <div class="tabular">
-                <div class="tabular-row">
-                    <div class="tabular-cell">Fixed Header</div>
-                    <div class="tabular-cell demo-switches"><input class="bootstrap-switch" type="checkbox" checked data-size="mini" data-on-color="success" data-off-color="default" name="demo-fixedheader" data-on-text="&nbsp;" data-off-text="&nbsp;"></div>
-                </div>
-                <div class="tabular-row">
-                    <div class="tabular-cell">Boxed Layout</div>
-                    <div class="tabular-cell demo-switches"><input class="bootstrap-switch" type="checkbox" data-size="mini" data-on-color="success" data-off-color="default" name="demo-boxedlayout" data-on-text="&nbsp;" data-off-text="&nbsp;"></div>
-                </div>
                 <div class="tabular-row">
                     <div class="tabular-cell">Collapse Leftbar</div>
                     <div class="tabular-cell demo-switches"><input class="bootstrap-switch" type="checkbox" data-size="mini" data-on-color="success" data-off-color="default" name="demo-collapseleftbar" data-on-text="&nbsp;" data-off-text="&nbsp;"></div>
@@ -128,7 +120,5 @@
 <script src="https://cdn.datatables.net/responsive/2.2.4/js/responsive.bootstrap.min.js"></script>
 
 <script>
-//$(document).ready(function(){
-//    $('.bootstrap-switch').switch();
-//})
+// $('#logPopover').on('click').popover('show');
 </script>

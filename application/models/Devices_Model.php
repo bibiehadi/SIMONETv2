@@ -8,6 +8,11 @@ class Devices_Model extends CI_Model {
         $this->db->insert('devices', $data);
     }
 
+    function setDevice($data){
+        $this->db->where('id', $data['id']);
+        $this->db->update('devices', $data);
+    }
+
     function getDevices(){
         if($data = $this->db->get('devices')){
 			return $data->result_array();

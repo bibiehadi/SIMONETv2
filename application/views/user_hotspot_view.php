@@ -15,13 +15,10 @@
                                 <div class="panel panel-default">
                                     <div class="panel-heading">
                                         <h2>Data User Hotspot</h2>
-                                        <div class="panel-ctrls"></div>
-                                        <div class="col-md-12" style="padding: 15px">
-                                        <a class="btn btn-success pull-right" data-aksi="add" style="margin-left: 10px;"><i class="fa fa-plus"></i></a>
-                                            <a class="btn btn-info pull-right" data-aksi="sync" href="javascript:;"><i class="fa fa-refresh"></i> Refresh</a>
-                                        </div>
+                                        <a class="btn btn-success pull-right" data-aksi="add" style="margin : 10px 10px 0px 10px"><i class="fa fa-plus"></i></a>
+                                        <a class="btn btn-info pull-right" data-aksi="sync" href="javascript:;" style="margin : 10px 10px"><i class="fa fa-refresh"></i> Refresh</a>
                                     </div>
-                                    <div class="panel-body no-padding">
+                                    <div class="panel-body">
                                         <table id="tb_hotspot" class="table table-striped table-bordered" cellspacing="0" width="100%">
                                             <thead>
                                                 <tr>
@@ -106,16 +103,17 @@
 
 <script type="text/javascript">
     table = $('#tb_hotspot').DataTable({
-        // "processing" : true,
-        // "serverSide" : true,
-        "responsive" : true,
-        // "order" : [],
-        "ajax" : {
+        responsive : true,
+        oLanguage: {
+        "sLengthMenu": " _MENU_ ",
+        "sSearch": "Search..."
+        },
+        ajax : {
             "url" : "<?php echo site_url('hotspot/userhotspotJSON')?>",
             "type" : "POST"
             // "dataSrc" : ""
         },
-        "columns" : [
+        columns : [
             // {"data" : "id"},
             {"data" : "name"},
             {"data" : "password"},

@@ -276,7 +276,7 @@
 							<li><a href="<?php echo site_url('hotspot/useractive'); ?>">User Active</a></li>
 						</ul>
 				</li>
-				<li><a href="<?php echo site_url('pasar'); ?>"><i class="ti ti-rss-alt"></i><span>Log Activity</span></a>
+				<li><a id="logPopover" role="button" data-toggle="popover" data-placement="right" data-content="Vivamus sagittis lacus vel augue laoreet rutrum faucibus."><i class="ti ti-rss-alt"></i><span>Log Activity</span></a>
 				</li>
 			</ul>
 		</nav>

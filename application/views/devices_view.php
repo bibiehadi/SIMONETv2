@@ -16,16 +16,16 @@
                                     <div class="panel-heading">
                                         <h2>Devices</h2>
                                         <!-- <div class="panel-ctrls"></div> -->
-                                        <a class="btn btn-success pull-right" data-aksi="add" style="margin-left: 10px;"><i class="fa fa-plus"></i></a>
+                                        <a class="btn btn-success pull-right" data-aksi="add" style="margin: 10px 10px;"><i class="fa fa-plus"></i></a>
                                     </div>
                                     <div class="panel-body">
                                         <table id="tb_devices" class="hover table table-striped table-bordered " cellspacing="0" width="100%">
                                             <thead>
                                                 <tr>
                                                     <th>ID</th>
-                                                    <th>Serial Number</th>
                                                     <th>Identity</th>
                                                     <th>IP Address</th>
+                                                    <th>Serial Number</th>
                                                     <th>Version</th>
                                                     <th>Uptime</th>
                                                     <th>Model</th>
@@ -102,7 +102,7 @@
                                     </div>
                                 </div>
                             </form>
-                            <button type="submit" id="btnSave" onClick="save()" class="btn btn-success pull-right">Save</button>
+                            <button type="submit" id="btnSave" onClick="save()" class="btn btn-success pull-right" style="margin: 10px 0px 0px 0px">Save</button>
                         </div>
                         <div class="tab-pane" id="DiscoveryDevice">
                             <table id="tb_discovery" class="table about-table " cellspacing="0" width="100%">
@@ -148,6 +148,7 @@
         responsive : true,
         oLanguage: {
         "sLengthMenu": " _MENU_ ",
+        "sSearch": "<span>Search..</span> _INPUT_"
         },
         ajax : {
             "url" : "<?php echo site_url('devices/devicesJSON')?>",
@@ -156,9 +157,9 @@
         },
         columns : [
             {"data" : "id"},
-            {"data" : "serial_number"},
             {"data" : "identity"},
             {"data" : "main_address4"},
+            {"data" : "serial_number"},
             {"data" : "version"},
             {"data" : "uptime"},
             {"data" : "model"},
@@ -168,15 +169,31 @@
         ],
     });
 
+    $('#tb_devices_filter input').attr('placeholder',"Search..");
+
     table2 = $('#tb_discovery').DataTable({
         responsive : true,
         oLanguage: {
         "sLengthMenu": " _MENU_ ",
+        "sSearch": "<span>Search..</span> _INPUT_"
         },
     })
 
     $('body').on('click','a[data-aksi="add"]',function(){
         addDevice();
+    })
+
+    $('body').on('click','a[data-aksi="discovery"]',function(){
+        var device = {
+            identity : $(this).attr('data-identity'),
+            address : $(this).attr('data-address'),
+            version : $(this).attr('data-version'),
+            uptime : $(this).attr('data-uptime'),
+            platform : $(this).attr('data-platform'),
+            board : $(this).attr('data-board'),
+            status : $(this).attr('data-status')
+        };
+        addByDiscovery(device);
     })
 
     $('body').on('click','a[data-aksi="sync"]',function(){
@@ -202,6 +219,22 @@
         $('.modal-title').text('Add Device');
     }
 
+    function addByDiscovery(device){
+        var data = device;
+        if(confirm('Anda yakin ingin menambahkan device ini ke database ?')){
+            $.post('<?php echo site_url('devices/addDeviceByDiscovery/') ?>',data,function(respon){
+                if(respon.status){
+                    $('#modal_form').modal('hide');
+                    reload_table();
+                }
+                else{ alert('error add this device');
+                }
+            },'json').fail(function(){
+                alert('error delete this data');
+            })
+        }
+    }
+
     function save(){
         $('#btnSave').text('saving...'); //change button text
         $('#btnSave').attr('disabled',true); //set button disable 
@@ -209,8 +242,6 @@
     
         if(save_method == 'add') {
             url = "<?php echo site_url('devices/adddevice')?>";
-        } else {
-            url = "<?php echo site_url('hotspot/setuserhotspot')?>";
         }
 
         $.ajax({
