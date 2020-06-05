@@ -32,7 +32,8 @@ class Devices_Model extends CI_Model {
 
     function getIPDevices(){
         $this->db->select('main_address4');
-        $this->db->where('platform', 'MikroTik');
+        $this->db->where('platform','MikroTik');
+        $this->db->or_where('platform','MikroTik Switch');
         if($data = $this->db->get('devices')){
             $result = $data->result_array();
 			foreach($result as $ip){

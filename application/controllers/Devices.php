@@ -1,7 +1,7 @@
 <?php
 
 defined('BASEPATH') OR exit('No direct script access allowed');
-
+require_once('application/libraries/Client.php');
 class Devices extends CI_Controller {
 
     
@@ -19,6 +19,7 @@ class Devices extends CI_Controller {
     public function index()
     {
         $data['discovery'] = $this->discoveryDevices();
+        $data['unifiDevices'] = $this->getUnifiDevices();
         $data['location'] = $this->devices->getLocation();
         $this->load->view('devices_view',$data);
         
@@ -100,14 +101,16 @@ class Devices extends CI_Controller {
                 //         $_data['serial'] = $serial;
                 $ip = $this->devices->getIPDevices();
                 foreach($read as $r){
-                    if(isset($r['address']) && !in_array($r['address'], $ip)){
-                        $version = explode('.',$r['version']);
-                        if($version[0] == '1'){
-                            $r['platform'] = "MikroTik Switch";
+                    if(isset($r['address'])){
+                        if(!in_array($r['address'], $ip)){
+                            $version = explode('.',$r['version']);
+                            if($version[0] == '1'){
+                                $r['platform'] = "MikroTik Switch";
+                            }
+                            $r['aksi'] = "<a href='javascript:;' data-aksi='discovery' data-identity='".$r['identity']."' data-uptime='".$r['uptime']."' data-board='".$r['board']."' data-version='".$r['version']."' data-address='".$r['address']."' data-platform='".$r['platform']."' data-status='Connected'><i class='fa fa-plus'></i></a>";
+                            $_data[] = $r;
                         }
-                        $r['aksi'] = "<a href='javascript:;' data-aksi='discovery' data-identity='".$r['identity']."' data-uptime='".$r['uptime']."' data-board='".$r['board']."' data-version='".$r['version']."' data-address='".$r['address']."' data-platform='".$r['platform']."' data-status='Connected'><i class='fa fa-plus'></i></a>";
-                        $_data[] = $r;
-                    }
+                    } 
                 }    
                 return $_data;
                 
@@ -193,10 +196,22 @@ class Devices extends CI_Controller {
             $connect = 0; $disconnect =0;
             $api = $this->routerosapi;
             if($api->connect("192.168.10.1","api","stikimonitor","62148")){
-                $api->write('/system/resource/print');
+                $api->write('/ping',false);
+                $api->write('=address=10.10.10.135',false);
+                $api->write('=count=5',false);
+                $api->write('=interval=0.3');
                 $read = $api->read();
                 $api->disconnect();
-                echo json_encode(array("status" => $read[0]['platform']));
+                foreach($read as $result){
+                    if($result['packet-loss']>=1 || isset($result['status'])){
+                        $disconnect++;
+                    }else if($result['packet-loss']==0){
+                        $connect++;
+                    }
+                }
+                echo "<pre>";
+                echo "Connect =".$connect." disconnect =".$disconnect;
+                print_r($read);
             }
         }catch(exeption $e){
             echo $e;
@@ -325,6 +340,41 @@ class Devices extends CI_Controller {
         $size = $size/1000;
         }
         return round($size, $decimals).' '.$unit[$i];
+    }
+
+    function getUnifiDevices(){
+        $unifi_connection = new UniFi_API\Client('bibiehadikusuma@stiki.ac.id', '66027822bibiE', 'https://10.10.10.2:8443', 'default', '5.10.25');
+        // $set_debug_mode   = $unifi_connection->set_debug(true);
+        $loginresults     = $unifi_connection->login();
+        $aps_array        = $unifi_connection->list_devices();       
+        foreach($aps_array as $ap){
+            if(isset($ap->name)){
+                $_ap['id'] = $ap->device_id;
+                $_ap['address'] = $ap->ip;
+                $_ap['identity'] = $ap->name;
+                $_ap['version'] = $ap->version;
+                $_ap['model'] = $ap->model;
+                $_ap['platform'] = 'UniFi';
+                $_ap['mac'] = $ap->mac;
+                if(isset($ap->uptime)){
+                    $_ap['uptime'] = timespan($ap->uptime);    
+                }else{
+                    $_ap['uptime'] = null;    
+                }
+                if((isset($ap->rx_bytes) && isset($ap->tx_byte))){
+                    $_ap['tx_bytes'] = $ap->tx_bytes;
+                    $_ap['rx_bytes'] = $ap->rx_bytes;
+                }else{
+                    $_ap['tx_bytes'] = null;
+                    $_ap['rx_bytes'] = null;
+                }
+                $_ap['aksi'] = "<a href='javascript:;' data-aksi='unifi' data-identity='".$_ap['identity']."' data-uptime='".$_ap['uptime']."' data-model='".$_ap['model']."' data-version='".$_ap['version']."' data-address='".$_ap['address']."' data-platform='".$_ap['platform']."' data-mac='".$_ap['mac']."' data-tx='".$_ap['tx_bytes']."' data-rx='".$_ap['rx_bytes']."' data-status='Connected'><i class='fa fa-plus'></i></a>";
+            }
+            $_aps_array[] = $_ap;
+        }
+        // echo "<pre>";
+        // print_r($_aps_array);
+        return $_aps_array;
     }
 }
 

@@ -24,6 +24,7 @@
                                                 <tr>
                                                     <th>ID</th>
                                                     <th>Identity</th>
+                                                    <th>Status</th>
                                                     <th>IP Address</th>
                                                     <th>Serial Number</th>
                                                     <th>Version</th>
@@ -31,7 +32,6 @@
                                                     <th>Model</th>
                                                     <th>Platform</th>
                                                     <th>Location</th>
-                                                    <th>Status</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
@@ -70,7 +70,10 @@
                             <a href="#AddManualy" data-toggle="tab">Add Device</a>
                         </li>
                         <li>
-                            <a href="#DiscoveryDevice" data-toggle="tab">Discovery Devices</a>
+                            <a href="#DiscoveryDevice" data-toggle="tab">Discover MikroTik</a>
+                        </li>
+                        <li>
+                            <a href="#UniFiDevice" data-toggle="tab">Discover UniFi</a>
                         </li>
                     </ul>
                     <div class="tab-content">
@@ -133,10 +136,39 @@
                                 </tbody>
                             </table>
                         </div>
+                        <div class="tab-pane" id="UniFiDevice">
+                            <table id="tb_unifi" class="table about-table " cellspacing="0" width="100%">
+                                <thead>
+                                    <tr>
+                                        <th>No</th>
+                                        <th>IP Address</th>
+                                        <th>Identity</th>
+                                        <th>Model</th>
+                                        <th>Version</th>
+                                        <th>Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                        <?php 
+                                        $i =1;
+                                            foreach($unifiDevices as $device){
+                                    ?> 
+                                    <tr>
+                                    <td><? echo $i++.'.'; ?></td>  
+                                    <td><? echo $device['address']; ?></td> 
+                                    <td><? echo $device['identity']; ?></td> 
+                                    <td><? echo $device['model']; ?></td> 
+                                    <td><? echo $device['version']; ?></td> 
+                                    <td><? echo $device['aksi']; ?></td> 
+                                    </tr>
+                                    <?}?>
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
                 </div>
             </div>
-            </div>
+        </div>
     </div>
 </div>
 
@@ -158,25 +190,31 @@
         columns : [
             {"data" : "id"},
             {"data" : "identity"},
+            {"data" : "status"},
             {"data" : "main_address4"},
             {"data" : "serial_number"},
             {"data" : "version"},
             {"data" : "uptime"},
             {"data" : "model"},
             {"data" : "platform"},
-            {"data" : "id_location"},
-            {"data" : "status"}
+            {"data" : "id_location"}
         ],
     });
 
     $('#tb_devices_filter input').attr('placeholder',"Search..");
 
     table2 = $('#tb_discovery').DataTable({
+        pageLength: 5,
         responsive : true,
-        oLanguage: {
-        "sLengthMenu": " _MENU_ ",
-        "sSearch": "<span>Search..</span> _INPUT_"
-        },
+        bLengthChange : false,
+        bInfo: false
+    })
+
+    table3 = $('#tb_unifi').DataTable({
+        pageLength: 5,
+        responsive : true,
+        bLengthChange : false,
+        bInfo: false
     })
 
     $('body').on('click','a[data-aksi="add"]',function(){
@@ -184,6 +222,20 @@
     })
 
     $('body').on('click','a[data-aksi="discovery"]',function(){
+        var device = {
+            identity : $(this).attr('data-identity'),
+            address : $(this).attr('data-address'),
+            version : $(this).attr('data-version'),
+            uptime : $(this).attr('data-uptime'),
+            platform : $(this).attr('data-platform'),
+            board : $(this).attr('data-board'),
+            status : $(this).attr('data-status')
+        };
+        addByDiscovery(device);
+    })
+
+
+    $('body').on('click','a[data-aksi="unifi"]',function(){
         var device = {
             identity : $(this).attr('data-identity'),
             address : $(this).attr('data-address'),
