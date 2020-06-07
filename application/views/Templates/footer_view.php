@@ -96,6 +96,7 @@
 <script type="text/javascript" src="<?php echo base_url('') ?>assets/plugins/nanoScroller/js/jquery.nanoscroller.min.js"></script>
 
 <script type="text/javascript" src="<?php echo base_url('') ?>assets/js/application.js"></script>
+<script type="text/javascript" src="<?php echo base_url('') ?>assets/js/bootbox.min.js"></script>
 <!-- <script type="text/javascript" src="<?php echo base_url('') ?>assets/demo/demo.js"></script> -->
 <script type="text/javascript" src="<?php echo base_url('') ?>assets/demo/demo-switcher.js"></script>
 <!-- <script type="text/javascript" src="<?php echo base_url('') ?>assets/plugins/form-daterangepicker/moment.min.js"></script>              			

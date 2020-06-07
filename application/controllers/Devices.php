@@ -1,6 +1,10 @@
 <?php
 
 defined('BASEPATH') OR exit('No direct script access allowed');
+
+set_include_path(get_include_path() . PATH_SEPARATOR . APPPATH . 'third_party/phpseclib');
+include(APPPATH . '/third_party/phpseclib/Net/SSH2.php');
+
 require_once('application/libraries/Client.php');
 class Devices extends CI_Controller {
 
@@ -18,8 +22,8 @@ class Devices extends CI_Controller {
 
     public function index()
     {
-        $data['discovery'] = $this->discoveryDevices();
-        $data['unifiDevices'] = $this->getUnifiDevices();
+        // $data['discovery'] = $this->discoveryDevices();
+        // $data['unifiDevices'] = $this->getUnifiDevices();
         $data['location'] = $this->devices->getLocation();
         $this->load->view('devices_view',$data);
         
@@ -66,6 +70,7 @@ class Devices extends CI_Controller {
         $data = array(
             'serial_number' => $this->input->post('serial'),
             'main_address4' => $this->input->post('address4'),
+            'platform' => $this->input->post('platform'),
             'id_location' => $this->input->post('location')
         );
         $this->devices->addDevice($data);
@@ -83,6 +88,10 @@ class Devices extends CI_Controller {
             'status' => $this->input->post('status')
         );
         $this->devices->addDevice($data);
+        $this->session->set_flashdata('devices', '<div class="alert alert-dismissable alert-success">
+            <i class="ti ti-check"></i>&nbsp; <strong>Well Done!</strong> Device '.$data['main_address4'].' Berhasil Ditambahkan
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+            </div>');
         echo json_encode(array("status" => TRUE));
     }
 
@@ -90,6 +99,7 @@ class Devices extends CI_Controller {
         $user = $this->devices->getUserRouter(array('id' => '1111'));
         try{
             $api = $this->routerosapi;
+            $api->port=$user['port'];
             if($api->connect('10.10.10.1',$user['username'],$user['password'])){
                 $api->write('/ip/neighbor/print');
                 $read = $api->read();
@@ -103,6 +113,7 @@ class Devices extends CI_Controller {
                 foreach($read as $r){
                     if(isset($r['address'])){
                         if(!in_array($r['address'], $ip)){
+                            $r['id'] = $r['.id'];
                             $version = explode('.',$r['version']);
                             if($version[0] == '1'){
                                 $r['platform'] = "MikroTik Switch";
@@ -112,13 +123,13 @@ class Devices extends CI_Controller {
                         }
                     } 
                 }    
-                return $_data;
+                // return $_data;
                 
-                // $output = array(
-                //     "draw" => $this->input->post('draw'),
-                //     "data" => $_data,
-                //     );
-                // echo json_encode($output);            
+                $output = array(
+                    "draw" => $this->input->post('draw'),
+                    "data" => $_data,
+                    );
+                echo json_encode($output);            
             }
         }catch(Exeption $error){
             echo json_encode(array("status" => FALSE));
@@ -145,6 +156,10 @@ class Devices extends CI_Controller {
                     $write = $api->read();
                     $api->disconnect();
                     $this->devices->setDevice($data);
+                    $this->session->set_flashdata('detail_device', '<div class="alert alert-dismissable alert-success">
+                        <i class="ti ti-check"></i>&nbsp; <strong>Well Done!</strong> Data Device '.$data['main_address4'].' Berhasil Dirubah
+                        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+                        </div>');
                     echo json_encode(array("status" => TRUE, "identity" => $write));
                 }else{
                     echo json_encode(array("status" => FALSE));
@@ -160,6 +175,11 @@ class Devices extends CI_Controller {
                 'id_location' => $this->input->post('location')  
             );
             $this->devices->setDevice($data);
+            $this->session->set_flashdata('detail_device', '<div class="alert alert-dismissable alert-success">
+                <i class="ti ti-check"></i>&nbsp; <strong>Well Done!</strong> Data Device '.$data['main_address4'].' Berhasil Dirubah
+                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+                </div>');
+        
             echo json_encode(array("status" => TRUE));
         }
     }
@@ -215,6 +235,23 @@ class Devices extends CI_Controller {
             }
         }catch(exeption $e){
             echo $e;
+        }
+    }
+
+    function cekOSUpdate(){
+        $user = $this->devices->getUserRouter(array('id' => '2222'));
+        try{
+            $api = $this->routerosapi;
+            $api->port = 8728;
+            if($api->connect('10.10.10.32',$user['username'],$user['password'])){
+                $comm = $api->comm('/system/package/update/');
+                // $read = $api->read();
+                // $api->disconnect();
+                // return $read[0]['name'];
+                print_r($comm);
+            }
+        }catch(Exeption $error){
+            // return 'error';
         }
     }
 
@@ -294,6 +331,7 @@ class Devices extends CI_Controller {
 
     function reboot(){
         $ip = $this->input->post('ip');
+        $identity = $this->input->post('identity');
         $user = $this->devices->getUserRouter(array('id' => '2222'));
         try{
             $api = $this->routerosapi;
@@ -302,6 +340,11 @@ class Devices extends CI_Controller {
                 $api->comm('/system/reboot');
                 $api->disconnect();
                 $this->devices->updateStatus($ip,array('status' => 'Reboot'));
+                $this->session->set_flashdata('devices', '<div class="alert alert-dismissable alert-success">
+                <i class="ti ti-check"></i>&nbsp; <strong>Well Done!</strong> Reboot Device '.$identity.' Berhasil!!
+                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+                </div>');
+        
                 echo json_encode(array("status" => TRUE));
             }
         }catch(Exeption $error){
@@ -312,14 +355,44 @@ class Devices extends CI_Controller {
     function delDevice(){
         // funtion menghapus data user hotspot di mikrotik dan database
         $id = $this->input->post('id');
+        $identity = $this->input->post('identity');
         if($this->devices->delDevice($id)){
             if($this->devices->delInterfaces($id)){
+                $this->session->set_flashdata('devices', '<div class="alert alert-dismissable alert-success">
+                <i class="ti ti-check"></i>&nbsp; <strong>Well Done!</strong> Menghapus Device '.$identity.' Berhasil !!
+                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+                </div>');
                 echo json_encode(array("status" => TRUE));
             }
         }else{
             echo json_encode(array("status" => FALSE));
         }
         
+    }
+
+    function downloadMikroTikOS(){
+        $ip = $this->input->post('ip');
+        $user = $this->devices->getUserRouter(array('id' => '2222'));
+        try{
+            $api = $this->routerosapi;
+            $api->port = $user['port'];
+            if($api->connect($ip,$user['username'],$user['password'])){
+                $api->write('/system/package/update/download');
+                $read = $api->read();
+                $api->write('/system/reboot');
+                $read1 = $api->read();
+                $this->devices->updateStatus($ip,array('status' => 'Reboot'));
+                $api->disconnect();
+                foreach($read as $r){
+                    $status = $r['status'];
+                }
+                echo json_encode(array("status" => TRUE, "message" => $status));
+            }else{
+                echo json_encode(array("status" => FALSE, "message" => "gagal terhubung ke router"));
+            }
+        }catch(Exeption $error){
+            echo json_encode(array("status" => FALSE));
+        }
     }
 
     function formatBytes($size, $decimals = 0){
@@ -374,7 +447,11 @@ class Devices extends CI_Controller {
         }
         // echo "<pre>";
         // print_r($_aps_array);
-        return $_aps_array;
+        $output = array(
+            "draw" => $this->input->post('draw'),
+            "data" => $_aps_array,
+            );
+        echo json_encode($output);            
     }
 }
 

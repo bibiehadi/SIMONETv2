@@ -67,7 +67,7 @@ class Devices_Model extends CI_Model {
 
     function getUserRouter($id){
         $this->db->where($id);
-        if($data = $this->db->get('configuration')){
+        if($data = $this->db->get('devices_user')){
 			return $data->row_array();
 		}else{
 			return false;

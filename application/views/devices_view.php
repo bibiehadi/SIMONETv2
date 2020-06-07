@@ -4,26 +4,29 @@
     <div class="static-content-wrapper">
         <div class="static-content">
             <div class="page-content">
-                <ol class="breadcrumb">
-                    <li><a href="#">Devices</a></li>
-                    <li class="active"><a href="#">List Devices</a></li>
-                </ol>
-                <div class="container-fluid">
+                <div class="container-fluid" style="margin-top: 10px">
                     <!-- <div data-widget-group="group1"> -->
                         <div class="row">
                             <div class="col-md-12">
+                            <?php echo $this->session->flashdata('devices') ?>
                                 <div class="panel panel-default">
                                     <div class="panel-heading">
                                         <h2>Devices</h2>
+                                        <select name="id" id="table-filter" class="list-group list-group-horizontal" style="width: 120px;color: #03a9f4;outline: 0px; background: #fafafa; margin-left :10px">
+                                            <option class="list-group-item list-group-item-action active" selected value="">All</option>
+                                            <option class="list-group-item list-group-item-action active" value="MikroTik">MikroTik</option>
+                                            <option class="list-group-item list-group-item-action active" value="UniFi">UniFi</option>
+                                        </select>
+
                                         <!-- <div class="panel-ctrls"></div> -->
                                         <a class="btn btn-success pull-right" data-aksi="add" style="margin: 10px 10px;"><i class="fa fa-plus"></i></a>
                                     </div>
                                     <div class="panel-body">
-                                        <table id="tb_devices" class="hover table table-striped table-bordered " cellspacing="0" width="100%">
+                                        <table id="tb_devices" class="hover table " cellspacing="0" width="100%">
                                             <thead>
                                                 <tr>
                                                     <th>ID</th>
-                                                    <th>Identity</th>
+                                                    <th>Device Name</th>
                                                     <th>Status</th>
                                                     <th>IP Address</th>
                                                     <th>Serial Number</th>
@@ -31,14 +34,13 @@
                                                     <th>Uptime</th>
                                                     <th>Model</th>
                                                     <th>Platform</th>
-                                                    <th>Location</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
                                             </tbody>
                                         </table>
                                     </div>
-                                    <div class="panel-footer"></div>
+                                    
                                 </div>
                             </div>
                         </div>
@@ -46,14 +48,14 @@
                 </div> 
                         <!-- </div>  -->
                     <!-- </div> -->
-                <footer role="contentinfo">
+                <!-- <footer role="contentinfo">
                     <div class="clearfix">
                         <ul class="list-unstyled list-inline pull-left">
                             <li><h6 style="margin: 0;">&copy; 2015 Avenxo</h6></li>
                         </ul>
                         <button class="pull-right btn btn-link btn-xs hidden-print" id="back-to-top"><i class="ti ti-arrow-up"></i></button>
                     </div>
-                </footer>
+                </footer> -->
 
 
 <div class="modal fade" id="modal_form" role="dialog" >
@@ -94,6 +96,18 @@
                                     </div>
                                 </div>
                                 <div class="form-group">
+                                    <label class="col-sm-2 control-label">Platform</label>
+                                    <div class="col-sm-8">
+                                        <select name="platform" id="selector_platform" class="form-control">
+                                            <option value="">--- Select ---</option>
+                                            <option value="MikroTik">MikroTik</option>
+                                            <option value="MikroTik Switch">MikroTik Switch</option>
+                                            <option value="UniFi">UniFi</option>
+                                            <option value="Other">Other</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="form-group">
                                     <label class="col-sm-2 control-label">Location</label>
                                     <div class="col-sm-8">
                                         <select name="location" id="selector2" class="form-control">
@@ -120,19 +134,6 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                        <?php 
-                                        $i =1;
-                                            foreach($discovery as $device){
-                                    ?> 
-                                    <tr>
-                                    <td><? echo $i++.'.'; ?></td> 
-                                    <td><? echo $device['interface']; ?></td> 
-                                    <td><? echo $device['address']; ?></td> 
-                                    <td><? echo $device['identity']; ?></td> 
-                                    <td><? echo $device['board']; ?></td> 
-                                    <td><? echo $device['aksi']; ?></td> 
-                                    </tr>
-                                    <?}?>
                                 </tbody>
                             </table>
                         </div>
@@ -140,7 +141,6 @@
                             <table id="tb_unifi" class="table about-table " cellspacing="0" width="100%">
                                 <thead>
                                     <tr>
-                                        <th>No</th>
                                         <th>IP Address</th>
                                         <th>Identity</th>
                                         <th>Model</th>
@@ -149,19 +149,6 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                        <?php 
-                                        $i =1;
-                                            foreach($unifiDevices as $device){
-                                    ?> 
-                                    <tr>
-                                    <td><? echo $i++.'.'; ?></td>  
-                                    <td><? echo $device['address']; ?></td> 
-                                    <td><? echo $device['identity']; ?></td> 
-                                    <td><? echo $device['model']; ?></td> 
-                                    <td><? echo $device['version']; ?></td> 
-                                    <td><? echo $device['aksi']; ?></td> 
-                                    </tr>
-                                    <?}?>
                                 </tbody>
                             </table>
                         </div>
@@ -196,25 +183,59 @@
             {"data" : "version"},
             {"data" : "uptime"},
             {"data" : "model"},
-            {"data" : "platform"},
-            {"data" : "id_location"}
+            {"data" : "platform"}
         ],
     });
+
+    $('#table-filter').on('change', function(){
+       table.search(this.value).draw();   
+    });
+
+    setInterval(() => {
+        reload_table();
+    }, 60000);
 
     $('#tb_devices_filter input').attr('placeholder',"Search..");
 
     table2 = $('#tb_discovery').DataTable({
         pageLength: 5,
         responsive : true,
+        dom: '<"top"f>rt<"bottom"p><"clear">',
         bLengthChange : false,
-        bInfo: false
+        bInfo: false,
+        ajax : {
+            "url" : "<?php echo site_url('devices/discoverydevices')?>",
+            "type" : "POST"
+            // "dataSrc" : ""
+        },
+        columns : [
+            {"data" : "id"},
+            {"data" : "interface"},
+            {"data" : "address"},
+            {"data" : "identity"},
+            {"data" : "board"},
+            {"data" : "aksi"}
+        ],
     })
 
     table3 = $('#tb_unifi').DataTable({
         pageLength: 5,
         responsive : true,
         bLengthChange : false,
-        bInfo: false
+        bInfo: false,
+        dom: '<"top"f>rt<"bottom"p><"clear">',
+        ajax : {
+            "url" : "<?php echo site_url('devices/getUnifiDevices')?>",
+            "type" : "POST"
+            // "dataSrc" : ""
+        },
+        columns : [
+            {"data" : "address"},
+            {"data" : "identity"},
+            {"data" : "model"},
+            {"data" : "version"},
+            {"data" : "aksi"}
+        ],
     })
 
     $('body').on('click','a[data-aksi="add"]',function(){
@@ -273,52 +294,59 @@
 
     function addByDiscovery(device){
         var data = device;
-        if(confirm('Anda yakin ingin menambahkan device ini ke database ?')){
-            $.post('<?php echo site_url('devices/addDeviceByDiscovery/') ?>',data,function(respon){
+        bootbox.confirm('Anda yakin ingin menambahkan device ini ke database ?', function(result){
+            if(result){
+                $.post('<?php echo site_url('devices/addDeviceByDiscovery/') ?>',data,function(respon){
                 if(respon.status){
                     $('#modal_form').modal('hide');
                     reload_table();
                 }
-                else{ alert('error add this device');
+                else{ 
+                    bootbox.alert('error add this device');
                 }
             },'json').fail(function(){
-                alert('error delete this data');
+                bootbox.alert('error delete this data');
             })
-        }
+            }
+        });
     }
 
     function save(){
-        $('#btnSave').text('saving...'); //change button text
-        $('#btnSave').attr('disabled',true); //set button disable 
-        var url;
-    
-        if(save_method == 'add') {
-            url = "<?php echo site_url('devices/adddevice')?>";
-        }
-
-        $.ajax({
-            url : url,
-            type: "POST",
-            data: $('#form').serialize(),
-            dataType: "JSON",
-            success: function(data)
-            {
-                if(data.status) 
-                {
-                    $('#modal_form').modal('hide');
-                    
+        bootbox.confirm('Anda yakin ingin menambahkan device ini ke database ?', function(result){
+            if(result){
+                $('#btnSave').text('saving...'); //change button text
+                $('#btnSave').attr('disabled',true); //set button disable 
+                var url;
+            
+                if(save_method == 'add') {
+                    url = "<?php echo site_url('devices/adddevice')?>";
                 }
-                reload_table();
-                $('#btnSave').text('save'); 
-                $('#btnSave').attr('disabled',false); 
-            },
-            error: function (jqXHR, textStatus, errorThrown)
-            {
-                alert('Gagal menyimpan data device');
-                $('#btnSave').text('save'); 
-                $('#btnSave').attr('disabled',false); 
+
+                $.ajax({
+                    url : url,
+                    type: "POST",
+                    data: $('#form').serialize(),
+                    dataType: "JSON",
+                    success: function(data)
+                    {
+                        if(data.status) 
+                        {
+                            $('#modal_form').modal('hide');
+                            
+                        }
+                        reload_table();
+                        $('#btnSave').text('save'); 
+                        $('#btnSave').attr('disabled',false); 
+                    },
+                    error: function (jqXHR, textStatus, errorThrown)
+                    {
+                        alert('Gagal menyimpan data device');
+                        $('#btnSave').text('save'); 
+                        $('#btnSave').attr('disabled',false); 
+                    }
+                })
             }
-        });
+        })
     }
 
     function reload_table(){

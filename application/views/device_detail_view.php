@@ -3,14 +3,10 @@
     </div>
     <div class="static-content-wrapper">
         <div class="static-content">
-            <div class="page-content">
-                <ol class="breadcrumb">
-                    <li><a href="<?php echo site_url('Devices'); ?>">Devices</a></li>
-                    <li><a href="#">List Devices</a></li>
-                    <li actived><a href="#"><? echo $identity;?></a></li>
-                </ol>
+            <div class="page-content" style="margin-top : 20px">
                 <div class="container-fluid">
                 <div data-widget-group="group1">
+                <?php echo $this->session->flashdata('detail_device') ?>
                     <div class="row">
                         <div class="col-sm-3">
                             <div class="panel panel-profile">
@@ -33,7 +29,7 @@
                                     <div class="panel panel-default">
                                         <div class="panel-heading">
                                             <div class="row">
-                                                <div class="col-md-4" >
+                                                <div class="col-md-6" >
                                                     <h2>Detail Device</h2>
                                                     <form class="form-inline" action="<?php echo site_url('devices/detaildevice');?>" method="post" id="deviceForm" style="">
                                                         <select name="id" id="device" class="custom-select custom-select-sm" style="width: 120px;color: #03a9f4; border: 0px; outline: 0px; background: #fafafa; margin-left :10px">
@@ -47,7 +43,7 @@
                                                         </select>
                                                     </form>
                                                 </div>
-                                                <div class="col-md-8">
+                                                <div class="col-md-6">
                                                     <?php if($status == 'Connected' && $platform == 'MikroTik'){?>
                                                         <a class="btn btn-warning pull-right" data-aksi="reboot" href="javascript:;" style="margin: 10px 20px 10px 0px">Reboot</a>
                                                     <? }?>
@@ -75,7 +71,7 @@
                                                         </tr>
                                                         <tr>
                                                             <th>Version</th>
-                                                            <td><?php echo $version?></td>
+                                                            <td><?php echo $version?><a class="btn" data-aksi="update" href="javascript:;"><i class="fa fa-chevron-circle-up"  style="color : blue"></i></a></td>
                                                         </tr>
                                                         <tr>
                                                             <th>Uptime</th>
@@ -246,17 +242,21 @@
     });
 
     $('#device').change(function(){
+        $.skylo('start');
         $('#deviceForm').submit();
+        $.skylo('end');
     })
+
+    $('body').on('click','a[data-aksi="update"]',function(){
+        updateSystem();
+    });
 
     $('body').on('click','a[data-aksi="remove"]',function(){
         removeDevice(<? echo $id; ?>);
-        // alert(<? echo $id?>);
     });
     
     $('body').on('click','a[data-aksi="sync"]',function(){
         syncInterfaces();
-        syncIP();
     });
 
     function syncInterfaces(){
@@ -265,17 +265,19 @@
                         id: <? echo $id; ?>};
             $.post('<?php echo site_url('devices/getInterfaces/') ?>',data,function(respon){
                 if(respon.status){
+                    syncIP();
+                    $.skylo('end');
                 }
-                else{ alert('error delete this data');
+                else{ 
+                    alert('error delete this data');
+                    $.skylo('end');
                 }
             },'json').fail(function(){
                 alert('error sync devices data');
             })
-            $.skylo('end');
     }
 
     function syncIP(){
-            $.skylo('start');
             var data = {ip : '<? echo $main_address4?>',
                         id: <? echo $id?>};
             $.post('<?php echo site_url('devices/getIP/') ?>',data,function(respon){
@@ -288,17 +290,21 @@
             },'json').fail(function(){
                 alert('error sync devices data');
             })
-            $.skylo('end');
     }
 
     function rebootDevice(ip){
-        var data = {ip : ip};
+        $.skylo('start');
+        var data = {ip : ip,
+                    identity : '<? echo $identity; ?>'};
         if(confirm('Anda yakin ingin mereboot device ini ?')){
             $.post('<?php echo site_url('devices/reboot/') ?>',data,function(respon){
                 if(respon.status){
                     location.href='<?php echo site_url('devices')?>/';
+                    $.skylo('end');
                 }
-                else{ alert('error reboot this device');
+                else{ 
+                    alert('error reboot this device');
+                    $.skylo('end');
                 }
             },'json').fail(function(){
                 alert('error reboot this device');
@@ -306,12 +312,39 @@
         }
     }
 
+    function updateSystem(){
+        var data = {ip : '<?echo $main_address4?>'};
+        bootbox.confirm('Anda yakin ingin mengupdate RouterOS device ini ?', function(result){
+            if(result){
+                var dialog = bootbox.dialog({
+                    title: 'Check Router OS',
+                    message: '<p><i class="fa fa-spin fa-spinner"></i> Loading...</p>'
+                });
+                            
+                $.post('<?php echo site_url('devices/downloadMikroTikOS/') ?>',data,function(respon){
+                    if(respon.status){
+                        dialog.find('.bootbox-body').html('<pre>'+ respon.message);
+                        // $.skylo('end');
+                    }
+                    else{ alert('error delete this data');
+                        dialog.find('.bootbox-body').html();
+                    }
+                },'json').fail(function(){
+                    alert('error delete this data');
+                })
+            }
+        })
+    }
+
     function removeDevice(id){
-        var data = {id : id};
+        $.skylo('start');
+        var data = {id : id,
+                    identity : '<? echo $identity; ?>'};
         if(confirm('Anda yakin ingin menghapus data ini ?')){
             $.post('<?php echo site_url('devices/delDevice/') ?>',data,function(respon){
                 if(respon.status){
                     location.href='<?php echo site_url('devices')?>/';
+                    $.skylo('end');
                 }
                 else{ alert('error delete this data');
                 }
