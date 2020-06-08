@@ -370,6 +370,30 @@ class Devices extends CI_Controller {
         
     }
 
+    function cekMikroTik(){
+        // $ip = $this->input->post('ip');
+        $ip = '10.10.10.135';
+        $mac = '00:0C:42:E5:0D:C6';
+        $user = $this->devices->getUserRouter(array('id' => '2222'));
+        try{
+            $api = $this->routerosapi;
+            $api->port = 8728;
+            if($api->connect($ip,$user['username'],$user['password'])){
+                $api->write('/ip/address/print');
+                $read = $api->read();
+                $api->disconnect();
+                echo json_encode(array("status" => TRUE));
+            }elseif($api->connect($mac,$user['username'],$user['password'])){
+                echo "gae MAC";
+                $api->disconnect();
+            }else{
+                echo "gak kenek";
+            }
+        }catch(Exeption $error){
+            echo json_encode(array("status" => FALSE));
+        }
+    }
+
     function downloadMikroTikOS(){
         $ip = $this->input->post('ip');
         $user = $this->devices->getUserRouter(array('id' => '2222'));
@@ -379,14 +403,20 @@ class Devices extends CI_Controller {
             if($api->connect($ip,$user['username'],$user['password'])){
                 $api->write('/system/package/update/download');
                 $read = $api->read();
-                $api->write('/system/reboot');
-                $read1 = $api->read();
-                $this->devices->updateStatus($ip,array('status' => 'Reboot'));
-                $api->disconnect();
                 foreach($read as $r){
-                    $status = $r['status'];
+                    if(isset($r['status'])){
+                        $api->disconnect();
+                        $status = $r['status'];
+                    }else{
+                        $api->disconnect();
+                        $status = $r[0]['message'];
+                        echo json_encode(array("status" => TRUE, "message" => $status));
+                        die();
+                    }
                 }
                 echo json_encode(array("status" => TRUE, "message" => $status));
+                die();
+                $api->disconnect();
             }else{
                 echo json_encode(array("status" => FALSE, "message" => "gagal terhubung ke router"));
             }

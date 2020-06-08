@@ -21,6 +21,14 @@ class Devices_Model extends CI_Model {
 		}
     }
 
+    function getDevicesByStatus(){
+        if($data = $this->db->get('devices')){
+			return $data->result_array();
+		}else{
+			return false;
+		}
+    }
+
     function getDevice($id){
         $this->db->where($id);
         if($data = $this->db->get('devices')){

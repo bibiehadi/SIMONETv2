@@ -321,28 +321,37 @@
                     message: '<p><i class="fa fa-spin fa-spinner"></i> Loading...</p>'
                 });
                             
-                $.post('<?php echo site_url('devices/downloadMikroTikOS/') ?>',data,function(respon){
+                var xhr = $.post('<?php echo site_url('devices/downloadMikroTikOS/') ?>',data,function(respon){
                     if(respon.status){
                         dialog.find('.bootbox-body').html('<pre>'+ respon.message);
+                        console.log(respon.message);
                         // $.skylo('end');
                     }
                     else{ alert('error delete this data');
-                        dialog.find('.bootbox-body').html();
+                        dialog.find('.bootbox-body').html('Gagal Melakukan Update RouterOS');
                     }
                 },'json').fail(function(){
                     alert('error delete this data');
                 })
+                setTimeout(() => {
+                    xhr.abort();
+                }, 60000);
             }
         })
     }
 
     function removeDevice(id){
         $.skylo('start');
+        loading = bootbox.dialog({ 
+            message: '<div class="text-center"><i class="fa fa-spin fa-spinner"></i> Loading...</div>', 
+            closeButton: false 
+        })
         var data = {id : id,
                     identity : '<? echo $identity; ?>'};
         if(confirm('Anda yakin ingin menghapus data ini ?')){
             $.post('<?php echo site_url('devices/delDevice/') ?>',data,function(respon){
                 if(respon.status){
+                    loading.modal('hide');
                     location.href='<?php echo site_url('devices')?>/';
                     $.skylo('end');
                 }
@@ -359,6 +368,7 @@
         $('#btnSave').text('saving...'); //change button text
         $('#btnSave').attr('disabled',true); //set button disable 
         var url = "<?php echo site_url('devices/setDevice')?>";
+        
 
         $.ajax({
             url : url,
