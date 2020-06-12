@@ -236,6 +236,7 @@
                             <table id="tb_subdevices" class="table table-hover" cellspacing="0" width="100%" style="margin 5px">
                                 <thead>
                                     <tr>
+                                        <th>ID</th>
                                         <th>Name</th>
                                         <th>IP Address v4</th>
                                         <th>Version</th>
@@ -247,6 +248,7 @@
                                 <tbody>
                                     <?php foreach($subdevices as $device){ ?> 
                                         <tr>
+                                        <td><?echo $device['id']?></td>
                                         <td><?echo $device['identity']?></td>
                                         <td><?echo $device['address']?></td>
                                         <td><?echo $device['version']?></td>

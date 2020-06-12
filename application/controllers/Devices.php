@@ -139,7 +139,7 @@ class Devices extends CI_Controller {
     function setDevice(){
         // function untuk merubah data user hotspot dan menyimpannya ke mikrotik
         $device = $this->devices->getDevice(array('id' => $this->input->post('id')));
-        if(($this->input->post('identity') != $device['identity']) && $device['platform'] == 'MikroTik' ){
+        if($device['platform'] == 'MikroTik'){
             $user = $this->devices->getUserRouter(array('id' => '2222'));
             $data = array(
                 'id' => $this->input->post('id'),
@@ -149,26 +149,29 @@ class Devices extends CI_Controller {
                 'id_device' => $this->input->post('masterdevice'),
                 'id_location' => $this->input->post('location')  
             );
-            try{
-                $api = $this->routerosapi;
-                $api->port = 8728;
-                if($api->connect($data['address'],$user['username'],$user['password'])){
-                    $api->write('/system/identity/set',false);
-                    $api->write('=name='.$data['identity']);
-                    $write = $api->read();
-                    $api->disconnect();
-                    $this->devices->setDevice($data);
-                    $this->session->set_flashdata('detail_device', '<div class="alert alert-dismissable alert-success">
-                        <i class="ti ti-check"></i>&nbsp; <strong>Well Done!</strong> Data Device '.$device['identity'].' Berhasil Dirubah
-                        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
-                        </div>');
-                    echo json_encode(array("status" => TRUE, "identity" => $write));
-                }else{
-                    echo json_encode(array("status" => FALSE, "data" => $device));
+            if($data['identity'] != $device['identity']){
+                try{
+                    $api = $this->routerosapi;
+                    $api->port = 8728;
+                    if($api->connect($data['address'],$user['username'],$user['password'])){
+                        $api->write('/system/identity/set',false);
+                        $api->write('=name='.$data['identity']);
+                        $write = $api->read();
+                        $api->disconnect();
+                        $this->session->set_flashdata('detail_device', '<div class="alert alert-dismissable alert-success">
+                            <i class="ti ti-check"></i>&nbsp; <strong>Well Done!</strong> Data Device '.$device['identity'].' Berhasil Dirubah
+                            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+                            </div>');
+                        echo json_encode(array("status" => TRUE, "identity" => $write));
+                    }else{
+                        echo json_encode(array("status" => FALSE, "data" => $device));
+                    }    
+                }catch(exeption $e){
+                    echo $e;
                 }
-            }catch(exeption $e){
-                echo $e;
             }
+            echo json_encode(array("status" => TRUE));
+            $this->devices->setDevice($data);
         }elseif($this->input->post('identity') == null){
             $data = array(
                 'id' => $this->input->post('id'),
