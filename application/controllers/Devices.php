@@ -206,12 +206,17 @@ class Devices extends CI_Controller {
             if($api->connect($ip,$user['username'],$user['password'])){
                 $api->write('/system/resource/print');
                 $read = $api->read();
+                $api->write('/system/routerboard/print');
+                $board = $api->read();
                 $api->disconnect();
+                $_array = array_merge_recursive($read[0],$board[0]);
                 $identity['identity'] = $this->getIdentity($ip);
                 $identity['id'] = $id;
                 if($identity['identity']!='error'){
-                    $this->devices->syncdatadevice($identity,$read);
+                    $this->devices->syncdatadevice($identity,$_array);
                 }
+                // echo "<pre>";
+                // print_r($_array);
                 // echo json_encode(array("status" => TRUE));
             }else{
                 // echo json_encode(array("status" => FALSE, "msg" => 'Gagal terhubung ke Router'.$device['address']));

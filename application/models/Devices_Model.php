@@ -63,13 +63,13 @@ class Devices_Model extends CI_Model {
 		}
     }
 
-    function syncDataDevice($identity,$data){
+    function syncDataDevice($identity,$device){
         try{
-            foreach($data as $device){
+            // foreach($data as $device){
                 $this->db->where('id', $identity['id']);
-                $this->db->update('devices', array('uptime' => $device['uptime'], 'version' => $device['version'], 
-                'model' => $device['board-name'], 'platform' => $device['platform'], 'identity' => $identity['identity']));
-            }
+                $this->db->update('devices', array('serial_number' => $device['serial-number'], 'uptime' => $device['uptime'], 'version' => $device['version'], 
+                'model' => $device['model'], 'platform' => $device['platform'], 'identity' => $identity['identity']));
+            // }
         }catch(Exception $e){
             return $e;
         }
@@ -153,9 +153,7 @@ class Devices_Model extends CI_Model {
         }
     }
 
-    function reload_table(){
-        table.ajax.reload(null,false);
-    }
+     
 }
 
 /* End of file Devices_Model.php */

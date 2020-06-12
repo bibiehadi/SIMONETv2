@@ -233,13 +233,12 @@
                                 </div>
                             </div>
                             <div class="panel-body ">
-                            <table id="tb_subdevices" class="table table-hover" cellspacing="0" width="100%" style="margin 5px">
+                            <table id="tb_subdevices" class="table table-hover table-responsive" cellspacing="0" width="100%" style="margin 5px">
                                 <thead>
                                     <tr>
                                         <th>ID</th>
                                         <th>Name</th>
-                                        <th>IP Address v4</th>
-                                        <th>Version</th>
+                                        <th>IP Address</th>
                                         <th>Model</th>
                                         <th>Platform</th>
                                         <th>Status</th>
@@ -251,7 +250,6 @@
                                         <td><?echo $device['id']?></td>
                                         <td><?echo $device['identity']?></td>
                                         <td><?echo $device['address']?></td>
-                                        <td><?echo $device['version']?></td>
                                         <td><?echo $device['model']?></td>
                                         <td><?echo $device['platform']?></td>
                                         <td><?echo $device['status']?></td>
@@ -322,6 +320,16 @@
     $('body').on('click','a[data-aksi="sync"]',function(){
         syncInterfaces();
     });
+
+    $('table#tb_subdevices').on('click','tbody tr',function(){
+        var id = $(this).find('td:eq(0)').html();
+        var url = '<?php echo site_url('devices/detaildevice')?>';
+        var form = $('<form action="' + url + '" method="post">' +
+        '<input type="hidden" name="id" value="'+id+'" />' +
+        '</form>');
+        $('body').append(form);
+        form.submit();
+    })
 
     function syncInterfaces(){
             $.skylo('start');
