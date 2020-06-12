@@ -6,10 +6,9 @@ class Dashboard extends CI_Controller {
     function __construct()
     {
         parent::__construct();
-        if($this->session->userdata('logged_in')=== null){
-            redirect('login');
+        if($this->session->userdata('username')== null){
+            redirect(site_url('login'),'refresh');
         }
-        // print_r($this->session->all_userdata());
             
     }
     

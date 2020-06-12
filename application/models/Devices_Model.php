@@ -29,6 +29,15 @@ class Devices_Model extends CI_Model {
 		}
     }
 
+    function getDevicesByMaster($id){
+        $this->db->where($id);
+        if($data = $this->db->get('devices')){
+			return $data->result_array();
+		}else{
+			return false;
+		}
+    }
+
     function getDevice($id){
         $this->db->where($id);
         if($data = $this->db->get('devices')){
@@ -39,13 +48,14 @@ class Devices_Model extends CI_Model {
     }
 
     function getIPDevices(){
-        $this->db->select('main_address4');
+        $this->db->select('address');
         $this->db->where('platform','MikroTik');
         $this->db->or_where('platform','MikroTik Switch');
+        $_ip = array();
         if($data = $this->db->get('devices')){
             $result = $data->result_array();
 			foreach($result as $ip){
-                $_ip[] = $ip['main_address4'];
+                $_ip[] = $ip['address'];
             }
             return $_ip;
 		}else{
@@ -82,9 +92,19 @@ class Devices_Model extends CI_Model {
 		}
     }
 
+    function getLastesROS(){
+        $this->db->where(array('id' => '1'));
+        if($data = $this->db->get('devices_configuration')){
+            $result = $data->result_array();
+            return $result[0]['script'];
+        }else{
+            return false;
+        }
+    }
+
     function getInterfaces($id){
         $this->db->where($id);
-        if($data = $this->db->get('interfaces')){
+        if($data = $this->db->get('device_interfaces')){
 			return $data->result_array();
 		}else{
 			return false;
@@ -95,9 +115,9 @@ class Devices_Model extends CI_Model {
         try{
             foreach($data as $interface){
                 if(!isset($interface['default'])){
-                    $this->db->query("insert into interfaces(name,mac_address,id_device,rx_byte,tx_byte)
-                    values ('".$interface['name']."','".$interface['mac-address']."','".$id_device."','".$interface['rx-byte']."','".$interface['tx-byte']."') 
-                    ON DUPLICATE KEY UPDATE name = '".$interface['name']."', mac_address = '".$interface['mac-address']."', id_device = '".$id_device."', rx_byte = '".$interface['rx-byte']."', tx_byte = '".$interface['tx-byte']."'");
+                    $this->db->query("insert into device_interfaces(id_interface,name,mac_address,id_device,rx_byte,tx_byte)
+                    values ('".$interface['.id']."','".$interface['name']."','".$interface['mac-address']."','".$id_device."','".$interface['rx-byte']."','".$interface['tx-byte']."') 
+                    ON DUPLICATE KEY UPDATE id_interface = '".$interface['.id']."', name = '".$interface['name']."', mac_address = '".$interface['mac-address']."', id_device = '".$id_device."', rx_byte = '".$interface['rx-byte']."', tx_byte = '".$interface['tx-byte']."'");
                 }
             }
         }catch(Exception $e){
@@ -108,11 +128,11 @@ class Devices_Model extends CI_Model {
     function updateIP($data){
         $this->db->where('id_device', $data['id']);
         $this->db->where('name', $data['name']);
-        $this->db->update('interfaces', array('address' => $data['address']));
+        $this->db->update('device_interfaces', array('address' => $data['address']));
     }
 
     function updateStatus($ip,$data){
-        $this->db->where('main_address4', $ip);
+        $this->db->where('address', $ip);
         $this->db->update('devices', $data);
     }
 
@@ -126,11 +146,15 @@ class Devices_Model extends CI_Model {
 
 
     function delInterfaces($id){
-        if($this->db->delete('interfaces',array('id_device' => $id))){
+        if($this->db->delete('device_interfaces',array('id_device' => $id))){
             return true;
         }else{
             return false;
         }
+    }
+
+    function reload_table(){
+        table.ajax.reload(null,false);
     }
 }
 

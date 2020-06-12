@@ -67,11 +67,17 @@
                                                         </tr>
                                                         <tr>
                                                             <th>Main IP Address</th>
-                                                            <td><?php echo $main_address4 ?></td>
+                                                            <td><?php echo $address ?></td>
                                                         </tr>
                                                         <tr>
                                                             <th>Version</th>
-                                                            <td><?php echo $version?><a class="btn" data-aksi="update" href="javascript:;"><i class="fa fa-chevron-circle-up"  style="color : blue"></i></a></td>
+                                                            <td><?php echo $version?><a class="btn" data-aksi="update" href="javascript:;">
+                                                            <? $_version = explode(' ',$version); 
+                                                                $_last_ros = explode(' ',$last_ros); 
+                                                             if(($_last_ros[0] > $_version[0]) && ($status == 'Connected') && ($platform == 'MikroTik')) {
+                                                                ?>
+                                                                <i class="fa fa-chevron-circle-up"  style="color : #03a9f4"></i></a></td>
+                                                             <?}?>
                                                         </tr>
                                                         <tr>
                                                             <th>Uptime</th>
@@ -79,7 +85,11 @@
                                                         </tr>
                                                         <tr>
                                                             <th>Location</th>
-                                                            <td><?php echo $id_location?></td>
+                                                            <? foreach($location as $loc){ 
+                                                                if ($loc['id'] == $id_location) {?>
+                                                                    <td><? echo $loc['nama'];?></td>
+                                                                <? }
+                                                                } ?>
                                                         </tr>
                                                         <tr>
                                                             <th>Status</th>
@@ -110,14 +120,14 @@
                                                 <div class="col-md-12">
                                                     <form class="form-horizontal tabular-form" id="editDevice">
                                                         <div class="form-group">
-                                                            <label for="form-serial" class="col-sm-2 control-label">ID Device</label>
+                                                            <label for="form-id" class="col-sm-2 control-label">ID Device</label>
                                                             <div class="col-sm-8 tabular-border">
-                                                                <input type="text" class="form-control" name="id" id="form-serial" value="<?php echo $id;?>" readonly>
+                                                                <input type="text" class="form-control" name="id" id="form-id" value="<?php echo $id;?>" readonly>
                                                             </div>
                                                         </div>
                                                         <?php if($status == 'Connected' && $platform == 'MikroTik'){?>
                                                         <div class="form-group">
-                                                            <label for="form-serial" class="col-sm-2 control-label">Identity</label>
+                                                            <label for="form-identity" class="col-sm-2 control-label">Identity</label>
                                                             <div class="col-sm-8 tabular-border">
                                                                 <input type="text" class="form-control" name="identity" id="identity" value="<?php echo $identity;?>">
                                                             </div>
@@ -132,7 +142,22 @@
                                                         <div class="form-group">
                                                             <label for="form-address" class="col-sm-2 control-label">Main IP Address</label>
                                                             <div class="col-sm-8 tabular-border">
-                                                                <input type="text" class="form-control" name="address" id="form-address" value="<?php echo $main_address4; ?>">
+                                                                <input type="text" class="form-control" name="address" id="form-address" value="<?php echo $address; ?>">
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label class="col-sm-2 control-label">Master Devices</label>
+                                                            <div class="col-sm-8">
+                                                                <select name="masterdevice" id="masterdevice" class="form-control">
+                                                                    <option value="">--- Select ---</option>
+                                                                    <? foreach($list_devices as $device){ 
+                                                                        if ($device['id'] == $id_device) {?>
+                                                                            <option selected value="<? echo $device['id']; ?>"><? echo $device['identity'];?></option>
+                                                                        <? }else{ ?>
+                                                                            <option value="<? echo $device['id']; ?>"><? echo $device['identity'];?></option>
+                                                                    <? } 
+                                                                    }?>
+                                                                </select>
                                                             </div>
                                                         </div>
                                                         <div class="form-group">
@@ -142,9 +167,9 @@
                                                                     <option value="">--- Select ---</option>
                                                                     <? foreach($location as $loc){ 
                                                                         if ($loc['id'] == $id_location) {?>
-                                                                            <option selected value="<? echo $loc['id']; ?>"><? echo $loc['name'];?></option>
+                                                                            <option selected value="<? echo $loc['id']; ?>"><? echo $loc['nama'];?></option>
                                                                         <? }else{ ?>
-                                                                            <option value="<? echo $loc['id']; ?>"><? echo $loc['name'];?></option>
+                                                                            <option value="<? echo $loc['id']; ?>"><? echo $loc['nama'];?></option>
                                                                     <? } 
                                                                     }?>
                                                                 </select>
@@ -177,10 +202,10 @@
                                                 </div>
                                             </div>
                                             <div class="panel-body ">
-                                            <table id="tb_interfaces" class="table table-striped table-bordered" cellspacing="0" width="100%" style="margin 5px">
+                                            <table id="tb_interfaces" class="table table-hover" cellspacing="0" width="100%" style="margin 5px">
                                                 <thead>
                                                     <tr>
-                                                        <th>No</th>
+                                                        <th>Id</th>
                                                         <th>Name</th>
                                                         <th>Mac Address</th>
                                                         <th>IP Address v4</th>
@@ -189,20 +214,6 @@
                                                     </tr>
                                                 </thead>
                                                 <tbody>
-                                                        <?php if($interfaces != null){
-                                                        $i =1;
-                                                            foreach($interfaces as $interface){
-                                                    ?> 
-                                                    <tr>
-                                                    <td><? echo $i++.'.'; ?></td> 
-                                                    <td><? echo $interface['name']; ?></td> 
-                                                    <td><? echo $interface['mac_address']; ?></td> 
-                                                    <td><? echo $interface['address']; ?></td> 
-                                                    <td><? echo byte_format($interface['tx_byte']); ?></td> 
-                                                    <td><? echo byte_format($interface['rx_byte']); ?></td> 
-                                                    </tr>
-                                                    <?}
-                                                    } ?>
                                                 </tbody>
                                             </table>
                                             </div>
@@ -211,6 +222,44 @@
                                 </div>
                             </div><!-- .tab-content -->
                         </div><!-- col-sm-8 -->
+                    </div>
+                    <div class="row">
+                        <div class="panel panel-default" style="margin : 0px 20px 20px 20px">
+                            <div class="panel-heading">
+                                <div class="row">
+                                    <div class="col-md-4" >
+                                        <h2>Device Dibawahnya</h2>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="panel-body ">
+                            <table id="tb_subdevices" class="table table-hover" cellspacing="0" width="100%" style="margin 5px">
+                                <thead>
+                                    <tr>
+                                        <th>Name</th>
+                                        <th>IP Address v4</th>
+                                        <th>Version</th>
+                                        <th>Model</th>
+                                        <th>Platform</th>
+                                        <th>Status</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <?php foreach($subdevices as $device){ ?> 
+                                        <tr>
+                                        <td><?echo $device['identity']?></td>
+                                        <td><?echo $device['address']?></td>
+                                        <td><?echo $device['version']?></td>
+                                        <td><?echo $device['model']?></td>
+                                        <td><?echo $device['platform']?></td>
+                                        <td><?echo $device['status']?></td>
+                                        </tr>
+                                    <? }
+                                    ?>
+                                </tbody>
+                            </table>
+                            </div>
+                        </div>
                     </div>
                 </div>
                 </div>
@@ -229,16 +278,29 @@
 
 
 <script type="text/javascript">
-    $('#tb_interfaces').DataTable({
+    var table = $('#tb_interfaces').DataTable({
         responsive : true,
         oLanguage: {
         "sLengthMenu": " _MENU_ ",
-        "sSearch": "Search..."
-        }
+        "sSearch": "<span>Search..</span> _INPUT_"
+        },
+        ajax : {
+            "url" : "<?php echo site_url('devices/getinterfacesJSON/').$id?>",
+            "type" : "POST"
+            // "dataSrc" : ""
+        },
+        columns : [
+            {"data" : "id_interface"},
+            {"data" : "name"},
+            {"data" : "mac_address"},
+            {"data" : "address"},
+            {"data" : "tx_byte"},
+            {"data" : "rx_byte"}
+        ],
     });
 
     $('body').on('click','a[data-aksi="reboot"]',function(){
-        rebootDevice('<? echo $main_address4; ?>');
+        rebootDevice('<? echo $address; ?>');
     });
 
     $('#device').change(function(){
@@ -261,9 +323,9 @@
 
     function syncInterfaces(){
             $.skylo('start');
-            var data = {ip : '<? echo $main_address4; ?>',
+            var data = {ip : '<? echo $address; ?>',
                         id: <? echo $id; ?>};
-            $.post('<?php echo site_url('devices/getInterfaces/') ?>',data,function(respon){
+            $.post('<?php echo site_url('devices/getinterfacesAPI/') ?>',data,function(respon){
                 if(respon.status){
                     syncIP();
                     $.skylo('end');
@@ -278,12 +340,12 @@
     }
 
     function syncIP(){
-            var data = {ip : '<? echo $main_address4?>',
+            var data = {ip : '<? echo $address?>',
                         id: <? echo $id?>};
             $.post('<?php echo site_url('devices/getIP/') ?>',data,function(respon){
                 if(respon.status){
                     // alert('sinkron data interfaces berhasil');
-                    location.reload();
+                    reload_table();
                 }
                 else{ alert('error delete this data');
                 }
@@ -313,7 +375,7 @@
     }
 
     function updateSystem(){
-        var data = {ip : '<?echo $main_address4?>'};
+        var data = {ip : '<?echo $address?>'};
         bootbox.confirm('Anda yakin ingin mengupdate RouterOS device ini ?', function(result){
             if(result){
                 var dialog = bootbox.dialog({
@@ -368,7 +430,6 @@
         $('#btnSave').text('saving...'); //change button text
         $('#btnSave').attr('disabled',true); //set button disable 
         var url = "<?php echo site_url('devices/setDevice')?>";
-        
 
         $.ajax({
             url : url,
@@ -394,17 +455,9 @@
         });
     }
 
-    // function formatBytes(bytes, decimals = 2) {
-    //     if (bytes === 0) return '0 Bytes';
-
-    //     const k = 1024;
-    //     const dm = decimals < 0 ? 0 : decimals;
-    //     const sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB'];
-
-    //     const i = Math.floor(Math.log(bytes) / Math.log(k));
-
-    //     return parseFloat((bytes / Math.pow(k, i)).toFixed(dm)) + ' ' + sizes[i];
-    // }
+    function reload_table(){
+        table.ajax.reload(null,false);
+    }
 </script>
 
 

@@ -35,7 +35,7 @@
 
     </head>
 
-    <body class="animated-content">
+    <body class="animated-content sidebar-collapsed">
         
         <header id="topnav" class="navbar navbar-default navbar-fixed-top" role="banner">
 
@@ -235,19 +235,14 @@
 		</li>
 
 	</ul>
-
-
-
-</header>
-
+	</header>
     </div>
-    
         <div id="wrapper">
             <div id="layout-static">
                 <div class="static-sidebar-wrapper sidebar-default">
                     <div class="static-sidebar">
                         <div class="sidebar">
-	<div class="widget">
+	<!-- <div class="widget">
         <div class="widget-body">
             <div class="userinfo">
                 <div class="avatar">
@@ -259,26 +254,26 @@
                 </div>
             </div>
         </div>
-    </div>
-	<div class="widget stay-on-collapse" id="widget-sidebar">
-        <nav role="navigation" class="widget-body">
-			<ul class="acc-menu">
-				<li class="nav-separator"><span>Explore</span></li>
-				<li><a href="<?php echo site_url('dashboard'); ?>"><i class="fa fa-tachometer"></i><span>Dashboard</span></a></li>	
-				<li><a href="<?php echo site_url('devices'); ?>"><i class="fa fa-hdd-o"></i><span>Devices</span></a></li>	
-				<li><a href="#"><i class="fa fa-area-chart" style="bold"></i><span>Statistic</span></a></li>	
-				<li><a href="javascript:;"><i class="fa fa-users"></i><span>Hotspot</span></a>
-					<ul class="acc-menu">
-							<li><a href="<?php echo site_url('hotspot/userhotspot'); ?>">User Hotspot</a></li>
-							<li><a href="<?php echo site_url('hotspot/userprofile'); ?>">User Profile</a></li>
-							<li><a href="<?php echo site_url('hotspot/useractive'); ?>">User Active</a></li>
-						</ul>
-				</li>
-				<li><a id="logPopover" role="button" data-toggle="popover" data-placement="right" data-content="Vivamus sagittis lacus vel augue laoreet rutrum faucibus."><i class="ti ti-rss-alt"></i><span>Log Activity</span></a>
-				</li>
-			</ul>
-		</nav>
-    </div>
+    </div> -->
+						<div class="widget stay-on-collapse" id="widget-sidebar">
+							<nav role="navigation" class="widget-body">
+								<ul class="acc-menu">
+									<li class="nav-separator"><span>Explore</span></li>
+									<li><a href="<?php echo site_url('dashboard'); ?>"><i class="fa fa-tachometer"></i><span>Dashboard</span></a></li>	
+									<li><a href="<?php echo site_url('devices'); ?>"><i class="fa fa-hdd-o"></i><span>Devices</span></a></li>	
+									<li><a href="#"><i class="fa fa-area-chart" style="bold"></i><span>Statistic</span></a></li>	
+									<li><a href="javascript:;"><i class="fa fa-users"></i><span>Hotspot</span></a>
+										<ul class="acc-menu">
+												<li><a href="<?php echo site_url('hotspot/userhotspot'); ?>">User Hotspot</a></li>
+												<li><a href="<?php echo site_url('hotspot/userprofile'); ?>">User Profile</a></li>
+												<li><a href="<?php echo site_url('hotspot/useractive'); ?>">User Active</a></li>
+											</ul>
+									</li>
+									<li><a id="logPopover" role="button" data-toggle="popover" data-placement="right" data-content="Vivamus sagittis lacus vel augue laoreet rutrum faucibus."><i class="ti ti-rss-alt"></i><span>Log Activity</span></a>
+									</li>
+								</ul>
+							</nav>
+						</div>
 
 </div>
 

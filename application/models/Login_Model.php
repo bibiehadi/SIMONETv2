@@ -1,6 +1,8 @@
 <?php 
 
 class Login_Model extends CI_Model{
+
+
     function login_val($username,$password){
         $this->db->where('username',$username);
         $this->db->or_where('email',$username);

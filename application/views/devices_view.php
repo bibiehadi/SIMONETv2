@@ -22,7 +22,7 @@
                                         <a class="btn btn-success pull-right" data-aksi="add" style="margin: 10px 10px;"><i class="fa fa-plus"></i></a>
                                     </div>
                                     <div class="panel-body">
-                                        <table id="tb_devices" class="hover table " cellspacing="0" width="100%">
+                                        <table id="tb_devices" class="table table-hover" cellspacing="0" width="100%">
                                             <thead>
                                                 <tr>
                                                     <th>ID</th>
@@ -63,7 +63,7 @@
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title" id="modal-title">Add User Profile</h4>
+                <h4 class="modal-title" id="modal-title">Add Device</h4>
             </div>
             <div class="modal-body form">
                 <div class="tab-container tab-default">
@@ -86,13 +86,19 @@
                                 <div class="form-group">
                                     <label class="col-sm-2 control-label">Serial Number</label>
                                     <div class="col-sm-8">
-                                        <input type="input" name="serial" class="form-control" placeholder='Serial Number Device' required>
+                                        <input type="input" name="serial" class="form-control" placeholder='Serial Number Device'>
                                     </div>
                                 </div>
                                 <div class="form-group">
-                                    <label class="col-sm-2 control-label">Main IP Address</label>
+                                    <label class="col-sm-2 control-label">IP Address</label>
                                     <div class="col-sm-8">
                                         <input type="input" name="address4" class="form-control" placeholder='IP Address Device' required>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label">Mac-Address</label>
+                                    <div class="col-sm-8">
+                                        <input type="input" name="mac_address" class="form-control" placeholder='Mac Address' required>
                                     </div>
                                 </div>
                                 <div class="form-group">
@@ -113,7 +119,7 @@
                                         <select name="location" id="selector2" class="form-control">
                                             <option value="">--- Select ---</option>
                                             <?php foreach ($location as $row) : ?>
-                                                <option value="<?php echo $row['id']; ?>"><?php echo $row['name'];?></option>
+                                                <option value="<?php print_r($row); ?>"><?php echo $row['nama'];?></option>
                                             <?php endforeach; ?>
                                         </select>
                                     </div>
@@ -138,7 +144,7 @@
                             </table>
                         </div>
                         <div class="tab-pane" id="UniFiDevice">
-                            <table id="tb_unifi" class="table about-table " cellspacing="0" width="100%">
+                            <table id="tb_unifi" class="table about-table " cellspacing="0" width="100%" >
                                 <thead>
                                     <tr>
                                         <th>IP Address</th>
@@ -178,7 +184,7 @@
             {"data" : "id"},
             {"data" : "identity"},
             {"data" : "status"},
-            {"data" : "main_address4"},
+            {"data" : "address"},
             {"data" : "serial_number"},
             {"data" : "version"},
             {"data" : "uptime"},
@@ -246,6 +252,7 @@
         var device = {
             identity : $(this).attr('data-identity'),
             address : $(this).attr('data-address'),
+            mac_address : $(this).attr('data-mac_address'),
             version : $(this).attr('data-version'),
             uptime : $(this).attr('data-uptime'),
             platform : $(this).attr('data-platform'),
@@ -260,6 +267,7 @@
         var device = {
             identity : $(this).attr('data-identity'),
             address : $(this).attr('data-address'),
+            mac_address : $(this).attr('data-mac'),
             version : $(this).attr('data-version'),
             uptime : $(this).attr('data-uptime'),
             platform : $(this).attr('data-platform'),
@@ -300,6 +308,8 @@
                 if(respon.status){
                     $('#modal_form').modal('hide');
                     reload_table();
+                    reload_table2();
+                    reload_table3();
                 }
                 else{ 
                     bootbox.alert('error add this device');
@@ -350,6 +360,14 @@
     }
 
     function reload_table(){
+        table.ajax.reload(null,false);
+    }
+
+    function reload_table2(){
+        table2.ajax.reload(null,false);
+    }
+
+    function reload_table3(){
         table.ajax.reload(null,false);
     }
 </script>

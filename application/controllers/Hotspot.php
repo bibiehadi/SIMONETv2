@@ -8,11 +8,11 @@ class Hotspot extends CI_Controller {
     public function __construct()
     {
         parent::__construct();
-        if($this->session->userdata('logged_in')=== null){
+        if($this->session->userdata('username')=== null){
             redirect('login');
         }
         $this->load->model('hotspot_model','hotspot');
-        $this->load->model('mikrotik_model','mikrotik');
+        $this->load->model('devices_model','devices');
     }
     
 
@@ -64,7 +64,9 @@ class Hotspot extends CI_Controller {
         );
         try{
             $api = $this->routerosapi;
-            if($api->connect("192.168.10.1","api","stikimonitor","62148")){
+            $user = $this->devices->getUserRouter(array('id' => '1111'));
+            $api->port = $user['port'];
+            if($api->connect("10.10.10.1",$user['username'],$user['password'])){
                 $api->write('/ip/hotspot/user/add',false);
 			    $api->write('=name='.$data['name'], false );
 			    $api->write('=password='.$data['password'], false );
@@ -99,7 +101,9 @@ class Hotspot extends CI_Controller {
         );
         try{
             $api = $this->routerosapi;
-            if($api->connect("192.168.10.1","api","stikimonitor","62148")){
+            $user = $this->devices->getUserRouter(array('id' => '1111'));
+            $api->port = $user['port'];
+            if($api->connect("10.10.10.1",$user['username'],$user['password'])){
                 $api->write('/ip/hotspot/user/set',false);
 			    $api->write('=.id='.$data['id'],false);
 			    $api->write('=name='.$data['name'], false );
@@ -121,7 +125,9 @@ class Hotspot extends CI_Controller {
         $id = $this->input->post('id');
         try{
             $api = $this->routerosapi;
-            if($api->connect("192.168.10.1","api","stikimonitor","62148")){
+            $user = $this->devices->getUserRouter(array('id' => '1111'));
+            $api->port = $user['port'];
+            if($api->connect("10.10.10.1",$user['username'],$user['password'])){
                 $api->write('/ip/hotspot/user/remove',false);
 			    $api->write('=.id='.$id);
                 $write = $api->read();
@@ -140,7 +146,9 @@ class Hotspot extends CI_Controller {
         // function untuk mensyncronise data dari mikrotik ke database
         try{
             $api = $this->routerosapi;
-            if($api->connect("192.168.10.1","api","stikimonitor","62148")){
+            $user = $this->devices->getUserRouter(array('id' => '1111'));
+            $api->port = $user['port'];
+            if($api->connect("10.10.10.1",$user['username'],$user['password'])){
                 $api->write('/ip/hotspot/user/print');
                 $read = $api->read();
                 $api->disconnect();        
@@ -198,7 +206,9 @@ class Hotspot extends CI_Controller {
         );
         try{
             $api = $this->routerosapi;
-            if($api->connect("192.168.10.1","api","stikimonitor","62148")){
+            $user = $this->devices->getUserRouter(array('id' => '1111'));
+            $api->port = $user['port'];
+            if($api->connect("10.10.10.1",$user['username'],$user['password'])){
                 $api->write('/ip/hotspot/user/profile/set',false);
 			    $api->write('=.id='.$data['id'],false);
 			    $api->write('=name='.$data['name'], false );
@@ -230,7 +240,9 @@ class Hotspot extends CI_Controller {
         );
         try{
             $api = $this->routerosapi;
-            if($api->connect("192.168.10.1","api","stikimonitor","62148")){
+            $user = $this->devices->getUserRouter(array('id' => '1111'));
+            $api->port = $user['port'];
+            if($api->connect("10.10.10.1",$user['username'],$user['password'])){
                 $api->write('/ip/hotspot/user/profile/add',false);
 			    $api->write('=name='.$data['name'], false );
 			    $api->write('=session-timeout='.$data['session_timeout'], false );
@@ -254,7 +266,9 @@ class Hotspot extends CI_Controller {
         $id = $this->input->post('id');
         try{
             $api = $this->routerosapi;
-            if($api->connect("192.168.10.1","api","stikimonitor","62148")){
+            $user = $this->devices->getUserRouter(array('id' => '1111'));
+            $api->port = $user['port'];
+            if($api->connect("10.10.10.1",$user['username'],$user['password'])){
                 $api->write('/ip/hotspot/user/profile/remove',false);
 			    $api->write('=.id='.$id);
                 $write = $api->read();
@@ -273,7 +287,9 @@ class Hotspot extends CI_Controller {
         // funtion untuk mensyncronise data dari mikrotik ke database
         try{
             $api = $this->routerosapi;
-            if($api->connect("192.168.10.1","api","stikimonitor","62148")){
+            $user = $this->devices->getUserRouter(array('id' => '1111'));
+            $api->port = $user['port'];
+            if($api->connect("10.10.10.1",$user['username'],$user['password'])){
                 $api->write('/ip/hotspot/user/profile/print');
                 $read = $api->read();
                 $api->disconnect();
@@ -296,10 +312,12 @@ class Hotspot extends CI_Controller {
 
     function userActiveJSON(){
         // function untuk mengget semua data user active dari Mikrotik
+        
         try{
             $api = $this->routerosapi;
-            $_read = array();
-            if($api->connect("192.168.10.1","api","stikimonitor","62148")){
+            $user = $this->devices->getUserRouter(array('id' => '1111'));
+            $api->port = $user['port'];
+            if($api->connect("10.10.10.1",$user['username'],$user['password'])){
                 $api->write('/ip/hotspot/active/print');
                 $read = $api->read();
                 $api->disconnect();
@@ -326,7 +344,9 @@ class Hotspot extends CI_Controller {
         $id = $this->input->post('id');
         try{
             $api = $this->routerosapi;
-            if($api->connect("192.168.10.1","api","stikimonitor","62148")){
+            $user = $this->devices->getUserRouter(array('id' => '1111'));
+            $api->port = $user['port'];
+            if($api->connect("10.10.10.1",$user['username'],$user['password'])){
                 $api->write('/ip/hotspot/active/remove',false);
 			    $api->write('=.id='.$id);
                 $write = $api->read();

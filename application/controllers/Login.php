@@ -6,13 +6,13 @@ class Login extends CI_Controller {
     function __construct(){
         parent::__construct();
         $this->load->model('login_model','login');
-        if($this->session->userdata('logged_in')=== true){
-            redirect('dashboard');
-        }
     }
     
 	public function index()
 	{
+        if($this->session->userdata('username')!= null){
+            redirect('dashboard');
+        }
         $this->load->view('login_view');
     }
     
@@ -31,7 +31,6 @@ class Login extends CI_Controller {
                 'username' => $username,
                 'email' => $email,
                 'role' => $role,
-                'logged_in' => TRUE
             );
             $this->session->set_userdata($sessdata);
 
@@ -47,7 +46,12 @@ class Login extends CI_Controller {
         }
     }
     function logout(){
+        $this->session->unset_userdata('id');
+        $this->session->unset_userdata('username');
+        $this->session->unset_userdata('email');
+        $this->session->unset_userdata('role');
         $this->session->sess_destroy();
-        redirect('login');
+        redirect(site_url('login'));
+        
     }
 }

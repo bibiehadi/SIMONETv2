@@ -29,16 +29,16 @@
         
         
 <div class="container" id="login-form">
-	<a href="index.html" class="login-logo"><img src="<?php echo base_url('');?>assets/img/logo-big.png"></a>
-		<div class="row">
-		<?php echo $this->session->flashdata('login') ?>
+	<!-- <a href="index.html" class="login-logo"></a> -->
+		<div class="row" style="margin : 200px auto 20px auto">
 			<div class="col-md-4 col-md-offset-4">
 				<div class="panel panel-default">
 					<!-- <div class="panel-heading">
 						<h2>Login Form</h2>
 					</div> -->
 					<div class="panel-body">
-						
+					<a href="index.html" ><img src="<?php echo base_url('');?>assets/img/logo-big.png" style="margin: 10px auto 20px auto; display: block"></a>
+					<?php echo $this->session->flashdata('login') ?>
 						<form action="<?php echo site_url('login/auth');?>" method="post" class="form-horizontal" id="validate-form" >
 							<div class="form-group mb-md">
 		                        <div class="col-xs-12">
