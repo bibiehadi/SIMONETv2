@@ -32,12 +32,12 @@
                                                 <div class="col-md-6" >
                                                     <h2>Detail Device</h2>
                                                     <form class="form-inline" action="<?php echo site_url('devices/detaildevice');?>" method="post" id="deviceForm" style="">
-                                                        <select name="id" id="device" class="custom-select custom-select-sm" style="width: 120px;color: #03a9f4; border: 0px; outline: 0px; background: #fafafa; margin-left :10px">
+                                                        <select name="serial" id="device" class="custom-select custom-select-sm" style="width: 120px;color: #03a9f4; border: 0px; outline: 0px; background: #fafafa; margin-left :10px">
                                                             <?php foreach ($list_devices as $row) {
-                                                                if($row['id'] == $id){?>
-                                                                    <option selected value="<?php echo $row['id']; ?> "><?php echo $row['identity'];?></option>
+                                                                if($row['serial_number'] == $serial_number){?>
+                                                                    <option selected value="<?php echo $row['serial_number']; ?> "><?php echo $row['identity'];?></option>
                                                                 <?} else { ?>
-                                                                    <option value="<?php echo $row['id']; ?>"><?php echo $row['identity'];?></option>
+                                                                    <option value="<?php echo $row['serial_number']; ?>"><?php echo $row['identity'];?></option>
                                                             <?php } 
                                                             } ?>
                                                         </select>
@@ -120,9 +120,9 @@
                                                 <div class="col-md-12">
                                                     <form class="form-horizontal tabular-form" id="editDevice">
                                                         <div class="form-group">
-                                                            <label for="form-id" class="col-sm-2 control-label">ID Device</label>
+                                                            <label for="form-serial" class="col-sm-2 control-label">Serial Number</label>
                                                             <div class="col-sm-8 tabular-border">
-                                                                <input type="text" class="form-control" name="id" id="form-id" value="<?php echo $id;?>" readonly>
+                                                                <input type="text" class="form-control" name="serial" id="form-serial" value="<?php echo $serial_number;?>" readonly>
                                                             </div>
                                                         </div>
                                                         <?php if($status == 'Connected' && $platform == 'MikroTik'){?>
@@ -133,12 +133,6 @@
                                                             </div>
                                                         </div>
                                                         <?}?>
-                                                        <div class="form-group">
-                                                            <label for="form-serial" class="col-sm-2 control-label">Serial Number</label>
-                                                            <div class="col-sm-8 tabular-border">
-                                                                <input type="text" class="form-control" name="serial" id="form-serial" value="<?php echo $serial_number;?>">
-                                                            </div>
-                                                        </div>
                                                         <div class="form-group">
                                                             <label for="form-address" class="col-sm-2 control-label">Main IP Address</label>
                                                             <div class="col-sm-8 tabular-border">
@@ -151,10 +145,10 @@
                                                                 <select name="masterdevice" id="masterdevice" class="form-control">
                                                                     <option value="">--- Select ---</option>
                                                                     <? foreach($list_devices as $device){ 
-                                                                        if ($device['id'] == $id_device) {?>
-                                                                            <option selected value="<? echo $device['id']; ?>"><? echo $device['identity'];?></option>
+                                                                        if ($device['serial_number'] == $id_device) {?>
+                                                                            <option selected value="<? echo $device['serial_number']; ?>"><? echo $device['identity'];?></option>
                                                                         <? }else{ ?>
-                                                                            <option value="<? echo $device['id']; ?>"><? echo $device['identity'];?></option>
+                                                                            <option value="<? echo $device['serial_number']; ?>"><? echo $device['identity'];?></option>
                                                                     <? } 
                                                                     }?>
                                                                 </select>
@@ -236,9 +230,9 @@
                             <table id="tb_subdevices" class="table table-hover table-responsive" cellspacing="0" width="100%" style="margin 5px">
                                 <thead>
                                     <tr>
-                                        <th>ID</th>
                                         <th>Name</th>
                                         <th>IP Address</th>
+                                        <th>Serial Number</th>
                                         <th>Model</th>
                                         <th>Platform</th>
                                         <th>Status</th>
@@ -247,9 +241,9 @@
                                 <tbody>
                                     <?php foreach($subdevices as $device){ ?> 
                                         <tr>
-                                        <td><?echo $device['id']?></td>
                                         <td><?echo $device['identity']?></td>
                                         <td><?echo $device['address']?></td>
+                                        <td><?echo $device['serial_number']?></td>
                                         <td><?echo $device['model']?></td>
                                         <td><?echo $device['platform']?></td>
                                         <td><?echo $device['status']?></td>
@@ -285,7 +279,7 @@
         "sSearch": "<span>Search..</span> _INPUT_"
         },
         ajax : {
-            "url" : "<?php echo site_url('devices/getinterfacesJSON/').$id?>",
+            "url" : "<?php echo site_url('devices/getinterfacesJSON/').$serial_number?>",
             "type" : "POST"
             // "dataSrc" : ""
         },
@@ -314,7 +308,7 @@
     });
 
     $('body').on('click','a[data-aksi="remove"]',function(){
-        removeDevice(<? echo $id; ?>);
+        removeDevice();
     });
     
     $('body').on('click','a[data-aksi="sync"]',function(){
@@ -322,10 +316,10 @@
     });
 
     $('table#tb_subdevices').on('click','tbody tr',function(){
-        var id = $(this).find('td:eq(0)').html();
+        var serial = $(this).find('td:eq(2)').html();
         var url = '<?php echo site_url('devices/detaildevice')?>';
         var form = $('<form action="' + url + '" method="post">' +
-        '<input type="hidden" name="id" value="'+id+'" />' +
+        '<input type="hidden" name="serial" value="'+serial+'" />' +
         '</form>');
         $('body').append(form);
         form.submit();
@@ -334,7 +328,7 @@
     function syncInterfaces(){
             $.skylo('start');
             var data = {ip : '<? echo $address; ?>',
-                        id: <? echo $id; ?>};
+                        serial: '<? echo $serial_number; ?>'};
             $.post('<?php echo site_url('devices/getinterfacesAPI/') ?>',data,function(respon){
                 if(respon.status){
                     syncIP();
@@ -351,7 +345,7 @@
 
     function syncIP(){
             var data = {ip : '<? echo $address?>',
-                        id: <? echo $id?>};
+                        serial: '<? echo $serial_number?>'};
             $.post('<?php echo site_url('devices/getIP/') ?>',data,function(respon){
                 if(respon.status){
                     // alert('sinkron data interfaces berhasil');
@@ -412,13 +406,13 @@
         })
     }
 
-    function removeDevice(id){
+    function removeDevice(){
         $.skylo('start');
         loading = bootbox.dialog({ 
             message: '<div class="text-center"><i class="fa fa-spin fa-spinner"></i> Loading...</div>', 
             closeButton: false 
         })
-        var data = {id : id,
+        var data = {serial : '<? echo $serial_number; ?>',
                     identity : '<? echo $identity; ?>'};
         if(confirm('Anda yakin ingin menghapus data ini ?')){
             $.post('<?php echo site_url('devices/delDevice/') ?>',data,function(respon){

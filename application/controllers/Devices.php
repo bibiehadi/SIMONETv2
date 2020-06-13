@@ -33,14 +33,14 @@ class Devices extends CI_Controller {
     public function detailDevice()
     {
         // function untuk menampilkan halaman detail user hotspot 
-        $id = $this->input->post('id');
-        $data = $this->devices->getDevice(array('id'=> $id));
+        $serial = $this->input->post('serial');
+        $data = $this->devices->getDevice(array('serial_number'=> $serial));
         $data['location'] = $this->getLocation();
         $data['list_devices'] = $this->devices->getdevices();
         $data['last_ros'] = $this->devices->getLastesROS();
-        $data['subdevices'] = $this->devices->getdevicesbymaster(array('id_device' => $id));
+        $data['subdevices'] = $this->devices->getdevicesby(array('id_device' => $serial));
         if($data['status'] == 'Connected' && $data['platform']=="MikroTik"){
-            $this->syncIdentities($data['address'],$id);
+            $this->syncIdentities($data['address'],$serial);
         }
         // echo "<pre>";
         // print_r($data['list_devices']);
@@ -81,18 +81,32 @@ class Devices extends CI_Controller {
     }
 
     function addDeviceByDiscovery(){
-        $data = array(
-            'address' => $this->input->post('address'),
-            'mac_address' => $this->input->post('mac_address'),
-            'identity' => $this->input->post('identity'),
-            'version' => $this->input->post('version'),
-            'uptime' => $this->input->post('uptime'),
-            'model' => $this->input->post('board'),
-            'platform' => $this->input->post('platform'),
-            'status' => $this->input->post('status')
-        );
+        if($this->input->post('platform') == "UniFi"){
+            $data = array(
+                'address' => $this->input->post('address'),
+                'mac_address' => $this->input->post('mac_address'),
+                'serial_number' => $this->input->post('serial'),
+                'identity' => $this->input->post('identity'),
+                'version' => $this->input->post('version'),
+                'uptime' => $this->input->post('uptime'),
+                'model' => $this->input->post('model'),
+                'platform' => $this->input->post('platform'),
+                'status' => $this->input->post('status')
+            );
+        }else{
+            $data = array(
+                'address' => $this->input->post('address'),
+                'mac_address' => $this->input->post('mac_address'),
+                'identity' => $this->input->post('identity'),
+                'version' => $this->input->post('version'),
+                'uptime' => $this->input->post('uptime'),
+                'model' => $this->input->post('board'),
+                'platform' => $this->input->post('platform'),
+                'status' => $this->input->post('status')
+            );
+        }
         $this->devices->addDevice($data);
-        echo json_encode(array("status" => TRUE));
+        echo json_encode(array("status" => TRUE, "data" => $data));
     }
 
     function discoveryDevices(){
@@ -138,11 +152,10 @@ class Devices extends CI_Controller {
 
     function setDevice(){
         // function untuk merubah data user hotspot dan menyimpannya ke mikrotik
-        $device = $this->devices->getDevice(array('id' => $this->input->post('id')));
+        $device = $this->devices->getDevice(array('serial_number' => $this->input->post('serial')));
         if($device['platform'] == 'MikroTik'){
             $user = $this->devices->getUserRouter(array('id' => '2222'));
             $data = array(
-                'id' => $this->input->post('id'),
                 'identity' => $this->input->post('identity'),
                 'serial_number' => $this->input->post('serial'),
                 'address' => $this->input->post('address'),
@@ -196,7 +209,7 @@ class Devices extends CI_Controller {
         }
     }
 
-    function syncIdentities($ip,$id){
+    function syncIdentities($ip,$serial){
         // funtion untuk mensyncronise data dari mikrotik ke database
         // $data = $this->devices->getdevices();
         $user = $this->devices->getUserRouter(array('id' => '2222'));
@@ -211,7 +224,7 @@ class Devices extends CI_Controller {
                 $api->disconnect();
                 $_array = array_merge_recursive($read[0],$board[0]);
                 $identity['identity'] = $this->getIdentity($ip);
-                $identity['id'] = $id;
+                $identity['serial'] = $serial;
                 if($identity['identity']!='error'){
                     $this->devices->syncdatadevice($identity,$_array);
                 }
@@ -232,9 +245,9 @@ class Devices extends CI_Controller {
         try{
             $connect = 0; $disconnect =0;
             $api = $this->routerosapi;
-            if($api->connect("192.168.10.1","api","stikimonitor","62148")){
+            if($api->connect("10.10.10.1","api","stikimonitor","62148")){
                 $api->write('/ping',false);
-                $api->write('=address=10.10.10.135',false);
+                $api->write('=address=192.168.10.7',false);
                 $api->write('=count=5',false);
                 $api->write('=interval=0.3');
                 $read = $api->read();
@@ -249,6 +262,8 @@ class Devices extends CI_Controller {
                 echo "<pre>";
                 echo "Connect =".$connect." disconnect =".$disconnect;
                 print_r($read);
+            }else{
+                echo "jancok";
             }
         }catch(exeption $e){
             echo $e;
@@ -288,10 +303,10 @@ class Devices extends CI_Controller {
         }
     }
 
-    function getInterfacesJSON($id){
+    function getInterfacesJSON($serial){
         // $id = $this->input->post('id');
         // function untuk mengget semua data user hotspot dari database
-        $data = $this->devices->getinterfaces(array('id_device' => $id));
+        $data = $this->devices->getinterfaces(array('serial_number' => $serial));
         $_data = array();
         foreach($data as $r){
             $r['tx_byte'] = byte_format($r['tx_byte']); 
@@ -308,7 +323,7 @@ class Devices extends CI_Controller {
 
     function getInterfacesAPI(){
         $ip = $this->input->post('ip');
-        $id = $this->input->post('id');
+        $serial = $this->input->post('serial');
         $user = $this->devices->getUserRouter(array('id' => '2222'));
         try{
             $api = $this->routerosapi;
@@ -329,7 +344,7 @@ class Devices extends CI_Controller {
                     }
                     $_read[]=$result;
                 }
-                $this->devices->syncinterfaces($_read,$id);
+                $this->devices->syncinterfaces($_read,$serial);
                 echo json_encode(array("status" => TRUE, "data" => $_read));
             }
         }catch(Exeption $error){
@@ -338,7 +353,7 @@ class Devices extends CI_Controller {
     }
 
     function getIP(){
-        $id = $this->input->post('id');
+        $serial = $this->input->post('serial');
         $ip = $this->input->post('ip');
         $user = $this->devices->getUserRouter(array('id' => '2222'));
         try{
@@ -352,7 +367,7 @@ class Devices extends CI_Controller {
                     if($interface['disabled'] == 'false'){
                         $_data['address'] = $interface['address'];
                         $_data['name'] = $interface['actual-interface'];
-                        $_data['id'] = $id;
+                        $_data['serial'] = $serial;
                         $this->devices->updateIP($_data);
                     }
                 }
@@ -388,10 +403,10 @@ class Devices extends CI_Controller {
 
     function delDevice(){
         // funtion menghapus data user hotspot di mikrotik dan database
-        $id = $this->input->post('id');
+        $serial = $this->input->post('serial');
         $identity = $this->input->post('identity');
-        if($this->devices->delDevice($id)){
-            if($this->devices->delInterfaces($id)){
+        if($this->devices->delDevice(array('serial_number' => $serial))){
+            if($this->devices->delInterfaces(array('serial_number' => $serial))){
                 $this->session->set_flashdata('devices', '<div class="alert alert-dismissable alert-success">
                 <i class="ti ti-check"></i>&nbsp; <strong>Well Done!</strong> Menghapus Device '.$identity.' Berhasil !!
                 <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
@@ -464,34 +479,42 @@ class Devices extends CI_Controller {
         $unifi_connection = new UniFi_API\Client($user['username'], $user['password'], 'https://10.10.10.2:8443', 'default', '5.10.25');
         // $set_debug_mode   = $unifi_connection->set_debug(true);
         $loginresults     = $unifi_connection->login();
-        $aps_array        = $unifi_connection->list_devices();       
+        $aps_array        = $unifi_connection->list_devices();  
+        $ip = $this->devices->getIPDevices();     
         foreach($aps_array as $ap){
             if(isset($ap->name)){
-                $_ap['id'] = $ap->device_id;
-                $_ap['address'] = $ap->ip;
-                $_ap['identity'] = $ap->name;
-                $_ap['version'] = $ap->version;
-                $_ap['model'] = $ap->model;
-                $_ap['platform'] = 'UniFi';
-                $_ap['mac'] = $ap->mac;
-                if(isset($ap->uptime)){
-                    $_ap['uptime'] = timespan($ap->uptime);    
-                }else{
-                    $_ap['uptime'] = null;    
+                if(!in_array($ap->ip, $ip)){
+                    $_ap['id'] = $ap->device_id;
+                    $_ap['address'] = $ap->ip;
+                    $_ap['identity'] = $ap->name;
+                    $_ap['serial'] = $ap->serial;
+                    $_ap['version'] = $ap->version;
+                    $_ap['model'] = $ap->model;
+                    $_ap['platform'] = 'UniFi';
+                    $_ap['mac'] = $ap->mac;
+                    if(isset($ap->uptime)){
+                        $_ap['uptime'] = timespan($ap->uptime); 
+                    }else{
+                        $_ap['uptime'] = null;    
+                    }
+                    if(isset($ap->rx_bytes) && isset($ap->tx_byte)){
+                        // $_ap['cpu'] = $ap['system-stats']->cpu; 
+                        // $_ap['mem'] = $ap['system-stats']->mem; 
+                        $_ap['last_version'] = $ap->upgrade_to_firmware;
+                        $_ap['tx_bytes'] = $ap->tx_bytes;
+                        $_ap['rx_bytes'] = $ap->rx_bytes;
+                    }else{
+                        $_ap['last_version'] = null;
+                        $_ap['tx_bytes'] = null;
+                        $_ap['rx_bytes'] = null;
+                        // $_ap['cpu'] = null; 
+                        // $_ap['mem'] = null; 
+                    }
+                    $_ap['aksi'] = "<a href='javascript:;' data-aksi='unifi' data-serial='".$_ap['serial']."' data-identity='".$_ap['identity']."' data-uptime='".$_ap['uptime']."' data-model='".$ap->model."' data-version='".$_ap['version']."' data-address='".$_ap['address']."' data-platform='".$_ap['platform']."' data-mac='".$_ap['mac']."' data-tx='".$_ap['tx_bytes']."' data-rx='".$_ap['rx_bytes']."' data-status='Connected'><i class='fa fa-plus'></i></a>";
                 }
-                if((isset($ap->rx_bytes) && isset($ap->tx_byte))){
-                    $_ap['tx_bytes'] = $ap->tx_bytes;
-                    $_ap['rx_bytes'] = $ap->rx_bytes;
-                }else{
-                    $_ap['tx_bytes'] = null;
-                    $_ap['rx_bytes'] = null;
-                }
-                $_ap['aksi'] = "<a href='javascript:;' data-aksi='unifi' data-identity='".$_ap['identity']."' data-uptime='".$_ap['uptime']."' data-model='".$_ap['model']."' data-version='".$_ap['version']."' data-address='".$_ap['address']."' data-platform='".$_ap['platform']."' data-mac='".$_ap['mac']."' data-tx='".$_ap['tx_bytes']."' data-rx='".$_ap['rx_bytes']."' data-status='Connected'><i class='fa fa-plus'></i></a>";
             }
             $_aps_array[] = $_ap;
         }
-        // echo "<pre>";
-        // print_r($_aps_array);
         $output = array(
             "draw" => $this->input->post('draw'),
             "data" => $_aps_array,
@@ -501,10 +524,8 @@ class Devices extends CI_Controller {
 
     function getLocation(){
         $zuko = new ZukoLibs;
-
         $output = $zuko->connect();
         $token = $output['data']['session_token'];
-
         $par = array(
             'filter' => array(),
             'limit' => 150,

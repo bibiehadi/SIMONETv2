@@ -25,7 +25,6 @@
                                         <table id="tb_devices" class="table table-hover" cellspacing="0" width="100%">
                                             <thead>
                                                 <tr>
-                                                    <th>ID</th>
                                                     <th>Device Name</th>
                                                     <th>Status</th>
                                                     <th>IP Address</th>
@@ -181,7 +180,6 @@
             // "dataSrc" : ""
         },
         columns : [
-            {"data" : "id"},
             {"data" : "identity"},
             {"data" : "status"},
             {"data" : "address"},
@@ -266,12 +264,13 @@
     $('body').on('click','a[data-aksi="unifi"]',function(){
         var device = {
             identity : $(this).attr('data-identity'),
+            serial : $(this).attr('data-serial'),
             address : $(this).attr('data-address'),
             mac_address : $(this).attr('data-mac'),
             version : $(this).attr('data-version'),
+            model : $(this).attr('data-model'),
             uptime : $(this).attr('data-uptime'),
             platform : $(this).attr('data-platform'),
-            board : $(this).attr('data-board'),
             status : $(this).attr('data-status')
         };
         addByDiscovery(device);
@@ -282,10 +281,10 @@
     });
 
     $('table#tb_devices').on('click','tbody tr',function(){
-        var id = $(this).find('td:eq(0)').html();
+        var serial = $(this).find('td:eq(3)').html();
         var url = '<?php echo site_url('devices/detaildevice')?>';
         var form = $('<form action="' + url + '" method="post">' +
-        '<input type="hidden" name="id" value="'+id+'" />' +
+        '<input type="hidden" name="serial" value="'+serial+'" />' +
         '</form>');
         $('body').append(form);
         form.submit();
@@ -368,7 +367,7 @@
     }
 
     function reload_table3(){
-        table.ajax.reload(null,false);
+        table3.ajax.reload(null,false);
     }
 </script>
 

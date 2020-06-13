@@ -9,7 +9,7 @@ class Devices_Model extends CI_Model {
     }
 
     function setDevice($data){
-        $this->db->where('id', $data['id']);
+        $this->db->where('serial_number', $data['serial_number']);
         $this->db->update('devices', $data);
     }
 
@@ -21,15 +21,7 @@ class Devices_Model extends CI_Model {
 		}
     }
 
-    function getDevicesByStatus(){
-        if($data = $this->db->get('devices')){
-			return $data->result_array();
-		}else{
-			return false;
-		}
-    }
-
-    function getDevicesByMaster($id){
+    function getDevicesBy($id){
         $this->db->where($id);
         if($data = $this->db->get('devices')){
 			return $data->result_array();
@@ -49,8 +41,8 @@ class Devices_Model extends CI_Model {
 
     function getIPDevices(){
         $this->db->select('address');
-        $this->db->where('platform','MikroTik');
-        $this->db->or_where('platform','MikroTik Switch');
+        // $this->db->where('platform','MikroTik');
+        // $this->db->or_where('platform','MikroTik Switch');
         $_ip = array();
         if($data = $this->db->get('devices')){
             $result = $data->result_array();
@@ -66,7 +58,7 @@ class Devices_Model extends CI_Model {
     function syncDataDevice($identity,$device){
         try{
             // foreach($data as $device){
-                $this->db->where('id', $identity['id']);
+                $this->db->where('serial_number', $identity['serial']);
                 $this->db->update('devices', array('serial_number' => $device['serial-number'], 'uptime' => $device['uptime'], 'version' => $device['version'], 
                 'model' => $device['model'], 'platform' => $device['platform'], 'identity' => $identity['identity']));
             // }
@@ -111,13 +103,13 @@ class Devices_Model extends CI_Model {
 		}
     }
 
-    function syncInterfaces($data,$id_device){
+    function syncInterfaces($data,$serial_number){
         try{
             foreach($data as $interface){
                 if(!isset($interface['default'])){
-                    $this->db->query("insert into device_interfaces(id_interface,name,mac_address,id_device,rx_byte,tx_byte)
-                    values ('".$interface['.id']."','".$interface['name']."','".$interface['mac-address']."','".$id_device."','".$interface['rx-byte']."','".$interface['tx-byte']."') 
-                    ON DUPLICATE KEY UPDATE id_interface = '".$interface['.id']."', name = '".$interface['name']."', mac_address = '".$interface['mac-address']."', id_device = '".$id_device."', rx_byte = '".$interface['rx-byte']."', tx_byte = '".$interface['tx-byte']."'");
+                    $this->db->query("insert into device_interfaces(id_interface,name,mac_address,serial_number,rx_byte,tx_byte)
+                    values ('".$interface['.id']."','".$interface['name']."','".$interface['mac-address']."','".$serial_number."','".$interface['rx-byte']."','".$interface['tx-byte']."') 
+                    ON DUPLICATE KEY UPDATE id_interface = '".$interface['.id']."', name = '".$interface['name']."', mac_address = '".$interface['mac-address']."', serial_number = '".$serial_number."', rx_byte = '".$interface['rx-byte']."', tx_byte = '".$interface['tx-byte']."'");
                 }
             }
         }catch(Exception $e){
@@ -126,7 +118,7 @@ class Devices_Model extends CI_Model {
     }
 
     function updateIP($data){
-        $this->db->where('id_device', $data['id']);
+        $this->db->where('serial_number', $data['serial']);
         $this->db->where('name', $data['name']);
         $this->db->update('device_interfaces', array('address' => $data['address']));
     }
@@ -136,8 +128,8 @@ class Devices_Model extends CI_Model {
         $this->db->update('devices', $data);
     }
 
-    function delDevice($id){
-        if ($this->db->delete('devices',array('id' => $id))){
+    function delDevice($serial){
+        if ($this->db->delete('devices',$serial)){
             return true;
         }else{
             return false;
@@ -145,8 +137,8 @@ class Devices_Model extends CI_Model {
     }
 
 
-    function delInterfaces($id){
-        if($this->db->delete('device_interfaces',array('id_device' => $id))){
+    function delInterfaces($serial){
+        if($this->db->delete('device_interfaces',$serial)){
             return true;
         }else{
             return false;
