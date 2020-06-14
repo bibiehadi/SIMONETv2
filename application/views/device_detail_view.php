@@ -11,14 +11,20 @@
                         <div class="col-sm-3">
                             <div class="panel panel-profile">
                                 <div class="panel-body">
-                                    <img src="<?php echo base_url('assets/img/anu.png')?>" class="img-circle" style="width : 150px; border: solid">
+                                <? if($platform == "UniFi"){?> 
+                                    <img src="<?php echo base_url('assets/img/unifi.png')?>" class="img-circle" style="width : 150px; ">
+                                <?}elseif($platform == "MikroTik" || $platform == "MikroTik Switch") {?>
+                                    <img src="<?php echo base_url('assets/img/rb.png')?>" class="img-circle" style="width : 150px; ">
+                                <?}else{?>
+                                    <!-- <img src="<?php echo base_url('assets/img/unifi.png')?>" class="img-circle" style="width : 150px; "> -->
+                                <?}?> 
                                     <div class="name"><?php echo $identity;?></div>
-                                    <div class="info"><?php echo $platform;?></div>
+                                    <div class="info"><?php echo $platform." ".$model;?></div>
                                 </div>
                             </div><!-- panel -->
                             <div class="list-group list-group-alternate mb-n nav nav-tabs">
                                 <a href="#tab-about" role="tab" data-toggle="tab" class="list-group-item active"><i class="ti ti-user"></i> Detail Device</a>
-                                <?php if($status == 'Connected' && $platform == 'MikroTik'){?>
+                                <?php if($status == 'Connected' && ($platform == 'MikroTik' || $platform == 'UniFi')){?>
                                     <a href="#tab-interfaces" role="tab" data-toggle="tab" class="list-group-item"><i class="ti ti-pencil"></i> Interfaces</a>
                                 <?}?>
                             </div>
@@ -189,7 +195,7 @@
                                                         <h2>Interfaces</h2>
                                                     </div>
                                                     <div class="col-md-8">
-                                                        <?php if($status == 'Connected'){?>
+                                                        <?php if($status == 'Connected' && $platform == 'MikroTik'){?>
                                                         <a class="btn btn-info pull-right" data-aksi="sync" href="javascript:;" style="margin: 10px"><i class="fa fa-refresh"></i></a>
                                                         <? }?>
                                                     </div>
@@ -266,7 +272,67 @@
                     </div>
                 </footer>
 
-
+<div class="modal fade" id="modal_interface" role="dialog" >
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="modal-title">Add Device</h4>
+            </div>
+            <div class="modal-body form">
+                <div class="tab-container tab-default">
+                    <ul class="nav nav-tabs">
+                        <li class="active">
+                            <a href="#Statistic" data-toggle="tab">Interface Statistic</a>
+                        </li>
+                        <li>
+                            <a href="#SetInterface" data-toggle="tab">Set Intreface Name</a>
+                        </li>
+                    </ul>
+                    <div class="tab-content">
+                        <div class="tab-pane active" id="Statistic">
+                        </div>
+                        <div class="tab-pane" id="SetInterface">
+                            <form id="setInterface" action="＃" method="post" class="form-horizontal row-border">
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label">SerialNumber</label>
+                                    <div class="col-sm-8">
+                                        <input type="input" name="serial" class="form-control" readonly>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label">ID</label>
+                                    <div class="col-sm-8">
+                                        <input type="input" name="id" class="form-control" readonly>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label">Name</label>
+                                    <div class="col-sm-8">
+                                        <input type="input" name="name" class="form-control" >
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label">Mac-Address</label>
+                                    <div class="col-sm-8">
+                                        <input type="input" name="mac" class="form-control" readonly>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label">IP Address</label>
+                                    <div class="col-sm-8">
+                                        <input type="input" name="address" class="form-control" readonly>
+                                    </div>
+                                </div>
+                            </form>
+                            <button type="submit" id="btnSave" onClick="saveInterface()" class="btn btn-success pull-right" style="margin: 10px 0px 0px 0px">Save</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 
 <?php $this->load->view('templates/footer_view'); ?>
 
@@ -324,6 +390,34 @@
         $('body').append(form);
         form.submit();
     })
+
+    $('table#tb_interfaces').on('click','tbody tr',function(){
+        var platform = '<? echo $platform ?>';
+        if(platform == 'MikroTik'){
+            var data = {
+                id : $(this).find('td:eq(0)').html(),
+                name : $(this).find('td:eq(1)').html(),
+                mac : $(this).find('td:eq(2)').html(),
+                address : $(this).find('td:eq(3)').html(),
+            };
+            editInterface(data);
+        }
+    })
+
+    function editInterface(data){
+        var data = data;
+        $('#setInterface')[0].reset();
+        $('.form-group').removeClass('has-error');
+        $('.help-block').empty(); 
+        //tab-edit
+        $('[name="serial"]').val('<? echo $serial_number; ?>');
+        $('[name="id"]').val(data.id);
+        $('[name="name"]').val(data.name);
+        $('[name="mac"]').val(data.mac);
+        $('[name="address"]').val(data.address);
+        $('#modal_interface').modal('show');
+        $('.modal-title').text(data.name);
+    }
 
     function syncInterfaces(){
             $.skylo('start');
@@ -455,6 +549,40 @@
                 alert('Gagal menyimpan data device');
                 $('#btnSave').text('save'); 
                 $('#btnSave').attr('disabled',false); 
+            }
+        });
+    }
+
+    function saveInterface(){
+        var ip = '<? echo $address?>';
+        $.skylo('start');
+        $('#btnSave').text('saving...'); //change button text
+        $('#btnSave').attr('disabled',true); //set button disable 
+        var url = "<?php echo site_url('devices/setInterface/')?>"+ip;
+
+        $.ajax({
+            url : url,
+            type: "POST",
+            data: $('#setInterface').serialize(),
+            dataType: "JSON",
+            success: function(data)
+            {
+                if(data.status) 
+                {
+                    alert('success');
+                    reload_table();
+                }
+                $.skylo('end');
+                $('#btnSave').text('save'); 
+                $('#btnSave').attr('disabled',false); 
+                $('#modal_interface').modal('hide');
+            },
+            error: function (jqXHR, textStatus, errorThrown)
+            {
+                alert('Gagal menyimpan data device');
+                $('#btnSave').text('save'); 
+                $('#btnSave').attr('disabled',false); 
+                $('#modal_interface').modal('hide');
             }
         });
     }

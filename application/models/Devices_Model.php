@@ -58,10 +58,15 @@ class Devices_Model extends CI_Model {
     function syncDataDevice($identity,$device){
         try{
             // foreach($data as $device){
+            if($device['platform'] == "MikroTik"){
                 $this->db->where('serial_number', $identity['serial']);
                 $this->db->update('devices', array('serial_number' => $device['serial-number'], 'uptime' => $device['uptime'], 'version' => $device['version'], 
                 'model' => $device['model'], 'platform' => $device['platform'], 'identity' => $identity['identity']));
-            // }
+            }elseif($device['platform'] == "UniFi"){
+            //     $this->db->where('serial_number', $identity['serial']);
+            //     $this->db->update('devices', array('serial_number' => $device['serial'], 'uptime' => $device['uptime'], 'version' => $device['version'], 
+            //     'model' => $device['model'], 'platform' => $device['platform'], 'identity' => $identity['identity']));
+            }
         }catch(Exception $e){
             return $e;
         }
@@ -103,13 +108,25 @@ class Devices_Model extends CI_Model {
 		}
     }
 
+    function setInterface($serial,$id,$data){
+        $this->db->where('serial_number', $serial);
+        $this->db->where('id_interface', $id);
+        $this->db->update('device_interfaces', $data);
+    }
+
     function syncInterfaces($data,$serial_number){
         try{
-            foreach($data as $interface){
-                if(!isset($interface['default'])){
-                    $this->db->query("insert into device_interfaces(id_interface,name,mac_address,serial_number,rx_byte,tx_byte)
-                    values ('".$interface['.id']."','".$interface['name']."','".$interface['mac-address']."','".$serial_number."','".$interface['rx-byte']."','".$interface['tx-byte']."') 
-                    ON DUPLICATE KEY UPDATE id_interface = '".$interface['.id']."', name = '".$interface['name']."', mac_address = '".$interface['mac-address']."', serial_number = '".$serial_number."', rx_byte = '".$interface['rx-byte']."', tx_byte = '".$interface['tx-byte']."'");
+            if(isset($data['platform'])){
+                $this->db->query("insert into device_interfaces(id_interface,name,address,mac_address,serial_number,rx_byte,tx_byte)
+                values ('1','eth0','".$data['address']."','".$data['mac']."','".$serial_number."','".$data['rx_bytes']."','".$data['tx_bytes']."') 
+                ON DUPLICATE KEY UPDATE id_interface = '1', name = 'eth0', address = '".$data['address']."', mac_address = '".$data['mac']."', serial_number = '".$serial_number."', rx_byte = '".$data['rx_bytes']."', tx_byte = '".$data['tx_bytes']."'");
+            }else{
+                foreach($data as $interface){
+                    if(!isset($interface['default'])){
+                        $this->db->query("insert into device_interfaces(id_interface,name,mac_address,serial_number,rx_byte,tx_byte)
+                        values ('".$interface['.id']."','".$interface['name']."','".$interface['mac-address']."','".$serial_number."','".$interface['rx-byte']."','".$interface['tx-byte']."') 
+                        ON DUPLICATE KEY UPDATE id_interface = '".$interface['.id']."', name = '".$interface['name']."', mac_address = '".$interface['mac-address']."', serial_number = '".$serial_number."', rx_byte = '".$interface['rx-byte']."', tx_byte = '".$interface['tx-byte']."'");
+                    }
                 }
             }
         }catch(Exception $e){

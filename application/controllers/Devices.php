@@ -40,7 +40,9 @@ class Devices extends CI_Controller {
         $data['last_ros'] = $this->devices->getLastesROS();
         $data['subdevices'] = $this->devices->getdevicesby(array('id_device' => $serial));
         if($data['status'] == 'Connected' && $data['platform']=="MikroTik"){
-            $this->syncIdentities($data['address'],$serial);
+            $this->syncIdentitiesMikroTik($data['address'],$serial);
+        }elseif($data['platform'] == "UniFi"){
+            $this->syncIdentitiesUniFi($serial);
         }
         // echo "<pre>";
         // print_r($data['list_devices']);
@@ -59,6 +61,13 @@ class Devices extends CI_Controller {
                     $r['status'] = '<span class="label label-danger">Disconnected </span>';
                 }elseif ($r['status'] == 'Reboot') {
                     $r['status'] = '<span class="label label-warning">Reboot </span>';
+                }
+                if($r['platform'] == "UniFi"){
+                    $r['img'] = '<img src="'.base_url('assets/img/unifi.ico').'" style="width: 30px">';
+                }elseif($r['platform'] == "MikroTik" || $r['platform'] == "MikroTik Switch"){
+                    $r['img'] = '<img src="'.base_url('assets/img/rb.ico').'" style="width: 30px">';
+                }else{
+                    $r['img'] = null;
                 }
                 $_data[] = $r;
             }
@@ -187,7 +196,6 @@ class Devices extends CI_Controller {
             $this->devices->setDevice($data);
         }elseif($this->input->post('identity') == null){
             $data = array(
-                'id' => $this->input->post('id'),
                 'serial_number' => $this->input->post('serial'),
                 'address' => $this->input->post('address'),
                 'id_device' => $this->input->post('masterdevice'),
@@ -209,7 +217,7 @@ class Devices extends CI_Controller {
         }
     }
 
-    function syncIdentities($ip,$serial){
+    function syncIdentitiesMikroTik($ip,$serial){
         // funtion untuk mensyncronise data dari mikrotik ke database
         // $data = $this->devices->getdevices();
         $user = $this->devices->getUserRouter(array('id' => '2222'));
@@ -235,7 +243,7 @@ class Devices extends CI_Controller {
                 // echo json_encode(array("status" => FALSE, "msg" => 'Gagal terhubung ke Router'.$device['address']));
             }
         }catch(Exeption $error){
-            echo json_encode(array("status" => FALSE, "msg" => $error));
+            // echo json_encode(array("status" => FALSE, "msg" => $error));
         }
     }
 
@@ -378,6 +386,32 @@ class Devices extends CI_Controller {
         }
     }
 
+    function setInterface($ip){
+        $id = $this->input->post('id');
+        $name = $this->input->post('name');
+        $serial = $this->input->post('serial');
+        $user = $this->devices->getUserRouter(array('id' => '2222'));
+        try{
+            $api = $this->routerosapi;
+            $api->port = 8728;
+            if($api->connect($ip,$user['username'],$user['password'])){
+                $api->write('/interface/set',false);
+                $api->write('=.id='.$id,false);
+                $api->write('=name='.$name);
+                $write = $api->read();
+                $api->write('/interface/print');
+                $read = $api->read();
+                $api->disconnect();
+                $this->devices->setInterface($serial, $id, array('name' => $name));
+                echo json_encode(array("status" => TRUE, "msg" => $id." ".$name));
+            }else{
+                echo json_encode(array("status" => FALSE, "msg" => "gagal merubah nama interface"));
+            }    
+        }catch(exeption $e){
+            echo $e;
+        }
+    }
+
     function reboot(){
         $ip = $this->input->post('ip');
         $identity = $this->input->post('identity');
@@ -497,18 +531,14 @@ class Devices extends CI_Controller {
                     }else{
                         $_ap['uptime'] = null;    
                     }
-                    if(isset($ap->rx_bytes) && isset($ap->tx_byte)){
-                        // $_ap['cpu'] = $ap['system-stats']->cpu; 
-                        // $_ap['mem'] = $ap['system-stats']->mem; 
-                        $_ap['last_version'] = $ap->upgrade_to_firmware;
+                    if(isset($ap->rx_bytes)){
+                        // $_ap['last_version'] = $ap->upgrade_to_firmware;
                         $_ap['tx_bytes'] = $ap->tx_bytes;
                         $_ap['rx_bytes'] = $ap->rx_bytes;
                     }else{
-                        $_ap['last_version'] = null;
+                        // $_ap['last_version'] = null;
                         $_ap['tx_bytes'] = null;
-                        $_ap['rx_bytes'] = null;
-                        // $_ap['cpu'] = null; 
-                        // $_ap['mem'] = null; 
+                        $_ap['rx_bytes'] = null; 
                     }
                     $_ap['aksi'] = "<a href='javascript:;' data-aksi='unifi' data-serial='".$_ap['serial']."' data-identity='".$_ap['identity']."' data-uptime='".$_ap['uptime']."' data-model='".$ap->model."' data-version='".$_ap['version']."' data-address='".$_ap['address']."' data-platform='".$_ap['platform']."' data-mac='".$_ap['mac']."' data-tx='".$_ap['tx_bytes']."' data-rx='".$_ap['rx_bytes']."' data-status='Connected'><i class='fa fa-plus'></i></a>";
                 }
@@ -519,7 +549,46 @@ class Devices extends CI_Controller {
             "draw" => $this->input->post('draw'),
             "data" => $_aps_array,
             );
-        echo json_encode($output);            
+        echo json_encode($output);
+    }
+
+    function syncIdentitiesUniFi($serial){
+        $user = $this->devices->getUserRouter(array('id' => '3333'));
+        $unifi_connection = new UniFi_API\Client($user['username'], $user['password'], 'https://10.10.10.2:8443', 'default', '5.10.25');
+        // $set_debug_mode   = $unifi_connection->set_debug(true);
+        $loginresults     = $unifi_connection->login();
+        $aps_array        = $unifi_connection->list_devices();  
+        foreach($aps_array as $ap){
+            if($ap->serial == $serial){
+                $_ap['id'] = $ap->device_id;
+                $_ap['address'] = $ap->ip;
+                $_ap['identity'] = $ap->name;
+                $_ap['serial_number'] = $ap->serial;
+                $_ap['version'] = $ap->version;
+                $_ap['model'] = $ap->model;
+                $_ap['platform'] = 'UniFi';
+                $_ap['mac'] = $ap->mac;
+                if(isset($ap->uptime)){
+                    $_ap['uptime'] = timespan($ap->uptime); 
+                }else{
+                    $_ap['uptime'] = null;    
+                }
+                if(isset($ap->rx_bytes)){
+                    // $_ap['last_version'] = $ap->upgrade_to_firmware;
+                    $_ap['tx_bytes'] = $ap->tx_bytes;
+                    $_ap['rx_bytes'] = $ap->rx_bytes;
+                }else{
+                    // $_ap['last_version'] = null;
+                    $_ap['tx_bytes'] = null;
+                    $_ap['rx_bytes'] = null;
+                }
+                $identity['identity'] = $ap->name;
+                $identity['serial'] = $ap->serial;
+                $this->devices->syncdatadevice($identity,$_ap);
+                $this->devices->syncinterfaces($_ap,$ap->serial);
+                // echo json_encode(array("status" => TRUE));
+            }
+        }
     }
 
     function getLocation(){

@@ -24,7 +24,7 @@
                                     <div class="panel-body">
                                         <table id="tb_devices" class="table table-hover" cellspacing="0" width="100%">
                                             <thead>
-                                                <tr>
+                                                <tr><th></th>
                                                     <th>Device Name</th>
                                                     <th>Status</th>
                                                     <th>IP Address</th>
@@ -180,6 +180,7 @@
             // "dataSrc" : ""
         },
         columns : [
+            {"data" : "img"},
             {"data" : "identity"},
             {"data" : "status"},
             {"data" : "address"},
@@ -281,7 +282,7 @@
     });
 
     $('table#tb_devices').on('click','tbody tr',function(){
-        var serial = $(this).find('td:eq(3)').html();
+        var serial = $(this).find('td:eq(4)').html();
         var url = '<?php echo site_url('devices/detaildevice')?>';
         var form = $('<form action="' + url + '" method="post">' +
         '<input type="hidden" name="serial" value="'+serial+'" />' +
