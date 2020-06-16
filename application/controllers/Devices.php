@@ -386,6 +386,35 @@ class Devices extends CI_Controller {
         }
     }
 
+    function getResource(){
+        $ip = $this->input->post('ip');
+        $user = $this->devices->getUserRouter(array('id' => '2222'));
+        try{
+            $api = $this->routerosapi;
+            $api->port = 8728;
+            if($api->connect($ip,$user['username'],$user['password'])){
+                $api->write('/system/resource/print');
+                $resource = $api->read();
+                $api->write('/system/healt/print');
+                $healt = $api->read();
+                $api->disconnect();
+                if($healt[0] != null){
+                    $healt[0]['voltage'] = $healt[0]['voltage'].'v';
+                    $healt[0]['temperature'] = $healt[0]['temperature'].'˚C';
+                    $_array = array_merge_recursive($resource[0],$healt[0]);
+                    echo json_encode(array("status" => TRUE, "data" => $_array));
+                }else{
+                    $healt[0]['voltage'] = '';
+                    $healt[0]['temperature'] = '';
+                    $_array = array_merge_recursive($resource[0],$healt[0]);
+                    echo json_encode(array("status" => TRUE, "data" => $_array));
+                }
+            }
+        }catch(Exeption $error){
+            echo json_encode(array("status" => FALSE));
+        }
+    }
+
     function setInterface($ip){
         $id = $this->input->post('id');
         $name = $this->input->post('name');
@@ -455,17 +484,17 @@ class Devices extends CI_Controller {
 
     function cekMikroTik(){
         // $ip = $this->input->post('ip');
-        $ip = '10.10.10.135';
-        $mac = '00:0C:42:E5:0D:C6';
+        $ip = '10.10.10.14';
+        // $mac = '00:0C:42:E5:0D:C6';
         $user = $this->devices->getUserRouter(array('id' => '2222'));
         try{
             $api = $this->routerosapi;
             $api->port = 8728;
             if($api->connect($ip,$user['username'],$user['password'])){
-                $api->write('/ip/address/print');
+                $api->write('/system/healt/print');
                 $read = $api->read();
                 $api->disconnect();
-                echo json_encode(array("status" => TRUE));
+                echo json_encode(array("status" => ($read[0]==null)));
             }elseif($api->connect($mac,$user['username'],$user['password'])){
                 echo "gae MAC";
                 $api->disconnect();
@@ -508,6 +537,8 @@ class Devices extends CI_Controller {
         }
     }
 
+
+// UNIFI 
     function getUnifiDevices(){
         $user = $this->devices->getUserRouter(array('id' => '3333'));
         $unifi_connection = new UniFi_API\Client($user['username'], $user['password'], 'https://10.10.10.2:8443', 'default', '5.10.25');
@@ -515,6 +546,7 @@ class Devices extends CI_Controller {
         $loginresults     = $unifi_connection->login();
         $aps_array        = $unifi_connection->list_devices();  
         $ip = $this->devices->getIPDevices();     
+        // $_ap= array();
         foreach($aps_array as $ap){
             if(isset($ap->name)){
                 if(!in_array($ap->ip, $ip)){
@@ -541,15 +573,18 @@ class Devices extends CI_Controller {
                         $_ap['rx_bytes'] = null; 
                     }
                     $_ap['aksi'] = "<a href='javascript:;' data-aksi='unifi' data-serial='".$_ap['serial']."' data-identity='".$_ap['identity']."' data-uptime='".$_ap['uptime']."' data-model='".$ap->model."' data-version='".$_ap['version']."' data-address='".$_ap['address']."' data-platform='".$_ap['platform']."' data-mac='".$_ap['mac']."' data-tx='".$_ap['tx_bytes']."' data-rx='".$_ap['rx_bytes']."' data-status='Connected'><i class='fa fa-plus'></i></a>";
+                    $_aps_array[] = $_ap;
                 }
             }
-            $_aps_array[] = $_ap;
         }
         $output = array(
             "draw" => $this->input->post('draw'),
             "data" => $_aps_array,
             );
         echo json_encode($output);
+        // echo "<pre>";
+        // print_r($_aps_array);
+        // print_r($ip);
     }
 
     function syncIdentitiesUniFi($serial){

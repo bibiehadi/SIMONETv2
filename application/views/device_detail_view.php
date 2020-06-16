@@ -10,16 +10,36 @@
                     <div class="row">
                         <div class="col-sm-3">
                             <div class="panel panel-profile">
-                                <div class="panel-body">
-                                <? if($platform == "UniFi"){?> 
-                                    <img src="<?php echo base_url('assets/img/unifi.png')?>" class="img-circle" style="width : 150px; ">
-                                <?}elseif($platform == "MikroTik" || $platform == "MikroTik Switch") {?>
-                                    <img src="<?php echo base_url('assets/img/rb.png')?>" class="img-circle" style="width : 150px; ">
-                                <?}else{?>
-                                    <!-- <img src="<?php echo base_url('assets/img/unifi.png')?>" class="img-circle" style="width : 150px; "> -->
-                                <?}?> 
-                                    <div class="name"><?php echo $identity;?></div>
-                                    <div class="info"><?php echo $platform." ".$model;?></div>
+                                <div class="panel-body" style="margin-bottom : 0px">
+                                    <? if($platform == "UniFi"){?> 
+                                        <img src="<?php echo base_url('assets/img/unifi.png')?>" class="img-circle" style="width : 150px; ">
+                                    <?}elseif($platform == "MikroTik" || $platform == "MikroTik Switch") {?>
+                                        <img src="<?php echo base_url('assets/img/rb.png')?>" class="img-circle" style="width : 150px; ">
+                                    <?}else{?>
+                                        <!-- <img src="<?php echo base_url('assets/img/unifi.png')?>" class="img-circle" style="width : 150px; "> -->
+                                    <?}?> 
+                                        <div class="name"><?php echo $identity;?></div>
+                                        <div class="info"><?php echo $platform." ".$model;?></div>
+                                    <? if($platform == "MikroTik"){?> 
+                                        <div class="row" style="text-align : left; margin-top: 5px">  
+                                            <div class="info">CPU</div>
+                                            <div class="progress" style="height: 20px">
+                                                <div id="cpu" class="progress-bar"></div>
+                                            </div>
+                                            <div class="info">Memory</div>
+                                            <div class="progress" style="height: 20px">
+                                                <div id="mem" class="progress-bar"></div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="info">Voltage : </div> 
+                                                <p id="volt"></p>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="info">Temperature : </div> 
+                                                <p id="temp"></p>
+                                            </div>
+                                        </div>
+                                    <? } ?>
                                 </div>
                             </div><!-- panel -->
                             <div class="list-group list-group-alternate mb-n nav nav-tabs">
@@ -338,6 +358,8 @@
 
 
 <script type="text/javascript">
+    getResource();
+
     var table = $('#tb_interfaces').DataTable({
         responsive : true,
         oLanguage: {
@@ -417,6 +439,38 @@
         $('[name="address"]').val(data.address);
         $('#modal_interface').modal('show');
         $('.modal-title').text(data.name);
+    }
+
+    function getResource(){
+        var url = "<?php echo site_url('devices/getResource')?>";
+
+        $.ajax({
+            url : url,
+            type: "POST",
+            data: {ip : '<?php echo $address?>'},
+            dataType: "JSON",
+            success: function(data)
+            {
+                console.log(data);
+                console.log(((data.data['total-memory'] - data.data['free-memory'])/data.data['total-memory'])*100);
+                if(data.status) 
+                {
+                    $('#cpu').css("width", data.data['cpu-load'] + "%").text(data.data['cpu-load'] + " %");
+                    $('#mem').css("width", Math.round(((data.data['total-memory'] - data.data['free-memory'])/data.data['total-memory'])*100) + "%").text(Math.round(((data.data['total-memory'] - data.data['free-memory'])/data.data['total-memory'])*100) + " %");
+                    $('#volt').text(data.data['voltage']);
+                    $('#temp').text(data.data['temperature']);
+                }
+                $.skylo('end');
+                $('#btnSave').text('save'); 
+                $('#btnSave').attr('disabled',false); 
+            },
+            error: function (jqXHR, textStatus, errorThrown)
+            {
+                console.log("Error getResource");
+            }
+        });
+
+        setTimeout(function(){ getResource(); }, 5000);
     }
 
     function syncInterfaces(){
