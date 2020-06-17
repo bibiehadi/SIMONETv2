@@ -20,7 +20,7 @@
                                     <?}?> 
                                         <div class="name"><?php echo $identity;?></div>
                                         <div class="info"><?php echo $platform." ".$model;?></div>
-                                    <? if($platform == "MikroTik"){?> 
+                                    <? if($platform == "MikroTik" && $status == 'Connected'){?> 
                                         <div class="row" style="text-align : left; margin-top: 5px">  
                                             <div class="info">CPU</div>
                                             <div class="progress" style="height: 20px">
@@ -97,13 +97,16 @@
                                                         </tr>
                                                         <tr>
                                                             <th>Version</th>
-                                                            <td><?php echo $version?><a class="btn" data-aksi="update" href="javascript:;">
+                                                            <td><?php echo $version?>
                                                             <? $_version = explode(' ',$version); 
                                                                 $_last_ros = explode(' ',$last_ros); 
                                                              if(($_last_ros[0] > $_version[0]) && ($status == 'Connected') && ($platform == 'MikroTik')) {
                                                                 ?>
-                                                                <i class="fa fa-chevron-circle-up"  style="color : #03a9f4"></i></a></td>
+                                                                <a class="btn" data-aksi="updateROS" href="javascript:;">
+                                                                <i class="fa fa-chevron-circle-up"  style="color : #03a9f4"></i>
+                                                                </a>
                                                              <?}?>
+                                                             </td>
                                                         </tr>
                                                         <tr>
                                                             <th>Uptime</th>
@@ -358,7 +361,9 @@
 
 
 <script type="text/javascript">
-    getResource();
+    if('<? echo $platform?>' == 'MikroTik'){
+        getResource();
+    }
 
     var table = $('#tb_interfaces').DataTable({
         responsive : true,
@@ -391,7 +396,7 @@
         $.skylo('end');
     })
 
-    $('body').on('click','a[data-aksi="update"]',function(){
+    $('body').on('click','a[data-aksi="updateROS"]',function(){
         updateSystem();
     });
 
@@ -451,8 +456,6 @@
             dataType: "JSON",
             success: function(data)
             {
-                console.log(data);
-                console.log(((data.data['total-memory'] - data.data['free-memory'])/data.data['total-memory'])*100);
                 if(data.status) 
                 {
                     $('#cpu').css("width", data.data['cpu-load'] + "%").text(data.data['cpu-load'] + " %");

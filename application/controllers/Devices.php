@@ -127,11 +127,6 @@ class Devices extends CI_Controller {
                 $api->write('/ip/neighbor/print');
                 $read = $api->read();
                 $api->disconnect();
-                // foreach($read as $interface){
-                //     if($interface['disabled'] == 'false'){
-                //         $_data['address'] = $interface['address'];
-                //         $_data['name'] = $interface['actual-interface'];
-                //         $_data['serial'] = $serial;
                 $ip = $this->devices->getIPDevices();
                 foreach($read as $r){
                     if(isset($r['address']) && ($r['platform']=='MikroTik')){
@@ -541,7 +536,7 @@ class Devices extends CI_Controller {
 // UNIFI 
     function getUnifiDevices(){
         $user = $this->devices->getUserRouter(array('id' => '3333'));
-        $unifi_connection = new UniFi_API\Client($user['username'], $user['password'], 'https://10.10.10.2:8443', 'default', '5.10.25');
+        $unifi_connection = new UniFi_API\Client($user['username'], $user['password'], 'https://10.10.10.115:8443', 'default', '5.10.25');
         // $set_debug_mode   = $unifi_connection->set_debug(true);
         $loginresults     = $unifi_connection->login();
         $aps_array        = $unifi_connection->list_devices();  
@@ -589,7 +584,7 @@ class Devices extends CI_Controller {
 
     function syncIdentitiesUniFi($serial){
         $user = $this->devices->getUserRouter(array('id' => '3333'));
-        $unifi_connection = new UniFi_API\Client($user['username'], $user['password'], 'https://10.10.10.2:8443', 'default', '5.10.25');
+        $unifi_connection = new UniFi_API\Client($user['username'], $user['password'], 'https://10.10.10.115:8443', 'default', '5.10.25');
         // $set_debug_mode   = $unifi_connection->set_debug(true);
         $loginresults     = $unifi_connection->login();
         $aps_array        = $unifi_connection->list_devices();  
@@ -623,6 +618,20 @@ class Devices extends CI_Controller {
                 $this->devices->syncinterfaces($_ap,$ap->serial);
                 // echo json_encode(array("status" => TRUE));
             }
+        }
+    }
+
+    function updateOSUniFi(){
+        $mac = '80:2a:a8:c6:09:e8';
+        $user = $this->devices->getUserRouter(array('id' => '3333'));
+        $unifi_connection = new UniFi_API\Client($user['username'], $user['password'], 'https://10.10.10.115:8443', 'default', '5.10.25');
+        // $set_debug_mode   = $unifi_connection->set_debug(true);
+        $loginresults     = $unifi_connection->login();
+        $results = $unifi_connection->upgrade_device($mac);
+        if($results == false){
+            echo json_encode(array("status" => FALSE, "msg" => $results));
+        }else{
+            echo json_encode(array("status" => TRUE, "msg" => $results));
         }
     }
 
