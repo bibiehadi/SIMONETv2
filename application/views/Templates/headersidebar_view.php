@@ -12,9 +12,7 @@
 
     <link type='text/css' href='http://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400italic,600' rel='stylesheet'>
 
-    <link type="text/css" href="<?php echo base_url('') ?>assets/fonts/font-awesome/css/font-awesome.min.css" rel="stylesheet">        <!-- Font Awesome -->
-    <link type="text/css" href="<?php echo base_url('') ?>assets/fonts/themify-icons/themify-icons.css" rel="stylesheet">              <!-- Themify Icons -->
-    <link type="text/css" href="<?php echo base_url('') ?>assets/css/styles.css" rel="stylesheet">                                     <!-- Core CSS with all styles -->
+    <link type="text/css" href="<?php echo base_url('') ?>assets/fonts/font-awesome/css/font-awesome.min.css" rel="stylesheet">        <!-- Font Awesome -->    <link type="text/css" href="<?php echo base_url('') ?>assets/css/styles.css" rel="stylesheet">                                     <!-- Core CSS with all styles -->
 
     <link type="text/css" href="<?php echo base_url('') ?>assets/plugins/codeprettifier/prettify.css" rel="stylesheet">                <!-- Code Prettifier -->
     <link type="text/css" href="<?php echo base_url('') ?>assets/plugins/iCheck/skins/minimal/blue.css" rel="stylesheet">              <!-- iCheck -->
@@ -43,17 +41,19 @@
 		<span id="trigger-sidebar" class="toolbar-trigger toolbar-icon-bg">
 			<a data-toggle="tooltips" data-placement="right" title="Toggle Sidebar">
 				<span class="icon-bg">
-					<i class="ti ti-menu"></i>
+					<i class="fa fa-bars"></i>
 				</span>
 			</a>
 		</span>
+		<img src="<? echo base_url('assets/img/logo-STIKI.png') ?>" alt="" style="width: 45px; margin: 5px">
+
+		<!-- <a class="navbar-brand" href=""></a> -->
 		
-		<a class="navbar-brand" href="<?php echo site_url() ?>"></a>
 	</div><!-- logo-area -->
 
 	<ul class="nav navbar-nav toolbar pull-right">
         <li class="dropdown toolbar-icon-bg hidden-xs">
-			<a href="#" class="hasnotifications dropdown-toggle" data-toggle='dropdown'><span class="icon-bg"><i class="ti ti-email"></i></span><span
+			<a href="#" class="hasnotifications dropdown-toggle" data-toggle='dropdown'><span class="icon-bg"><i class="fa fa-envelope"></i></span><span
 			class="badge badge-deeporange">2</span></a>
 			<div class="dropdown-menu notifications arrow">
 				<div class="topnav-dropdown-header">
@@ -147,7 +147,7 @@
 		</li>
 		
 		<li class="dropdown toolbar-icon-bg">
-			<a href="#" class="hasnotifications dropdown-toggle" data-toggle='dropdown'><span class="icon-bg"><i class="ti ti-bell"></i></span><span class="badge badge-deeporange">2</span></a>
+			<a href="#" class="hasnotifications dropdown-toggle" data-toggle='dropdown'><span class="icon-bg"><i class="fa fa-bell"></i></span><span class="badge badge-deeporange">2</span></a>
 			<div class="dropdown-menu notifications arrow">
 				<div class="topnav-dropdown-header">
 					<span>Notifications</span>
@@ -157,7 +157,7 @@
 						<li class="media notification-success">
 							<a href="#">
 								<div class="media-left">
-									<span class="notification-icon"><i class="ti ti-check"></i></span>
+									<span class="notification-icon"><i class="fa fa-check"></i></span>
 								</div>
 								<div class="media-body">
 									<h4 class="notification-heading">Update 1.0.4 successfully pushed</h4>
@@ -168,7 +168,7 @@
 						<li class="media notification-info">
 							<a href="#">
 								<div class="media-left">
-									<span class="notification-icon"><i class="ti ti-check"></i></span>
+									<span class="notification-icon"><i class="fa fa-check"></i></span>
 								</div>
 								<div class="media-body">
 									<h4 class="notification-heading">Update 1.0.3 successfully pushed</h4>
@@ -179,7 +179,7 @@
 						<li class="media notification-teal">
 							<a href="#">
 								<div class="media-left">
-									<span class="notification-icon"><i class="ti ti-check"></i></span>
+									<span class="notification-icon"><i class="fa fa-check"></i></span>
 								</div>
 								<div class="media-body">
 									<h4 class="notification-heading">Update 1.0.2 successfully pushed</h4>
@@ -190,7 +190,7 @@
 						<li class="media notification-indigo">
 							<a href="#">
 								<div class="media-left">
-									<span class="notification-icon"><i class="ti ti-check"></i></span>
+									<span class="notification-icon"><i class="fa fa-check"></i></span>
 								</div>
 								<div class="media-body">
 									<h4 class="notification-heading">Update 1.0.1 successfully pushed</h4>
@@ -201,7 +201,7 @@
 						<li class="media notification-danger">
 							<a href="#">
 								<div class="media-left">
-									<span class="notification-icon"><i class="ti ti-arrow-up"></i></span>
+									<span class="notification-icon"><i class="fa fa-arrow-up"></i></span>
 								</div>
 								<div class="media-body">
 									<h4 class="notification-heading">Initial Release 1.0</h4>
@@ -222,15 +222,15 @@
 				<img class="img-circle" src="<?php echo base_url('') ?>assets/img/anu.png" alt="" />
 			</a>
 			<ul class="dropdown-menu userinfo arrow">
-				<li><a href="#/"><i class="ti ti-user"></i><span>Profile</span><span class="badge badge-info pull-right">80%</span></a></li>
-				<li><a href="#/"><i class="ti ti-panel"></i><span>Account</span></a></li>
-				<li><a href="#/"><i class="ti ti-settings"></i><span>Settings</span></a></li>
+				<li><a href="#/"><i class="fa fa-user"></i><span>Profile</span><span class="badge badge-info pull-right">80%</span></a></li>
+				<li><a href="#/"><i class="fa fa-panel"></i><span>Account</span></a></li>
+				<li><a href="#/"><i class="fa fa-cog"></i><span>Settings</span></a></li>
 				<li class="divider"></li>
-				<li><a href="#/"><i class="ti ti-stats-up"></i><span>Earnings</span></a></li>
-				<li><a href="#/"><i class="ti ti-view-list-alt"></i><span>Statement</span></a></li>
-				<li><a href="#/"><i class="ti ti-money"></i><span>Withdrawals</span></a></li>
+				<li><a href="#/"><i class="fa fa-stats-up"></i><span>Earnings</span></a></li>
+				<li><a href="#/"><i class="fa fa-view-list-alt"></i><span>Statement</span></a></li>
+				<li><a href="#/"><i class="fa fa-money"></i><span>Withdrawals</span></a></li>
 				<li class="divider"></li>
-				<li><a href="<?php echo site_url('login/logout') ?>"><i class="ti ti-shift-right"></i><span>Sign Out</span></a></li>
+				<li><a href="<?php echo site_url('login/logout') ?>"><i class="fa fa-shift-right"></i><span>Sign Out</span></a></li>
 			</ul>
 		</li>
 
@@ -269,7 +269,7 @@
 												<li><a href="<?php echo site_url('hotspot/useractive'); ?>">User Active</a></li>
 											</ul>
 									</li>
-									<li><a id="logPopover" role="button" data-toggle="popover" data-placement="right" data-content="Vivamus sagittis lacus vel augue laoreet rutrum faucibus."><i class="ti ti-rss-alt"></i><span>Log Activity</span></a>
+									<li><a id="logPopover" role="button" data-toggle="popover" data-placement="right" data-content="Vivamus sagittis lacus vel augue laoreet rutrum faucibus."><i class="fa fa-rss-alt"></i><span>Log Activity</span></a>
 									</li>
 								</ul>
 							</nav>

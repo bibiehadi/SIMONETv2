@@ -55,12 +55,13 @@ class Devices extends CI_Controller {
         $data = $this->devices->getdevices();
         $_data = array();
             foreach($data as $r){
+                $r['address'] = '<span style="color: #03a9f4">'.$r['address'].'</span>';
                 if($r['status'] == 'Connected'){
-                    $r['status'] = '<span class="label label-primary">Connected</span>';
+                    $r['status'] = '<span class="badge" style="color: #39cc64; background-color: transparent; border: 1px solid">Connected</span>';
                 }elseif ($r['status'] == 'Disconnected') {
-                    $r['status'] = '<span class="label label-danger">Disconnected </span>';
+                    $r['status'] = '<span class="badge" style="color: #f03a3e; background-color: transparent; border: 1px solid">Disconnected </span>';
                 }elseif ($r['status'] == 'Reboot') {
-                    $r['status'] = '<span class="label label-warning">Reboot </span>';
+                    $r['status'] = '<span class="badge" style="color: #ffdb1a; background-color: transparent; border: 1px solid">Reboot </span>';
                 }
                 if($r['platform'] == "UniFi"){
                     $r['img'] = '<img src="'.base_url('assets/img/unifi.ico').'" style="width: 30px">';

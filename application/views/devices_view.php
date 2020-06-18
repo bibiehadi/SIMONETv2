@@ -11,18 +11,17 @@
                             <?php echo $this->session->flashdata('devices') ?>
                                 <div class="panel panel-default">
                                     <div class="panel-heading">
-                                        <h2>Devices</h2>
-                                        <select name="id" id="table-filter" class="list-group list-group-horizontal" style="width: 120px;color: #03a9f4;outline: 0px; background: #fafafa; margin-left :10px">
-                                            <option class="list-group-item list-group-item-action active" selected value="">All</option>
-                                            <option class="list-group-item list-group-item-action active" value="MikroTik">MikroTik</option>
-                                            <option class="list-group-item list-group-item-action active" value="UniFi">UniFi</option>
-                                        </select>
+                                        <div class="btn-group" role="group" aria-label="Basic example">
+                                            <button type="button" class="btn btn-primary" data-aksi="all">All</button>
+                                            <button type="button" class="btn btn-primary" data-aksi="mikrotik">MikroTik</button>
+                                            <button type="button" class="btn btn-primary" data-aksi="unifi">UniFi</button>
+                                        </div>
 
                                         <!-- <div class="panel-ctrls"></div> -->
                                         <a class="btn btn-success pull-right" data-aksi="add" style="margin: 10px 10px;"><i class="fa fa-plus"></i></a>
                                     </div>
                                     <div class="panel-body">
-                                        <table id="tb_devices" class="table table-hover" cellspacing="0" width="100%">
+                                        <table id="tb_devices" class="table table-hover" cellspacing="0" width="100%" style="cursor:pointer">
                                             <thead>
                                                 <tr><th></th>
                                                     <th>Device Name</th>
@@ -143,7 +142,7 @@
                             </table>
                         </div>
                         <div class="tab-pane" id="UniFiDevice">
-                            <table id="tb_unifi" class="table about-table " cellspacing="0" width="100%" >
+                            <table id="tb_unifi" class="table about-table " cellspacing="0" width="100%">
                                 <thead>
                                     <tr>
                                         <th>IP Address</th>
@@ -170,6 +169,9 @@
 <script type="text/javascript">
     table = $('#tb_devices').DataTable({
         responsive : true,
+        pageLength : 50,
+        lengthChange: false,
+        dom: 'rt<"bottom"p><"clear">',
         oLanguage: {
         "sLengthMenu": " _MENU_ ",
         "sSearch": "<span>Search..</span> _INPUT_"
@@ -190,12 +192,25 @@
             {"data" : "model"},
             {"data" : "platform"}
         ],
+        "createdRow": function(row, data, dataIndex) {
+            if (data["status"] == '<span class="badge" style="color: #f03a3e; background-color: transparent; border: 1px solid">Disconnected </span>') {
+            $(row).css("background-color", "#B9BAB8");
+            // $(row).addClass("label label-danger");
+            }
+        },
     });
 
-    $('#table-filter').on('change', function(){
-       table.search(this.value).draw();   
+    $('body').on('click','button[data-aksi="all"]',function(){
+        table.search('').draw();   
     });
 
+    $('body').on('click','button[data-aksi="mikrotik"]',function(){
+        table.search('MikroTik').draw();   
+    });
+    
+    $('body').on('click','button[data-aksi="unifi"]',function(){
+        table.search('UniFi').draw();   
+    });
     setInterval(() => {
         reload_table();
     }, 60000);
@@ -290,6 +305,22 @@
         $('body').append(form);
         form.submit();
     })
+
+
+    // $('table#tb_devices').on('','tbody tr',function(){
+    //     var status = $(this).find('td:eq(2)').html();
+
+    //     console.log(status);
+    //     if(status == 'Disconnected'){
+    //         $(this).css("background-color", "green");
+    //     }
+    // })
+
+    // $('table#tb_devices tbody td').map(function(){
+    //     if($this.text() === 'Disconnected') {
+    //         $(this).css("background-color", "green");
+    //     }
+    // })
 
     function addDevice(){
         save_method= 'add';

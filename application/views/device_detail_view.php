@@ -43,9 +43,9 @@
                                 </div>
                             </div><!-- panel -->
                             <div class="list-group list-group-alternate mb-n nav nav-tabs">
-                                <a href="#tab-about" role="tab" data-toggle="tab" class="list-group-item active"><i class="ti ti-user"></i> Detail Device</a>
+                                <a href="#tab-about" role="tab" data-toggle="tab" class="list-group-item active"><i class="fa fa-user"></i> Detail Device</a>
                                 <?php if($status == 'Connected' && ($platform == 'MikroTik' || $platform == 'UniFi')){?>
-                                    <a href="#tab-interfaces" role="tab" data-toggle="tab" class="list-group-item"><i class="ti ti-pencil"></i> Interfaces</a>
+                                    <a href="#tab-interfaces" role="tab" data-toggle="tab" class="list-group-item"><i class="fa fa-pencil"></i> Interfaces</a>
                                 <?}?>
                             </div>
                         </div><!-- col-sm-3 -->
