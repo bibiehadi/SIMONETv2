@@ -8,17 +8,30 @@
                     <!-- <div data-widget-group="group1"> -->
                         <div class="row">
                             <div class="col-md-12">
-                            <?php echo $this->session->flashdata('devices') ?>
                                 <div class="panel panel-default">
-                                    <div class="panel-heading">
+                                    <? echo $this->session->flashdata('devices') ?>
+                                    <div class="panel-heading">    
                                         <div class="btn-group" role="group" aria-label="Basic example">
                                             <button type="button" class="btn btn-primary" data-aksi="all">All</button>
                                             <button type="button" class="btn btn-primary" data-aksi="mikrotik">MikroTik</button>
                                             <button type="button" class="btn btn-primary" data-aksi="unifi">UniFi</button>
                                         </div>
+                                        <div class="btn-group pull-right" id="tools">
 
-                                        <!-- <div class="panel-ctrls"></div> -->
-                                        <a class="btn btn-success pull-right" data-aksi="add" style="margin: 10px 10px;"><i class="fa fa-plus"></i></a>
+                                        </div>
+                                        <div class="col-md-2 pull-right" style="margin:10px 0 0 0">
+                                            <div class="input-group">
+                                                <span class="input-group-addon">
+                                                    <i class="fa fa-search"></i>
+                                                </span>
+                                                <input class="form-control" placeholder='Search..' type="text" id="myInputTextField">
+                                            </div>
+                                        </div>
+                                        <div class="btn-group pull-right" role="group" aria-label="Basic example">
+                                            <a class="btn btn-info" id="upgradeUnifi" data-aksi="upgradeUniFi" style="margin:10px 0 0 0px; visibility: hidden;"><i class="fa fa-arrow-circle-up"></i> Upgrade</a>
+                                            <a class="btn btn-success" data-aksi="add" style="margin:10px 0 0 0px"><i class="fa fa-plus"></i></a>    
+                                        </div>
+                                        
                                     </div>
                                     <div class="panel-body">
                                         <table id="tb_devices" class="table table-hover" cellspacing="0" width="100%" style="cursor:pointer">
@@ -171,7 +184,10 @@
         responsive : true,
         pageLength : 50,
         lengthChange: false,
-        dom: 'rt<"bottom"p><"clear">',
+        dom: 'Trt<"bottom"ip><"clear">',
+        tableTools: {
+            "sSwfPath": "/swf/copy_csv_xls_pdf.swf"
+        },
         oLanguage: {
         "sLengthMenu": " _MENU_ ",
         "sSearch": "<span>Search..</span> _INPUT_"
@@ -197,20 +213,32 @@
             $(row).css("background-color", "#B9BAB8");
             // $(row).addClass("label label-danger");
             }
-        },
+        }
     });
+
+        $('#myInputTextField').keyup(function(){
+            table.search($(this).val()).draw() ;
+        })
 
     $('body').on('click','button[data-aksi="all"]',function(){
         table.search('').draw();   
+        $('#upgradeUnifi').css('visibility', 'hidden');
     });
 
     $('body').on('click','button[data-aksi="mikrotik"]',function(){
         table.search('MikroTik').draw();   
+        $('#upgradeUnifi').css('visibility', 'hidden');
     });
     
     $('body').on('click','button[data-aksi="unifi"]',function(){
-        table.search('UniFi').draw();   
+        table.search('UniFi').draw();
+        $('#upgradeUnifi').css('visibility', 'visible');   
     });
+
+    $('body').on('click','a[data-aksi="upgradeUniFi"]',function(){
+        upgradeUnifis();
+    });
+
     setInterval(() => {
         reload_table();
     }, 60000);
@@ -299,7 +327,7 @@
     $('table#tb_devices').on('click','tbody tr',function(){
         var serial = $(this).find('td:eq(4)').html();
         var url = '<?php echo site_url('devices/detaildevice')?>';
-        var form = $('<form action="' + url + '" method="post">' +
+        var form = $('<form action="' + url + '" method="post" target="_blank">' +
         '<input type="hidden" name="serial" value="'+serial+'" />' +
         '</form>');
         $('body').append(form);
@@ -388,6 +416,23 @@
                 })
             }
         })
+    }
+
+    function upgradeUnifis(){
+        alert('jancok');
+        if(confirm('Anda yakin ingin mengupgrade semua device UniFi?')){        
+            var xhr = $.post('<?php echo site_url('devices/upgradeAllUnifi/') ?>',function(respon){
+                    if(respon.status){
+                        reload_table();
+                    }
+                },'json').fail(function(){
+                    alert('error delete this data');
+                })
+                setTimeout(() => {
+                    xhr.abort();
+                }, 60000);
+        }
+        
     }
 
     function reload_table(){

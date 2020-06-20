@@ -60,12 +60,12 @@ class Devices_Model extends CI_Model {
             // foreach($data as $device){
             if($device['platform'] == "MikroTik"){
                 $this->db->where('serial_number', $identity['serial']);
-                $this->db->update('devices', array('serial_number' => $device['serial-number'], 'uptime' => $device['uptime'], 'version' => $device['version'], 
+                $this->db->update('devices', array('uptime' => $device['uptime'], 'version' => $device['version'], 
                 'model' => $device['model'], 'platform' => $device['platform'], 'identity' => $identity['identity']));
             }elseif($device['platform'] == "UniFi"){
-            //     $this->db->where('serial_number', $identity['serial']);
-            //     $this->db->update('devices', array('serial_number' => $device['serial'], 'uptime' => $device['uptime'], 'version' => $device['version'], 
-            //     'model' => $device['model'], 'platform' => $device['platform'], 'identity' => $identity['identity']));
+                $this->db->where('serial_number', $identity['serial']);
+                $this->db->update('devices', array('address' => $device['address'],'uptime' => $device['uptime'], 'version' => $device['version'], 
+                'model' => $device['model'], 'platform' => $device['platform'], 'identity' => $identity['identity']));
             }
         }catch(Exception $e){
             return $e;
@@ -140,8 +140,8 @@ class Devices_Model extends CI_Model {
         $this->db->update('device_interfaces', array('address' => $data['address']));
     }
 
-    function updateStatus($ip,$data){
-        $this->db->where('address', $ip);
+    function updateStatus($where,$data){
+        $this->db->where($where);
         $this->db->update('devices', $data);
     }
 

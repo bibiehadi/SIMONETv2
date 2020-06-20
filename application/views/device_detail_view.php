@@ -70,7 +70,7 @@
                                                     </form>
                                                 </div>
                                                 <div class="col-md-6">
-                                                    <?php if($status == 'Connected' && $platform == 'MikroTik'){?>
+                                                    <?php if($status == 'Connected' && ($platform == 'MikroTik' || $platform == 'UniFi')){?>
                                                         <a class="btn btn-warning pull-right" data-aksi="reboot" href="javascript:;" style="margin: 10px 20px 10px 0px">Reboot</a>
                                                     <? }?>
                                                     <a href="#tab-edit" role="tab" data-toggle="tab" class="btn btn-primary pull-right" style="margin: 10px 10px 10px 0px"><i class="fa fa-pencil-square-o"></i></a>
@@ -94,6 +94,10 @@
                                                         <tr>
                                                             <th>Main IP Address</th>
                                                             <td><?php echo $address ?></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <th>Mac-Address</th>
+                                                            <td><?php echo $mac_address ?></td>
                                                         </tr>
                                                         <tr>
                                                             <th>Version</th>
@@ -387,7 +391,7 @@
     });
 
     $('body').on('click','a[data-aksi="reboot"]',function(){
-        rebootDevice('<? echo $address; ?>');
+        rebootDevice();
     });
 
     $('#device').change(function(){
@@ -509,12 +513,19 @@
             })
     }
 
-    function rebootDevice(ip){
+    function rebootDevice(){
         $.skylo('start');
-        var data = {ip : ip,
+        if('<? echo $platform ?>' == 'MikroTik'){
+            var data = { ip : '<? echo $address ?>',
+                        identity : '<? echo $identity; ?>'};
+            var url = '<?php echo site_url('devices/reboot/') ?>';
+        }else if('<? echo $platform ?>' == 'UniFi'){
+            var data = {mac : '<? echo $mac_address?>',
                     identity : '<? echo $identity; ?>'};
+            var url = '<?php echo site_url('devices/rebootUniFi/') ?>';
+        }
         if(confirm('Anda yakin ingin mereboot device ini ?')){
-            $.post('<?php echo site_url('devices/reboot/') ?>',data,function(respon){
+            $.post(url,data,function(respon){
                 if(respon.status){
                     location.href='<?php echo site_url('devices')?>/';
                     $.skylo('end');

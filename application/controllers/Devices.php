@@ -447,7 +447,7 @@ class Devices extends CI_Controller {
             if($api->connect($ip,$user['username'],$user['password'])){
                 $api->comm('/system/reboot');
                 $api->disconnect();
-                $this->devices->updateStatus($ip,array('status' => 'Reboot'));
+                $this->devices->updateStatus(array('address' => $ip),array('status' => 'Reboot'));
                 $this->session->set_flashdata('devices', '<div class="alert alert-dismissable alert-success">
                 <i class="ti ti-check"></i>&nbsp; <strong>Well Done!</strong> Reboot Device '.$identity.' Berhasil!!
                 <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
@@ -555,7 +555,7 @@ class Devices extends CI_Controller {
                     $_ap['platform'] = 'UniFi';
                     $_ap['mac'] = $ap->mac;
                     if(isset($ap->uptime)){
-                        $_ap['uptime'] = timespan($ap->uptime); 
+                        $_ap['uptime'] = $this->time_elapsed_B($ap->uptime); 
                     }else{
                         $_ap['uptime'] = null;    
                     }
@@ -600,7 +600,7 @@ class Devices extends CI_Controller {
                 $_ap['platform'] = 'UniFi';
                 $_ap['mac'] = $ap->mac;
                 if(isset($ap->uptime)){
-                    $_ap['uptime'] = timespan($ap->uptime); 
+                    $_ap['uptime'] = $this->time_elapsed_B($ap->uptime); 
                 }else{
                     $_ap['uptime'] = null;    
                 }
@@ -623,7 +623,7 @@ class Devices extends CI_Controller {
     }
 
     function updateOSUniFi(){
-        $mac = '80:2a:a8:c6:09:e8';
+        $mac = '04:18:d6:cc:21:90';
         $user = $this->devices->getUserRouter(array('id' => '3333'));
         $unifi_connection = new UniFi_API\Client($user['username'], $user['password'], 'https://10.10.10.115:8443', 'default', '5.10.25');
         // $set_debug_mode   = $unifi_connection->set_debug(true);
@@ -632,6 +632,44 @@ class Devices extends CI_Controller {
         if($results == false){
             echo json_encode(array("status" => FALSE, "msg" => $results));
         }else{
+            echo json_encode(array("status" => TRUE, "msg" => $results));
+        }
+    }
+
+    function upgradeAllUniFi(){
+        $user = $this->devices->getUserRouter(array('id' => '3333'));
+        $unifi_connection = new UniFi_API\Client($user['username'], $user['password'], 'https://10.10.10.115:8443', 'default', '5.10.25');
+        $set_debug_mode   = $unifi_connection->set_debug(true);
+        $loginresults     = $unifi_connection->login();
+        $results = $unifi_connection->start_rolling_upgrade();
+        $unifis = $this->devices->getDevicesBy(array('platform' => 'UniFi'));
+        if($results == false){
+            echo json_encode(array("status" => FALSE, "msg" => $results));
+        }else{
+            // foreach($unifis as $unifi){
+            //     $this->devices->updateStatus(array('serial_number' => $unifi['serial_number']), array('status' => 'Upgrading..'));
+            // }
+            echo json_encode(array("status" => TRUE, "msg" => $results));
+        }
+    }
+
+    function rebootUniFi(){
+        // $mac = '80:2a:a8:c6:09:e8';
+        $mac = $this->input->post('mac');
+        $identity = $this->input->post('identity');
+        $user = $this->devices->getUserRouter(array('id' => '3333'));
+        $unifi_connection = new UniFi_API\Client($user['username'], $user['password'], 'https://10.10.10.115:8443', 'default', '5.10.25');
+        // $set_debug_mode   = $unifi_connection->set_debug(true);
+        $loginresults     = $unifi_connection->login();
+        $results = $unifi_connection->restart_ap($mac);
+        if($results == false){
+            echo json_encode(array("status" => FALSE, "msg" => $results));
+        }else{
+            $this->devices->updateStatus(array('mac_address' => $mac),array('status' => 'Reboot'));
+            $this->session->set_flashdata('devices', '<div class="alert alert-dismissable alert-success">
+            <i class="ti ti-check"></i>&nbsp; <strong>Well Done!</strong> Reboot Device '.$identity.' Berhasil!!
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+            </div>');
             echo json_encode(array("status" => TRUE, "msg" => $results));
         }
     }
@@ -650,6 +688,26 @@ class Devices extends CI_Controller {
         return $location;
 
     }
+
+    function time_elapsed_B($secs){
+        $bit = array(
+            'y'        => $secs / 31556926 % 12,
+            'w'        => $secs / 604800 % 52,
+            'd'        => $secs / 86400 % 7,
+            'h'        => $secs / 3600 % 24,
+            'm'    => $secs / 60 % 60,
+            's'    => $secs % 60
+            );
+           
+        foreach($bit as $k => $v){
+            if($v > 1)$ret[] = $v . $k;
+            if($v == 1)$ret[] = $v . $k;
+            }
+        array_splice($ret, count($ret)-1, 0);
+        // $ret[] = 'ago.';
+       
+        return join('', $ret);
+        }
 }
 
 /* End of file Devices.php */

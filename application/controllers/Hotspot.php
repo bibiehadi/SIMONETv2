@@ -317,6 +317,7 @@ class Hotspot extends CI_Controller {
             $api = $this->routerosapi;
             $user = $this->devices->getUserRouter(array('id' => '1111'));
             $api->port = $user['port'];
+            $_read = array();
             if($api->connect("10.10.10.1",$user['username'],$user['password'])){
                 $api->write('/ip/hotspot/active/print');
                 $read = $api->read();

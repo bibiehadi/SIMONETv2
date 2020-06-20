@@ -37,7 +37,7 @@
 						<h2>Login Form</h2>
 					</div> -->
 					<div class="panel-body">
-					<a href="index.html" ><img src="<?php echo base_url('');?>assets/img/logo-big.png" style="margin: 10px auto 20px auto; display: block"></a>
+					<a href="" ><img src="<?php echo base_url('');?>assets/img/logo-stiki.png" style="margin: 10px auto 20px auto; display: block; width: 70px"></a>
 					<?php echo $this->session->flashdata('login') ?>
 						<form action="<?php echo site_url('login/auth');?>" method="post" class="form-horizontal" id="validate-form" >
 							<div class="form-group mb-md">
