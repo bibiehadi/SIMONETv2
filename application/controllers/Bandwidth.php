@@ -13,22 +13,34 @@ class Bandwidth extends CI_Controller {
         $this->load->view('graph_view');
     }
 
-    public function lineGraph($interface)
+    public function lineGraph()
     {
-        $graphs = $this->bandwidth->get_data(array('interface' => $interface));
+        // echo 'Default Timezone: ' . date('d-m-Y H:i:s') . '</br>';
+        date_default_timezone_set('Asia/Jakarta');
+        // echo 'Indonesian Timezone: ' . date('d-m-Y H:i:s');
+        $interface = "BPro100";
+        $first_date = "2020-06-20";
+        $last_date = date("Y-m-d H:i:s");
+        $graphs = $this->bandwidth->get_data(array('interface' => $interface, 'first_date' => $first_date, 'last_date' => $last_date));
         // echo '<pre>';
         // print_r($graph);
+        $row = array (
+            'tx' => array(), 
+			'rx' => array(), 
+			'point' => array() 
+        );
         foreach($graphs as $graph){
-            // $row['date'][] = $this->formatDate($graph['time']);
-            $row['date'][] = $graph->time;
-            $row['tx'][] = $graph->tx;
-            $row['rx'][] = $graph->rx;
-            
+            $row['tx'][] = round($graph->tx);
+			$row['rx'][] = round($graph->rx);
+            // $row['point'][] = date('H:i:s', strtotime($graph->time));
+            $time = date('Y-m-d H:i:s', strtotime($graph->time));
+			$row['point'][] = $time;
         }
-        $result = $row;
+        // $result = $row;
         // echo "<pre>";
-        // print_r($result);
-        echo json_encode($result);
+        // echo $last_date;
+        // print_r($row);
+        echo json_encode($row);
     }
 
     function formatDate($date){

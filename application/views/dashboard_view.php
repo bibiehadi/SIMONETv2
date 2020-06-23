@@ -4,56 +4,79 @@
                 <div class="static-content-wrapper">
                     <div class="static-content">
                         <div class="page-content">
-                            <ol class="breadcrumb">
-                                
-<li class=""><a href="index.html">Home</a></li>
-<li class="active"><a href="index.html">Dashboard</a></li>
-
-                            </ol>
                             <div class="container-fluid">
-                                
 
-<div class="row">
-	<div class="col-md-3">
-		<div class="info-tile tile-orange">
-			<div class="tile-icon"><i class="ti ti-shopping-cart-full"></i></div>
-			<div class="tile-heading"><span>Orders</span></div>
-			<div class="tile-body"><span>2,150</span></div>
-			<div class="tile-footer"><span class="text-success">22.5% <i class="fa fa-level-up"></i></span></div>
-		</div>
-	</div>
-	<div class="col-md-3">
-		<div class="info-tile tile-success">
-			<div class="tile-icon"><i class="ti ti-bar-chart"></i></div>
-			<div class="tile-heading"><span>Revenues</span></div>
-			<div class="tile-body"><span>$75,100</span></div>
-			<div class="tile-footer"><span class="text-danger">12.7% <i class="fa fa-level-down"></i></span></div>
-		</div>
-	</div>
-	<div class="col-md-3">
-		<div class="info-tile tile-info">
-			<div class="tile-icon"><i class="ti ti-stats-up"></i></div>
-			<div class="tile-heading"><span>Earnings</span></div>
-			<div class="tile-body"><span>$40,150</span></div>
-			<div class="tile-footer"><span class="text-success">5.2% <i class="fa fa-level-up"></i></span></div>
-		</div>
-	</div>
-	<div class="col-md-3">
-		<div class="info-tile tile-danger">
-			<div class="tile-icon"><i class="ti ti-bar-chart-alt"></i></div>
-			<div class="tile-heading"><span>Visitors</span></div>
-			<div class="tile-body"><span>12,600</span></div>
-			<div class="tile-footer"><span class="text-danger">10.5% <i class="fa fa-level-down"></i></span></div>
-		</div>
-	</div>
+<div class="row" style = "margin-top: 20px">
+	<div class="col-sm-3">
+		<div class="panel panel-profile">
+			<div class="panel-body">
+			<div class="name">Main Router</div>
+			<div class="info">CCR - 1036</div>
+			<div class="row" style="text-align : left; margin-top: 5px">  
+				<div class="info">CPU</div>
+				<div class="progress" style="height: 20px">
+					<div id="cpu" class="progress-bar"></div>
+				</div>
+				<div class="info">Memory</div>
+				<div class="progress" style="height: 20px">
+					<div id="mem" class="progress-bar"></div>
+				</div>
+				<div class="col-md-6">
+					<div class="info">Voltage : </div> 
+					<p id="volt"></p>
+				</div>
+				<div class="col-md-6">
+					<div class="info">Temperature : </div> 
+					<p id="temp"></p>
+				</div>
+			</div>
+			</div>
+		</div><!-- panel -->
+	</div><!-- col-sm-3 -->
+	<div class="col-sm-9">
+		<div class="tab-content">
+			<div class="tab-pane active" id="tab-about">
+				<div class="panel panel-default">
+					<div class="panel-body">
+						<div class="about-area">
+							<h4>Network</h4>
+							<div class="col-md-4">
+								<div style="text-align:center">
+									<img src="<?php echo base_url('assets/img/rb.png')?>" class="img-circle" style="width : 120px; ">
+									<h4>Routerboard</h4>
+									<h3>.../...</h3>
+								</div>
+							</div>
+							<div class="col-md-4">
+								<div style="text-align:center">
+									<img src="<?php echo base_url('assets/img/unifi.png')?>" class="img-circle" style="width : 120px; ">
+									<h4>AP UniFi</h4>
+									<h3>.../...</h3>
+								</div>
+							</div>
+							<div class="col-md-4">
+								<div style="text-align:center">
+									<span>
+										<i class="fa fa-user-circle-o" aria-hidden="true"></i>
+									</span>
+									<h4>Main Router</h4>
+									<h3>.../...</h3>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div><!-- .tab-content -->
+	</div><!-- col-sm-8 -->
 </div>
 
 <div data-widget-group="group1">
 	<div class="row">
 		<div class="col-md-6">
-			<div class="panel panel-info" data-widget='{"id" : "wiget9", "draggable": "false"}'>
+			<div class="panel panel-bluegray" data-widget='{"id" : "wiget9", "draggable": "false"}'>
 				<div class="panel-heading">
-					<h2>Social Stats</h2>
+					<h2>Indosat</h2>
 					<div class="panel-ctrls button-icon-bg" 
 						data-actions-container="" 
 						data-action-collapse='{"target": ".panel-body"}'
@@ -64,7 +87,7 @@
 				</div>
 				<div class="panel-editbox" data-widget-controls=""></div>
 				<div class="panel-body">
-					<div id="socialstats" style="height: 272px;" class="mt-sm mb-sm"></div>
+					<div class="mychart" id="chart1" style="height: 272px;" class="mt-sm mb-sm" data-interface="Indosat"></div>
 				</div>
 			</div>
 		</div>
@@ -72,7 +95,7 @@
 		<div class="col-md-6">
 			<div class="panel panel-bluegray" data-widget='{"draggable": "false"}'>
 				<div class="panel-heading">
-					<h2>Earnings Stats</h2>
+					<h2>MyRep BPro 100</h2>
 					<div class="panel-ctrls button-icon-bg" 
 						data-actions-container="" 
 						data-action-collapse='{"target": ".panel-body"}'
@@ -82,20 +105,18 @@
 					</div>
 				</div>
 				<div class="panel-body">
-					<div id="earnings" style="height: 272px;" class="mt-sm mb-sm"></div>
+					<div class="mychart" id="chart2" style="height: 272px;" class="mt-sm mb-sm" data-interface="BPro100"></div>
 				</div>
 			</div>
 		</div>
 
 	</div>
-
-
 	<div class="row">
 		<div class="col-md-6">
-			<div class="panel panel-gray" data-widget='{"draggable": "false"}'>
-                <div class="panel-heading">
-                	<h2>Recent Activities</h2>
-	                <div class="panel-ctrls button-icon-bg" 
+			<div class="panel panel-bluegray" data-widget='{"id" : "wiget9", "draggable": "false"}'>
+				<div class="panel-heading">
+					<h2>MyRep B300</h2>
+					<div class="panel-ctrls button-icon-bg" 
 						data-actions-container="" 
 						data-action-collapse='{"target": ".panel-body"}'
 						data-action-colorpicker=''
@@ -103,242 +124,17 @@
 						>
 					</div>
 				</div>
-				<!-- <div class="panel-body">
-					<ul class="mini-timeline">
-						<li class="mini-timeline-lime">
-							<div class="timeline-icon"></div>
-							<div class="timeline-body">
-								<div class="timeline-content">
-									<a href="#/" class="name">Vincent Keller</a> added new task <a href="#/">Admin Dashboard UI</a>
-									<span class="time">4 mins ago</span>
-								</div>
-							</div>
-						</li>
-
-						<li class="mini-timeline-deeporange">
-							<div class="timeline-icon"></div>
-							<div class="timeline-body">
-								<div class="timeline-content">
-									<a href="#/" class="name">Shawna Owen</a> added <a href="#/" class="name">Alonzo Keller</a> and <a href="#/" class="name">Mario Bailey</a> to project <a href="#/">Wordpress eCommerce Template</a>
-									<span class="time">6 mins ago</span>
-								</div>
-							</div>
-						</li>
-
-						<li class="mini-timeline-info">
-							<div class="timeline-icon"></div>
-							<div class="timeline-body">
-								<div class="timeline-content">
-									<a href="#/" class="name">Christian Delgado</a> commented on thread <a href="#/">Frontend Template PSD</a>
-									<span class="time">12 mins ago</span>
-								</div>
-							</div>
-						</li>
-
-						<li class="mini-timeline-indigo">
-							<div class="timeline-icon"></div>
-							<div class="timeline-body">
-								<div class="timeline-content">
-									<a href="#/" class="name">Jonathan Smith</a> added <a href="#/" class="name">Frend Pratt</a> and <a href="#/" class="name">Robin Horton</a> to project <a href="#/">Material Design Admin Template</a>
-									<span class="time">6 hours ago</span>
-								</div>
-							</div>
-						</li>
-						<li class="mini-timeline-default">
-							<div class="timeline-body ml-n">
-								<div class="timeline-content">
-									<button type="button" data-loading-text="Loading..." class="loading-example-btn btn btn-sm btn-default">See more</button>
-								</div>
-							</div>
-						</li>
-					</ul>
-				</div> -->
-				<div class="panel-body scroll-pane" style="height: 320px;">
-					<div class="scroll-content">
-						<ul class="mini-timeline">
-							<li class="mini-timeline-lime">
-								<div class="timeline-icon"></div>
-								<div class="timeline-body">
-									<div class="timeline-content">
-										<a href="#/" class="name">Vincent Keller</a> added new task <a href="#/">Admin Dashboard UI</a>
-										<span class="time">4 mins ago</span>
-									</div>
-								</div>
-							</li>
-
-							<li class="mini-timeline-deeporange">
-								<div class="timeline-icon"></div>
-								<div class="timeline-body">
-									<div class="timeline-content">
-										<a href="#/" class="name">Shawna Owen</a> added <a href="#/" class="name">Alonzo Keller</a> and <a href="#/" class="name">Mario Bailey</a> to project <a href="#/">Wordpress eCommerce Template</a>
-										<span class="time">6 mins ago</span>
-									</div>
-								</div>
-							</li>
-
-							<li class="mini-timeline-info">
-								<div class="timeline-icon"></div>
-								<div class="timeline-body">
-									<div class="timeline-content">
-										<a href="#/" class="name">Christian Delgado</a> commented on thread <a href="#/">Frontend Template PSD</a>
-										<span class="time">12 mins ago</span>
-									</div>
-								</div>
-							</li>
-
-							<li class="mini-timeline-indigo">
-								<div class="timeline-icon"></div>
-								<div class="timeline-body">
-									<div class="timeline-content">
-										<a href="#/" class="name">Jonathan Smith</a> added <a href="#/" class="name">Frend Pratt</a> and <a href="#/" class="name">Robin Horton</a> to project <a href="#/">Material Design Admin Template</a>
-										<span class="time">6 hours ago</span>
-									</div>
-								</div>
-							</li>
-							<li class="mini-timeline-lime">
-								<div class="timeline-icon"></div>
-								<div class="timeline-body">
-									<div class="timeline-content">
-										<a href="#/" class="name">Vincent Keller</a> added new task <a href="#/">Admin Dashboard UI</a>
-										<span class="time">4 mins ago</span>
-									</div>
-								</div>
-							</li>
-
-							<li class="mini-timeline-deeporange">
-								<div class="timeline-icon"></div>
-								<div class="timeline-body">
-									<div class="timeline-content">
-										<a href="#/" class="name">Shawna Owen</a> added <a href="#/" class="name">Alonzo Keller</a> and <a href="#/" class="name">Mario Bailey</a> to project <a href="#/">Wordpress eCommerce Template</a>
-										<span class="time">6 mins ago</span>
-									</div>
-								</div>
-							</li>
-
-							<li class="mini-timeline-info">
-								<div class="timeline-icon"></div>
-								<div class="timeline-body">
-									<div class="timeline-content">
-										<a href="#/" class="name">Christian Delgado</a> commented on thread <a href="#/">Frontend Template PSD</a>
-										<span class="time">12 mins ago</span>
-									</div>
-								</div>
-							</li>
-
-							<li class="mini-timeline-indigo">
-								<div class="timeline-icon"></div>
-								<div class="timeline-body">
-									<div class="timeline-content">
-										<a href="#/" class="name">Jonathan Smith</a> added <a href="#/" class="name">Frend Pratt</a> and <a href="#/" class="name">Robin Horton</a> to project <a href="#/">Material Design Admin Template</a>
-										<span class="time">6 hours ago</span>
-									</div>
-								</div>
-							</li>
-							<li class="mini-timeline-default">
-								<div class="timeline-body ml-n">
-									<div class="timeline-content">
-										<button type="button" data-loading-text="Loading..." class="loading-example-btn btn btn-sm btn-default">See more</button>
-									</div>
-								</div>
-							</li>
-						</ul>
-					</div>
-				</div>
-			</div>
-		</div>
-		<div class="col-md-3">
-			<div class="panel panel-white" data-widget='{"draggable": "false"}'>
-                <div class="panel-heading">
-                	<h2>New Members</h2>
-	                <div class="panel-ctrls button-icon-bg" 
-						data-actions-container="" 
-						data-action-refresh-demo='{"type": "circular"}'
-						>
-					</div>
-				</div>
+				<div class="panel-editbox" data-widget-controls=""></div>
 				<div class="panel-body">
-					<ul class="widget-avatar">
-						<li><img src="http://placehold.it/300&text=Placeholder" alt=""/></li>
-						<li><img src="http://placehold.it/300&text=Placeholder" alt=""/></li>
-						<li><img src="http://placehold.it/300&text=Placeholder" alt=""/></li>
-						<li><img src="http://placehold.it/300&text=Placeholder" alt=""/></li>
-						<li><img src="http://placehold.it/300&text=Placeholder" alt=""/></li>
-					</ul>
-					<button class="btn btn-block btn-primary">View More</button>
-				</div>
-			</div>
-
-			<div class="panel panel-white" data-widget='{"draggable": "false"}'>
-                <div class="panel-heading">
-                	<h2>Online Now</h2>
-	                <div class="panel-ctrls button-icon-bg" 
-						data-actions-container="" 
-						data-action-refresh-demo='{"type": "circular"}'
-						>
-					</div>
-				</div>
-				<div class="panel-body">
-					<ul class="widget-avatar">
-						<li data-status="online"><img src="http://placehold.it/300&text=Placeholder" alt=""/></li>
-						<li data-status="online"><img src="http://placehold.it/300&text=Placeholder" alt=""/></li>
-						<li data-status="online"><img src="http://placehold.it/300&text=Placeholder" alt=""/></li>
-						<li data-status="away"><img src="http://placehold.it/300&text=Placeholder" alt=""/></li>
-						<li data-status="busy"><img src="http://placehold.it/300&text=Placeholder" alt=""/></li>
-					</ul>
-					<button class="btn btn-block btn-success">Contact List</button>
+					<div class="mychart" id="chart3" style="height: 272px;" class="mt-sm mb-sm" data-interface="B300"></div>
 				</div>
 			</div>
 		</div>
-		<div class="col-md-3">
 
-			<div class="panel panel-midnightblue widget-progress" data-widget='{"draggable": "false"}'>
-                <div class="panel-heading">
-                    <h2>Progress</h2>
-                    <div class="panel-ctrls button-icon-bg" 
-						data-actions-container="" 
-						data-action-refresh-demo='{"type": "circular"}'
-						>
-					</div>
-                </div>
-                <div class="panel-body">
-					<div class="easypiechart mb-md" id="progress" data-percent="37">
-						<span class="percent-non"></span>
-					</div>
-                </div>
-                <div class="panel-footer">
-					<div class="tabular">
-						<div class="tabular-row">
-							<div class="tabular-cell">
-								<span class="status-total">Total</span>
-								<span class="status-value">100</span>
-							</div>
-							<div class="tabular-cell">
-								<span class="status-pending">Pending</span>
-								<span class="status-value">63</span>
-							</div>
-						</div>
-					</div>
-				</div>
-            </div>
-
-			<div class="widget-weather">
-				<div class="pull-left">
-					<span class="weather-location">Toronto, CA</span>
-					<span class="weather-desc">Sunny</span>
-				</div>
-				<div class="pull-right">
-					<span class="weather-temp">16<span>ºC</span></span>
-				</div>
-			</div>
-		</div>
-	</div>
-
-
-	<div class="row">
-		<div class="col-md-8">
-			<div class="panel panel-default" data-widget='{"draggable": "false"}'>
+		<div class="col-md-6">
+			<div class="panel panel-bluegray" data-widget='{"draggable": "false"}'>
 				<div class="panel-heading">
-					<h2>Visitor Stats</h2>
+					<h2>MyRep B100</h2>
 					<div class="panel-ctrls button-icon-bg" 
 						data-actions-container="" 
 						data-action-collapse='{"target": ".panel-body"}'
@@ -348,189 +144,11 @@
 					</div>
 				</div>
 				<div class="panel-body">
-					<div class="row">
-						<div class="col-md-6">
-							<div class="spark-container mb-xl">
-								<div class="pull-left">
-									<h2 class="title" style="color: #cddc39">Pageviews</h2>
-									<h3 class="number">19,600</h3>
-								</div>
-								<div class="pull-right">
-									<h2 class="title" style="color: #ff5722; text-align: right;">Sessions</h2>
-									<h3 class="number">1,200</h3>
-								</div>
-
-								<div class="spark-pageviews"></div>
-							</div>
-						</div>
-						<div class="col-md-6">
-							<div id="newvsreturning" style="height: 144px" class="mt-md mb-md"></div>
-						</div>
-					</div>
-					<div class="row">
-						<div class="col-md-3">
-							<div class="spark-container">
-								<h2 class="title">Users</h2>
-								<h3 class="number">700</h3>
-								<div class="spark-users"></div>
-							</div>
-						</div>
-						<div class="col-md-3">
-							<div class="spark-container">
-								<h2 class="title">Avg. Duration</h2>
-								<h3 class="number">00:04:36</h3>
-								<div class="spark-avgduration"></div>
-							</div>
-						</div>
-						<div class="col-md-3">
-							<div class="spark-container">
-								<h2 class="title">Page/Session</h2>
-								<h3 class="number">4.20</h3>
-								<div class="spark-pagesession"></div>
-							</div>
-						</div>
-						<div class="col-md-3">
-							<div class="spark-container">
-								<h2 class="title">Bounce Rate</h2>
-								<h3 class="number">52.10%</h3>
-								<div class="spark-bouncerate"></div>
-							</div>
-						</div>
-					</div>
+					<div class="mychart" id="chart4" style="height: 272px;" class="mt-sm mb-sm" data-interface="B100"></div>
 				</div>
 			</div>
 		</div>
-		<div class="col-md-4">
-			<div class="panel panel-teal" data-widget='{"draggable": "false"}'>
-				<div class="panel-heading">
-					<h2>Browsers</h2>
-					<div class="panel-ctrls button-icon-bg" 
-						data-actions-container="" 
-						data-action-collapse='{"target": ".panel-body"}'
-						data-action-colorpicker=''
-						data-action-refresh-demo='{"type": "circular"}'
-						>
-					</div>
-				</div>
-				<div class="panel-body no-padding">
-					<table class="table browsers m-n">
-						<tbody>
-							<tr>
-								<td>Google Chrome</td>
-								<td class="text-right">43.7%</td>
-								<td class="vam" style="width: 56px;">
-									<div class="progress m-n">
-	                                  <div class="progress-bar progress-bar-teal" style="width: 100%"></div>
-	                                </div>
-	                            </td>
-							</tr>
-							<tr>
-								<td>Firefox</td>
-								<td class="text-right">20.5%</td>
-								<td class="vam">
-									<div class="progress m-n">
-	                                  <div class="progress-bar progress-bar-teal" style="width: 50%"></div>
-	                                </div>
-	                            </td>
-							</tr>
-							<tr>
-								<td>Opera</td>
-								<td class="text-right">14.6%</td>
-								<td class="vam">
-									<div class="progress m-n">
-	                                  <div class="progress-bar progress-bar-teal" style="width: 40%"></div>
-	                                </div>
-	                            </td>
-							</tr>
-							<tr>
-								<td>Safari</td>
-								<td class="text-right">9.1%</td>
-								<td class="vam">
-									<div class="progress m-n">
-	                                  <div class="progress-bar progress-bar-teal" style="width: 25%"></div>
-	                                </div>
-	                            </td>
-							</tr>
-							<tr>
-								<td>Internet Explorer</td>
-								<td class="text-right">5.3%</td>
-								<td class="vam">
-									<div class="progress m-n">
-	                                  <div class="progress-bar progress-bar-teal" style="width: 12.5%"></div>
-	                                </div>
-	                            </td>
-							</tr>
-							<tr>
-								<td>Torch</td>
-								<td class="text-right">2.9%</td>
-								<td class="vam">
-									<div class="progress m-n">
-	                                  <div class="progress-bar progress-bar-teal" style="width: 9%"></div>
-	                                </div>
-	                            </td>
-							</tr>
-							<tr>
-								<td>Maxthon</td>
-								<td class="text-right">2.3%</td>
-								<td class="vam">
-									<div class="progress m-n">
-	                                  <div class="progress-bar progress-bar-teal" style="width: 6%"></div>
-	                                </div>
-	                            </td>
-							</tr>
-							<tr>
-								<td>Others</td>
-								<td class="text-right">1.6%</td>
-								<td class="vam">
-									<div class="progress m-n">
-	                                  <div class="progress-bar progress-bar-teal" style="width: 3%"></div>
-	                                </div>
-	                            </td>
-							</tr>
-						</tbody>
-					</table>
-				</div>
-			</div>
-		</div>
-	</div>
 
-	<div class="row">
-		<div class="col-md-4">
-			<div class="panel panel-realtime" data-widget='{"draggable": "false"}'>
-                <div class="panel-heading">
-                    <h2>Real-Time</h2>
-                    <div class="panel-ctrls mr-n">
-                    	<div class="mt-md mb-md">
-                    		<input type="checkbox" class="js-switch-success switchery-xs" checked />
-						</div>
-                    </div>
-                </div>
-                <div class="panel-body">
-                	<span class="rightnow">Right Now</span>
-					<span class="number">20</span>
-					<span class="activeuser">active Users right now</span>
-                    <div id="realtime-updates" style="height: 112px" class="centered"></div>
-                </div>
-            </div>
-		</div>
-		<div class="col-md-8">
-			<div class="panel panel-white" data-widget='{"draggable": "false"}'>
-                <div class="panel-heading">
-                    <h2>World Map</h2>
-                    <div class="panel-ctrls button-icon-bg" 
-						data-actions-container="" 
-						data-action-collapse='{"target": ".panel-body"}'
-						data-action-colorpicker=''
-						data-action-refresh-demo='{"type": "circular"}'
-						>
-					</div>
-                </div>
-                <div class="panel-body">
-					<div id="worldmap" style="height: 272px; width: 100%;" class="mt-sm mb-sm"></div>
-                </div>
-            </div>
-		</div>
-		
 	</div>
 
 </div>
@@ -548,4 +166,134 @@
 </footer>
     </body>
     <?php $this->load->view('templates/footer_view'); ?>
+	<script src="https://code.highcharts.com/highcharts.js"></script>
+	<script src="https://code.highcharts.com/modules/data.js"></script>
+	<script src="https://code.highcharts.com/modules/exporting.js"></script>
+	<script src="https://code.highcharts.com/modules/export-data.js"></script>
+	<script src="https://code.highcharts.com/modules/accessibility.js"></script>
+<script>
+	var charts = {};
+	var chart;
+	$(document).ready(function() {
+		$('.mychart').each(function(){
+			interfaceChart($(this).attr('id'));
+		})
+		
+		$('.highcharts-credits').hide();
+		
+	});
+
+	function requestData(iface, id) 
+	{
+		$.ajax({
+			url: '<?php echo site_url("dashboard/interface");?>',     						
+			type: "POST",
+			dataType: "JSON",
+			data: {iface:iface} ,
+			success: function(data) {	
+				console.log(data);
+				charts[id].xAxis[0].setCategories(data.point);
+				charts[id].series[0].setData(data.tx);
+				charts[id].series[1].setData(data.rx);
+			},
+			error: function(XMLHttpRequest, textStatus, errorThrown) { 
+			  console.error("Status: " + textStatus + " request: " + XMLHttpRequest); console.error("Error: " + errorThrown); 
+			}       
+		});
+		
+	}
+
+	function interfaceChart(id) { 
+			var container = $('#'+id);
+			if(!container.length) return false;
+			var interface = container.data('interface');
+			console.log(interface);
+			// var title = container.data('title');
+			
+			
+			charts[id] = new Highcharts.Chart({
+			chart: {
+				renderTo: id,
+		  		animation: Highcharts.svg,
+				type: 'areaspline',
+				// zoomType: 'x',
+				events: {
+					load: function () {
+					setInterval(function () {
+						requestData(interface, id);
+					}, 8000);
+					}				
+				},
+			},
+			title: {
+				text: null
+			},
+			exporting: {
+				enabled: false
+			},
+			xAxis: {
+				type: 'datetime',
+				// categories : data.point,
+				// tickInterval: 60
+				
+				// labels: {
+				//     data : data.point,
+				// format: '{value:%Y-%m-%d}',
+				// rotation: 45,
+				// align: 'left'
+				// }
+			},
+			yAxis: {
+				// title: {
+				//     text: 'Y-Axis'
+				// }
+				minPadding: 0.2,
+				maxPadding: 0.2,
+				title: {text: null},
+				labels: {
+				formatter: function () {      
+					var bytes = this.value;                          
+					var sizes = ['b/s', 'kb/s', 'Mb/s', 'Gb/s', 'Tb/s'];
+					if (bytes == 0) return '0 bps';
+					var i = parseInt(Math.floor(Math.log(bytes) / Math.log(1024)));
+					return parseFloat((bytes / Math.pow(1024, i)).toFixed(2)) + ' ' + sizes[i];                    
+				},
+				},    
+			},
+			plotOptions: {
+				area: {
+					fillOpacity: 0.5,
+					marker: {
+						enabled: false,
+						symbol: 'circle',
+						radius: 2,
+						states: {
+							hover: {
+								enabled: true
+							}
+						}
+					}
+				}
+			},
+			tooltip: {
+				// formatter: function () { 
+				// 	var _0x2f7f=["\x70\x6F\x69\x6E\x74\x73","\x79","\x62\x70\x73","\x6B\x62\x70\x73","\x4D\x62\x70\x73","\x47\x62\x70\x73","\x54\x62\x70\x73","\x3C\x73\x70\x61\x6E\x20\x73\x74\x79\x6C\x65\x3D\x22\x63\x6F\x6C\x6F\x72\x3A","\x63\x6F\x6C\x6F\x72","\x73\x65\x72\x69\x65\x73","\x3B\x20\x66\x6F\x6E\x74\x2D\x73\x69\x7A\x65\x3A\x20\x31\x2E\x35\x65\x6D\x3B\x22\x3E","\x73\x79\x6D\x62\x6F\x6C\x55\x6E\x69\x63\x6F\x64\x65","\x3C\x2F\x73\x70\x61\x6E\x3E\x3C\x62\x3E","\x6E\x61\x6D\x65","\x3A\x3C\x2F\x62\x3E\x20\x30\x20\x62\x70\x73","\x70\x75\x73\x68","\x6C\x6F\x67","\x66\x6C\x6F\x6F\x72","\x3A\x3C\x2F\x62\x3E\x20","\x74\x6F\x46\x69\x78\x65\x64","\x70\x6F\x77","\x20","\x65\x61\x63\x68","\x3C\x62\x3E\x4D\x69\x6B\x68\x6D\x6F\x6E\x20\x54\x72\x61\x66\x66\x69\x63\x20\x4D\x6F\x6E\x69\x74\x6F\x72\x3C\x2F\x62\x3E\x3C\x62\x72\x20\x2F\x3E\x3C\x62\x3E\x54\x69\x6D\x65\x3A\x20\x3C\x2F\x62\x3E","\x25\x48\x3A\x25\x4D\x3A\x25\x53","\x78","\x64\x61\x74\x65\x46\x6F\x72\x6D\x61\x74","\x3C\x62\x72\x20\x2F\x3E","\x20\x3C\x62\x72\x2F\x3E\x20","\x6A\x6F\x69\x6E"];var s=[];$[_0x2f7f[22]](this[_0x2f7f[0]],function(_0x3735x2,_0x3735x3){var _0x3735x4=_0x3735x3[_0x2f7f[1]];var _0x3735x5=[_0x2f7f[2],_0x2f7f[3],_0x2f7f[4],_0x2f7f[5],_0x2f7f[6]];if(_0x3735x4== 0){s[_0x2f7f[15]](_0x2f7f[7]+ this[_0x2f7f[9]][_0x2f7f[8]]+ _0x2f7f[10]+ this[_0x2f7f[9]][_0x2f7f[11]]+ _0x2f7f[12]+ this[_0x2f7f[9]][_0x2f7f[13]]+ _0x2f7f[14])};var _0x3735x2=parseInt(Math[_0x2f7f[17]](Math[_0x2f7f[16]](_0x3735x4)/ Math[_0x2f7f[16]](1024)));s[_0x2f7f[15]](_0x2f7f[7]+ this[_0x2f7f[9]][_0x2f7f[8]]+ _0x2f7f[10]+ this[_0x2f7f[9]][_0x2f7f[11]]+ _0x2f7f[12]+ this[_0x2f7f[9]][_0x2f7f[13]]+ _0x2f7f[18]+ parseFloat((_0x3735x4/ Math[_0x2f7f[20]](1024,_0x3735x2))[_0x2f7f[19]](2))+ _0x2f7f[21]+ _0x3735x5[_0x3735x2])});return _0x2f7f[23]+ Highcharts[_0x2f7f[26]](_0x2f7f[24], new Date(this[_0x2f7f[25]]))+ _0x2f7f[27]+ s[_0x2f7f[29]](_0x2f7f[28])
+				// },
+				shared: true                                                      
+			},
+			credits: {
+				enabled: true
+			},
+			series: [{
+				name: 'Tx',
+				data: [],
+				marker: {enabled: false}
+			}, {
+				name: 'Rx',
+				data: [],
+				marker: {enabled: false}
+			}],
+		})
+	}
+	</script>
 </html>
