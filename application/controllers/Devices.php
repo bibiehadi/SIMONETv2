@@ -34,7 +34,7 @@ class Devices extends CI_Controller {
     {
         // function untuk menampilkan halaman detail user hotspot 
         $serial = $this->input->post('serial');
-        $data = $this->devices->getDevice(array('serial_number'=> $serial));
+        $data = $this->devices->getdevice(array('serial_number'=> $serial));
         $data['location'] = $this->getLocation();
         $data['list_devices'] = $this->devices->getdevices();
         $data['last_ros'] = $this->devices->getLastesROS();
@@ -384,10 +384,15 @@ class Devices extends CI_Controller {
 
     function getResource(){
         $ip = $this->input->post('ip');
-        $user = $this->devices->getUserRouter(array('id' => '2222'));
+        if($ip == '10.10.10.1'){
+            $user = $this->devices->getUserRouter(array('id' => '1111'));
+        }else{
+            $user = $this->devices->getUserRouter(array('id' => '2222'));
+        }
+        
         try{
             $api = $this->routerosapi;
-            $api->port = 8728;
+            $api->port=$user['port'];
             if($api->connect($ip,$user['username'],$user['password'])){
                 $api->write('/system/resource/print');
                 $resource = $api->read();
@@ -395,7 +400,11 @@ class Devices extends CI_Controller {
                 $healt = $api->read();
                 $api->disconnect();
                 if($healt[0] != null){
-                    $healt[0]['voltage'] = $healt[0]['voltage'].'v';
+                    if($ip == '10.10.10.1'){
+                        $healt[0]['voltage'] = $healt[0]['cpu-temperature'].'˚C';
+                    }else{
+                        $healt[0]['voltage'] = $healt[0]['voltage'].'v';
+                    }
                     $healt[0]['temperature'] = $healt[0]['temperature'].'˚C';
                     $_array = array_merge_recursive($resource[0],$healt[0]);
                     echo json_encode(array("status" => TRUE, "data" => $_array));
@@ -404,7 +413,7 @@ class Devices extends CI_Controller {
                     $healt[0]['temperature'] = '';
                     $_array = array_merge_recursive($resource[0],$healt[0]);
                     echo json_encode(array("status" => TRUE, "data" => $_array));
-                }
+                }  
             }
         }catch(Exeption $error){
             echo json_encode(array("status" => FALSE));
@@ -418,7 +427,7 @@ class Devices extends CI_Controller {
         $user = $this->devices->getUserRouter(array('id' => '2222'));
         try{
             $api = $this->routerosapi;
-            $api->port = 8728;
+            $api->port=$user['port'];
             if($api->connect($ip,$user['username'],$user['password'])){
                 $api->write('/interface/set',false);
                 $api->write('=.id='.$id,false);
@@ -434,6 +443,39 @@ class Devices extends CI_Controller {
             }    
         }catch(exeption $e){
             echo $e;
+        }
+    }
+
+    function getInterfaceChart(){
+        // $ip = '10.10.10.3';
+        $ip = $this->input->post('ip');
+        $interface = $this->input->post('iface');
+        // $interface = 'ether1';
+        $user = $this->devices->getUserRouter(array('id' => '2222'));
+        try{
+            $api = $this->routerosapi;
+            $api->port=$user['port'];
+            if($api->connect($ip,$user['username'],$user['password'])){
+             	$api->write("/interface/monitor-traffic",false);
+                $api->write("=interface=".$interface,false);  
+                $api->write("=once=",true);
+                $READ = $api->read(false);
+                $ARRAY = $api->parseResponse($READ);
+                if(count($ARRAY)>0){  
+                    $rx = $ARRAY[0]["rx-bits-per-second"];
+                    $tx = $ARRAY[0]["tx-bits-per-second"];
+                    $rows['tx'][] = $tx;
+                    $rows['rx'][] = $rx;
+                    $rows['point'][] = date("h:i:s");
+                }else{  
+                    echo $ARRAY['!trap'][0]['message'];	 
+                }
+                $result = $rows;
+                $api->disconnect();
+                echo json_encode($result);
+            }
+        }catch(exeption $e){
+
         }
     }
 

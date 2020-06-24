@@ -22,7 +22,7 @@
 					<div id="mem" class="progress-bar"></div>
 				</div>
 				<div class="col-md-6">
-					<div class="info">Voltage : </div> 
+					<div class="info">CPU Temperature : </div> 
 					<p id="volt"></p>
 				</div>
 				<div class="col-md-6">
@@ -40,26 +40,31 @@
 					<div class="panel-body">
 						<div class="about-area">
 							<h4>Network</h4>
-							<div class="col-md-4">
+							<div class="col-sm-3">
 								<div style="text-align:center">
-									<img src="<?php echo base_url('assets/img/rb.png')?>" class="img-circle" style="width : 120px; ">
+									<img src="<?php echo base_url('assets/img/rb.png')?>" class="img-circle" style="width : 100px; ">
 									<h4>Routerboard</h4>
 									<h3>.../...</h3>
 								</div>
 							</div>
-							<div class="col-md-4">
+							<div class="col-sm-3">
 								<div style="text-align:center">
-									<img src="<?php echo base_url('assets/img/unifi.png')?>" class="img-circle" style="width : 120px; ">
+									<img src="<?php echo base_url('assets/img/unifi.png')?>" class="img-circle" style="width : 100px; ">
 									<h4>AP UniFi</h4>
 									<h3>.../...</h3>
 								</div>
 							</div>
-							<div class="col-md-4">
+							<div class="col-sm-3">
 								<div style="text-align:center">
-									<span>
-										<i class="fa fa-user-circle-o" aria-hidden="true"></i>
-									</span>
-									<h4>Main Router</h4>
+									<img src="<?php echo base_url('assets/img/clients.png')?>" class="img-circle" style="width : 100px; ">
+									<h4>Users Connect</h4>
+									<h3>.../...</h3>
+								</div>
+							</div>
+							<div class="col-sm-3">
+								<div style="text-align:center">
+									<img src="<?php echo base_url('assets/img/users.png')?>" class="img-circle" style="width : 100px; ">
+									<h4>User Login</h4>
 									<h3>.../...</h3>
 								</div>
 							</div>
@@ -166,11 +171,6 @@
 </footer>
     </body>
     <?php $this->load->view('templates/footer_view'); ?>
-	<script src="https://code.highcharts.com/highcharts.js"></script>
-	<script src="https://code.highcharts.com/modules/data.js"></script>
-	<script src="https://code.highcharts.com/modules/exporting.js"></script>
-	<script src="https://code.highcharts.com/modules/export-data.js"></script>
-	<script src="https://code.highcharts.com/modules/accessibility.js"></script>
 <script>
 	var charts = {};
 	var chart;
@@ -180,6 +180,7 @@
 		})
 		
 		$('.highcharts-credits').hide();
+		getResource();
 		
 	});
 
@@ -295,5 +296,36 @@
 			}],
 		})
 	}
+
+	function getResource(){
+        var url = "<?php echo site_url('devices/getResource')?>";
+
+        $.ajax({
+            url : url,
+            type: "POST",
+            data: {ip : '10.10.10.1'},
+            dataType: "JSON",
+            success: function(data)
+            {
+				console.log(data);
+                if(data.status) 
+                {
+                    $('#cpu').css("width", data.data['cpu-load'] + "%").text(data.data['cpu-load'] + " %");
+                    $('#mem').css("width", Math.round(((data.data['total-memory'] - data.data['free-memory'])/data.data['total-memory'])*100) + "%").text(Math.round(((data.data['total-memory'] - data.data['free-memory'])/data.data['total-memory'])*100) + " %");
+                    $('#volt').text(data.data['voltage']);
+                    $('#temp').text(data.data['temperature']);
+                }
+                $.skylo('end');
+                $('#btnSave').text('save'); 
+                $('#btnSave').attr('disabled',false); 
+            },
+            error: function (jqXHR, textStatus, errorThrown)
+            {
+                console.log("Error getResource");
+            }
+		});
+		
+        setTimeout(function(){ getResource(); }, 5000);
+    }
 	</script>
 </html>

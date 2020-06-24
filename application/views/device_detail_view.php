@@ -451,11 +451,14 @@
         $('[name="name"]').val(data.name);
         $('[name="mac"]').val(data.mac);
         $('[name="address"]').val(data.address);
+        interfaceChart(data.name);
+
         $('#modal_interface').modal('show');
         $('.modal-title').text(data.name);
+        tx = [], rx = [], point = [];
     }
 
-    function getResource(){
+    function getResource(ether){
         var url = "<?php echo site_url('devices/getResource')?>";
 
         $.ajax({
@@ -663,19 +666,29 @@
     function reload_table(){
         table.ajax.reload(null,false);
     }
-
-    function requestData(iface, id) 
-	{
+    var charts = {};
+	var chart;
+    var tx = [], rx = [], point = [];
+    function requestData(iface) {
 		$.ajax({
-			url: '<?php echo site_url("dashboard/interface");?>',     						
+			url: '<?php echo site_url("devices/getinterfacechart");?>',     						
 			type: "POST",
 			dataType: "JSON",
-			data: {iface:iface} ,
+            data: {iface:iface,
+            ip : '<? echo $address ?>'} ,
 			success: function(data) {	
-				console.log(data);
-				charts[id].xAxis[0].setCategories(data.point);
-				charts[id].series[0].setData(data.tx);
-				charts[id].series[1].setData(data.rx);
+                if (tx.length == 10) {
+					tx.shift();
+					rx.shift();
+					point.shift();
+				}
+				tx.push(parseInt(data.tx));	
+				rx.push(parseInt(data.rx));
+				point.push(data.point);
+
+				charts[0].xAxis[0].setCategories(point);
+				charts[0].series[0].setData(tx);
+				charts[0].series[1].setData(rx);
 			},
 			error: function(XMLHttpRequest, textStatus, errorThrown) { 
 			  console.error("Status: " + textStatus + " request: " + XMLHttpRequest); console.error("Error: " + errorThrown); 
@@ -684,25 +697,18 @@
 		
 	}
 
-	function interfaceChart(id) { 
-			var container = $('#'+id);
-			if(!container.length) return false;
-			var interface = container.data('interface');
-			console.log(interface);
-			// var title = container.data('title');
-			
-			
-			charts[id] = new Highcharts.Chart({
+	function interfaceChart(interface) { 
+			charts[0] = new Highcharts.Chart({
 			chart: {
-				renderTo: id,
+				renderTo: 'chart',
 		  		animation: Highcharts.svg,
 				type: 'areaspline',
 				// zoomType: 'x',
 				events: {
 					load: function () {
 					setInterval(function () {
-						requestData(interface, id);
-					}, 8000);
+						requestData(interface);
+					}, 10000);
 					}				
 				},
 			},
