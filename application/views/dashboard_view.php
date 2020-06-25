@@ -22,7 +22,7 @@
 					<div id="mem" class="progress-bar"></div>
 				</div>
 				<div class="col-md-6">
-					<div class="info">CPU Temperature : </div> 
+					<div class="info">CPU Temp : </div> 
 					<p id="volt"></p>
 				</div>
 				<div class="col-md-6">
@@ -44,28 +44,28 @@
 								<div style="text-align:center">
 									<img src="<?php echo base_url('assets/img/rb.png')?>" class="img-circle" style="width : 100px; ">
 									<h4>Routerboard</h4>
-									<h3>.../...</h3>
+									<h3 id="totalRouter">.../...</h3>
 								</div>
 							</div>
 							<div class="col-sm-3">
 								<div style="text-align:center">
 									<img src="<?php echo base_url('assets/img/unifi.png')?>" class="img-circle" style="width : 100px; ">
 									<h4>AP UniFi</h4>
-									<h3>.../...</h3>
+									<h3 id="totalAP">.../...</h3>
 								</div>
 							</div>
 							<div class="col-sm-3">
 								<div style="text-align:center">
 									<img src="<?php echo base_url('assets/img/clients.png')?>" class="img-circle" style="width : 100px; ">
 									<h4>Users Connect</h4>
-									<h3>.../...</h3>
+									<h3 id="totalConnect">.../...</h3>
 								</div>
 							</div>
 							<div class="col-sm-3">
 								<div style="text-align:center">
 									<img src="<?php echo base_url('assets/img/users.png')?>" class="img-circle" style="width : 100px; ">
 									<h4>User Login</h4>
-									<h3>.../...</h3>
+									<h3 id="totalLogin">.../...</h3>
 								</div>
 							</div>
 						</div>
@@ -181,7 +181,7 @@
 		
 		$('.highcharts-credits').hide();
 		getResource();
-		
+		getTotal();
 	});
 
 	function requestData(iface, id) 
@@ -326,6 +326,41 @@
 		});
 		
         setTimeout(function(){ getResource(); }, 5000);
+    }
+	function getTotal(){
+        var url = "<?php echo site_url('dashboard/total')?>";
+
+        $.ajax({
+            url : url,
+            type: "POST",
+            dataType: "JSON",
+            success: function(data)
+            {
+                if(data.status) 
+                {
+					if(data.data['router']< data.data['allrouter']){
+						$('#totalRouter').css("color", "red").text(data.data['router']+'/'+data.data['allrouter']);
+					}else{
+						$('#totalRouter').text(data.data['allrouter']);	
+					}
+                    
+					if(data.data['ap']< data.data['allap']){
+						$('#totalAP').css("color", "red").text(data.data['ap']+'/'+data.data['allap']);
+					}else{
+						$('#totalAP').text(data.data['allap']);	
+					}
+                    $('#totalConnect').text(data.data['connect']);
+                    $('#totalLogin').text(data.data['login']);
+                }
+                $.skylo('end');
+            },
+            error: function (jqXHR, textStatus, errorThrown)
+            {
+                console.log("Error getResource");
+            }
+        });
+
+        setTimeout(function(){ getTotal(); }, 5000);
     }
 	</script>
 </html>

@@ -436,9 +436,20 @@
                 mac : $(this).find('td:eq(2)').html(),
                 address : $(this).find('td:eq(3)').html(),
             };
+            // chartData.abort();
+            clearInterval(interval);
+            tx=[], rx=[], point=[];
             editInterface(data);
         }
     })
+
+    // getInterfaceName();
+    function getInterfaceName(){
+        $('table#tb_interfaces tbody').each(function(data,a){
+            console.log(a);
+            console.log($(this).find('td:eq(1)').html());
+        })
+    }
 
     function editInterface(data){
         var data = data;
@@ -452,10 +463,8 @@
         $('[name="mac"]').val(data.mac);
         $('[name="address"]').val(data.address);
         interfaceChart(data.name);
-
         $('#modal_interface').modal('show');
         $('.modal-title').text(data.name);
-        tx = [], rx = [], point = [];
     }
 
     function getResource(ether){
@@ -669,8 +678,10 @@
     var charts = {};
 	var chart;
     var tx = [], rx = [], point = [];
-    function requestData(iface) {
-		$.ajax({
+    var chartData;
+    var interval;
+    function requestData(iface){
+		chartData = $.ajax({
 			url: '<?php echo site_url("devices/getinterfacechart");?>',     						
 			type: "POST",
 			dataType: "JSON",
@@ -682,9 +693,9 @@
 					rx.shift();
 					point.shift();
 				}
-				tx.push(parseInt(data.tx));	
-				rx.push(parseInt(data.rx));
-				point.push(data.point);
+				tx.push(parseInt(data.data['tx']));	
+				rx.push(parseInt(data.data['rx']));
+				point.push(data.data['point']);
 
 				charts[0].xAxis[0].setCategories(point);
 				charts[0].series[0].setData(tx);
@@ -706,7 +717,7 @@
 				// zoomType: 'x',
 				events: {
 					load: function () {
-					setInterval(function () {
+					interval = setInterval(function () {
 						requestData(interface);
 					}, 10000);
 					}				

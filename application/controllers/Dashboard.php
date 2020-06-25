@@ -10,6 +10,10 @@ class Dashboard extends CI_Controller {
             redirect(site_url('login'),'refresh');
         }
         $this->load->model('bandwidth_model', 'bandwidth');
+        $this->load->model('hotspot_model', 'hotspot');
+        $this->load->model('devices_model', 'devices');
+        
+        
     }
     
     public function index(){
@@ -40,6 +44,54 @@ class Dashboard extends CI_Controller {
         // print_r($graphs);
         // print_r($row);
         echo json_encode($row);
+    }
+
+    function total(){
+        $data = array(
+            'router' => count($this->devices->countDeviceByStatus(array('platform' => 'MikroTik', 'status' => 'Connected'))),
+            'allrouter' => count($this->devices->countDeviceByStatus(array('platform' => 'MikroTik', 'status' => null))),
+            'ap' => count($this->devices->countDeviceByStatus(array('platform' => 'UniFi', 'status' => 'Connected'))),
+            'allap' => count($this->devices->countDeviceByStatus(array('platform' => 'UniFi', 'status' => null))),
+            'connect' => count($this->countConnect()),
+            'login' => count($this->countLogin())
+        );
+        echo json_encode(array("status" => TRUE, "data" => $data));
+    }
+
+    function countLogin(){
+        // function untuk mengget semua data user active dari Mikrotik
+        
+        try{
+            $api = $this->routerosapi;
+            $user = $this->devices->getUserRouter(array('id' => '1111'));
+            $api->port = $user['port'];
+            if($api->connect("10.10.10.1",$user['username'],$user['password'])){
+                $api->write('/ip/hotspot/active/print');
+                $read = $api->read();
+                $api->disconnect();
+                return $read;       
+            }
+        }catch(Exeption $error){
+            return $error;
+        }
+    }
+
+    function countConnect(){
+        // function untuk mengget semua data user active dari Mikrotik
+        
+        try{
+            $api = $this->routerosapi;
+            $user = $this->devices->getUserRouter(array('id' => '1111'));
+            $api->port = $user['port'];
+            if($api->connect("10.10.10.1",$user['username'],$user['password'])){
+                $api->write('/ip/hotspot/host/print');
+                $read = $api->read();
+                $api->disconnect();
+                return $read;       
+            }
+        }catch(Exeption $error){
+            return $error;
+        }
     }
 }
 

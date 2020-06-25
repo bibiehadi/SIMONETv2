@@ -249,7 +249,9 @@ class Devices extends CI_Controller {
         try{
             $connect = 0; $disconnect =0;
             $api = $this->routerosapi;
-            if($api->connect("10.10.10.1","api","stikimonitor","62148")){
+            $user = $this->devices->getUserRouter(array('id' => '1111'));
+            $api->port = $user['port'];
+            if($api->connect("10.10.10.1",$user['username'],$user['password'])){
                 $api->write('/ping',false);
                 $api->write('=address=192.168.10.7',false);
                 $api->write('=count=5',false);
@@ -448,6 +450,7 @@ class Devices extends CI_Controller {
 
     function getInterfaceChart(){
         // $ip = '10.10.10.3';
+        date_default_timezone_set('Asia/Jakarta');
         $ip = $this->input->post('ip');
         $interface = $this->input->post('iface');
         // $interface = 'ether1';
@@ -472,7 +475,7 @@ class Devices extends CI_Controller {
                 }
                 $result = $rows;
                 $api->disconnect();
-                echo json_encode($result);
+                echo json_encode(array('data' => $result, 'interface' => $interface));
             }
         }catch(exeption $e){
 

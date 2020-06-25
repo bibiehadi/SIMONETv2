@@ -39,6 +39,18 @@ class Devices_Model extends CI_Model {
 		}
     }
 
+    function countDeviceByStatus($filter){
+        $this->db->like('platform', $filter['platform']);
+        if($filter['status'] != null){
+            $this->db->where('status',$filter['status']);
+        }
+        if($data = $this->db->get('devices')){
+			return $data->result_array();
+		}else{
+			return false;
+		}
+    }
+
     function getIPDevices(){
         $this->db->select('address');
         // $this->db->where('platform','MikroTik');
