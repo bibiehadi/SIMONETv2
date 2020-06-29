@@ -224,7 +224,7 @@
 			<ul class="dropdown-menu userinfo arrow">
 				<li><a href="#/"><i class="fa fa-user"></i><span>Profile</span><span class="badge badge-info pull-right">80%</span></a></li>
 				<li><a href="#/"><i class="fa fa-panel"></i><span>Account</span></a></li>
-				<li><a href="#/"><i class="fa fa-cog"></i><span>Settings</span></a></li>
+				<li><a href="#/" data-aksi="settings"><i class="fa fa-cog"></i><span>Settings</span></a></li>
 				<li class="divider"></li>
 				<li><a href="#/"><i class="fa fa-stats-up"></i><span>Earnings</span></a></li>
 				<li><a href="#/"><i class="fa fa-view-list-alt"></i><span>Statement</span></a></li>
@@ -269,7 +269,7 @@
 												<li><a href="<?php echo site_url('hotspot/useractive'); ?>">User Active</a></li>
 											</ul>
 									</li>
-									<li><a id="logPopover" role="button" data-toggle="popover" data-placement="right" data-content="Vivamus sagittis lacus vel augue laoreet rutrum faucibus."><i class="fa fa-rss-alt"></i><span>Log Activity</span></a>
+									<li><a href="javascript:;" data-aksi="log"><i class="fa fa-bell"></i><span>Log Activity</span></a>
 									</li>
 								</ul>
 							</nav>

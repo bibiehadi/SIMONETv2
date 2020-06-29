@@ -16,8 +16,11 @@ class Devices extends CI_Controller {
         if($this->session->userdata('username')=== null){
             redirect('login');
         }
+        date_default_timezone_set('Asia/Jakarta');
         $this->load->model('devices_model','devices');
         $this->load->model('mikrotik_model','mikrotik');
+        $this->load->model('log_model', 'log_event');
+        
     }
     
 
@@ -87,6 +90,14 @@ class Devices extends CI_Controller {
             'id_location' => $this->input->post('location')
         );
         $this->devices->addDevice($data);
+        $log = array(
+            'Message' => ' New Device '.$data['identity'].' added by '.$this->session->userdata('username'),
+            'SysLogTag' => 'system,simonet',
+            'ReceivedAt' => date("Y-m-d H:i:s"),
+            'DeviceReportedTime' => date("Y-m-d H:i:s"),
+            'FromHost' => 'SIMONETapp'
+        );
+        $this->log_event->insertLogActivity($log);
         echo json_encode(array("status" => TRUE));
     }
 
@@ -115,6 +126,14 @@ class Devices extends CI_Controller {
                 'status' => $this->input->post('status')
             );
         }
+        $log = array(
+            'Message' => ' New Device '.$data['identity'].' added by '.$this->session->userdata('username'),
+            'SysLogTag' => 'system,simonet',
+            'ReceivedAt' => date("Y-m-d H:i:s"),
+            'DeviceReportedTime' => date("Y-m-d H:i:s"),
+            'FromHost' => 'SIMONETapp'
+        );
+        $this->log_event->insertLogActivity($log);
         $this->devices->addDevice($data);
         echo json_encode(array("status" => TRUE, "data" => $data));
     }
@@ -188,6 +207,14 @@ class Devices extends CI_Controller {
                     echo $e;
                 }
             }
+            $log = array(
+                'Message' =>  'Device '.$data['identity'].' changed by '.$this->session->userdata('username'),
+                'SysLogTag' => 'system,simonet',
+                'ReceivedAt' => date("Y-m-d H:i:s"),
+                'DeviceReportedTime' => date("Y-m-d H:i:s"),
+                'FromHost' => 'SIMONETapp'
+            );
+            $this->log_event->insertLogActivity($log);
             echo json_encode(array("status" => TRUE));
             $this->devices->setDevice($data);
         }elseif($this->input->post('identity') == null){
@@ -197,6 +224,14 @@ class Devices extends CI_Controller {
                 'id_device' => $this->input->post('masterdevice'),
                 'id_location' => $this->input->post('location')  
             );
+            $log = array(
+                'Message' =>  'Device '.$data['serial_number'].' changed by '.$this->session->userdata('username'),
+                'SysLogTag' => 'system,simonet',
+                'ReceivedAt' => date("Y-m-d H:i:s"),
+                'DeviceReportedTime' => date("Y-m-d H:i:s"),
+                'FromHost' => 'SIMONETapp'
+            );
+            $this->log_event->insertLogActivity($log);
             $this->devices->setDevice($data);
             $this->session->set_flashdata('detail_device', '<div class="alert alert-dismissable alert-success">
                 <i class="ti ti-check"></i>&nbsp; <strong>Well Done!</strong> Data Device '.$device['identity'].' Berhasil Dirubah
@@ -439,6 +474,14 @@ class Devices extends CI_Controller {
                 $read = $api->read();
                 $api->disconnect();
                 $this->devices->setInterface($serial, $id, array('name' => $name));
+                $log = array(
+                    'Message' =>  'Device interface changed by '.$this->session->userdata('username'),
+                    'SysLogTag' => 'system,simonet',
+                    'ReceivedAt' => date("Y-m-d H:i:s"),
+                    'DeviceReportedTime' => date("Y-m-d H:i:s"),
+                    'FromHost' => 'SIMONETapp'
+                );
+                $this->log_event->insertLogActivity($log);
                 echo json_encode(array("status" => TRUE, "msg" => $id." ".$name));
             }else{
                 echo json_encode(array("status" => FALSE, "msg" => "gagal merubah nama interface"));
@@ -497,7 +540,14 @@ class Devices extends CI_Controller {
                 <i class="ti ti-check"></i>&nbsp; <strong>Well Done!</strong> Reboot Device '.$identity.' Berhasil!!
                 <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
                 </div>');
-        
+                $log = array(
+                    'Message' =>  'Device '.$identity.' rebooted by '.$this->session->userdata('username'),
+                    'SysLogTag' => 'system,simonet',
+                    'ReceivedAt' => date("Y-m-d H:i:s"),
+                    'DeviceReportedTime' => date("Y-m-d H:i:s"),
+                    'FromHost' => 'SIMONETapp'
+                );
+                $this->log_event->insertLogActivity($log);
                 echo json_encode(array("status" => TRUE));
             }
         }catch(Exeption $error){
@@ -515,6 +565,14 @@ class Devices extends CI_Controller {
                 <i class="ti ti-check"></i>&nbsp; <strong>Well Done!</strong> Menghapus Device '.$identity.' Berhasil !!
                 <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
                 </div>');
+                $log = array(
+                    'Message' =>  'Device '.$identity.' deleted by '.$this->session->userdata('username'),
+                    'SysLogTag' => 'system,simonet',
+                    'ReceivedAt' => date("Y-m-d H:i:s"),
+                    'DeviceReportedTime' => date("Y-m-d H:i:s"),
+                    'FromHost' => 'SIMONETapp'
+                );
+                $this->log_event->insertLogActivity($log);
                 echo json_encode(array("status" => TRUE));
             }
         }else{
@@ -681,6 +739,19 @@ class Devices extends CI_Controller {
         }
     }
 
+    function syncIPUniFiAll(){
+        $user = $this->devices->getUserRouter(array('id' => '3333'));
+        $unifi_connection = new UniFi_API\Client($user['username'], $user['password'], 'https://10.10.10.115:8443', 'default', '5.10.25');
+        // $set_debug_mode   = $unifi_connection->set_debug(true);
+        $loginresults     = $unifi_connection->login();
+        $aps_array        = $unifi_connection->list_devices();  
+        foreach($aps_array as $ap){
+                $_ap['address'] = $ap->ip;
+                $_ap['serial_number'] = $ap->serial;
+                $this->devices->updateIPUniFi($_ap);
+        }
+    }
+
     function upgradeAllUniFi(){
         $user = $this->devices->getUserRouter(array('id' => '3333'));
         $unifi_connection = new UniFi_API\Client($user['username'], $user['password'], 'https://10.10.10.115:8443', 'default', '5.10.25');
@@ -710,6 +781,14 @@ class Devices extends CI_Controller {
         if($results == false){
             echo json_encode(array("status" => FALSE, "msg" => $results));
         }else{
+            $log = array(
+                'Message' =>  'Device '.$identity.' rebooted by '.$this->session->userdata('username'),
+                'SysLogTag' => 'system,simonet',
+                'ReceivedAt' => date("Y-m-d H:i:s"),
+                'DeviceReportedTime' => date("Y-m-d H:i:s"),
+                'FromHost' => 'SIMONETapp'
+            );
+            $this->log_event->insertLogActivity($log);
             $this->devices->updateStatus(array('mac_address' => $mac),array('status' => 'Reboot'));
             $this->session->set_flashdata('devices', '<div class="alert alert-dismissable alert-success">
             <i class="ti ti-check"></i>&nbsp; <strong>Well Done!</strong> Reboot Device '.$identity.' Berhasil!!

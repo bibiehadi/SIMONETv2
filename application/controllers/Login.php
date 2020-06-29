@@ -6,6 +6,8 @@ class Login extends CI_Controller {
     function __construct(){
         parent::__construct();
         $this->load->model('login_model','login');
+        $this->load->model('log_model','log_event');
+        date_default_timezone_set('Asia/Jakarta');
     }
     
 	public function index()
@@ -31,13 +33,30 @@ class Login extends CI_Controller {
                 'username' => $username,
                 'email' => $email,
                 'role' => $role,
+                'address' => $this->input->ip_address()
             );
             $this->session->set_userdata($sessdata);
 
             if($role === 'adm'){
+                $log = array(
+                    'Message' =>  'user '.$this->session->userdata('username').' logged in from '.$this->session->userdata('address'),
+                    'SysLogTag' => 'system,simonet',
+                    'ReceivedAt' => date("Y-m-d H:i:s"),
+                    'DeviceReportedTime' => date("Y-m-d H:i:s"),
+                    'FromHost' => 'SIMONETapp'
+                );
+                $this->log_event->insertLogActivity($log);
                 redirect('dashboard');
             }
         }else{
+            $log = array(
+                'Message' => 'login failure for user '.$this->session->userdata('username'),
+                'SysLogTag' => 'system,error,simonet',
+                'ReceivedAt' => date("Y-m-d H:i:s"),
+                'DeviceReportedTime' => date("Y-m-d H:i:s"),
+                'FromHost' => 'SIMONETapp'
+            );
+            $this->log_event->insertLogActivity($log);
             $this->session->set_flashdata('login', '<div class="alert alert-dismissable alert-danger">
             <i class="ti ti-close"></i>&nbsp; <strong>Oh snap!</strong> Username atau Password Salah!! Silahkan coba lagi.
             <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
@@ -46,6 +65,14 @@ class Login extends CI_Controller {
         }
     }
     function logout(){
+        $log = array(
+            'Message' =>  'user '.$this->session->userdata('username').' logged out from '.$this->session->userdata('address'),
+            'SysLogTag' => 'system,error,simonet',
+            'ReceivedAt' => date("Y-m-d H:i:s"),
+            'DeviceReportedTime' => date("Y-m-d H:i:s"),
+            'FromHost' => 'SIMONETapp'
+        );
+        $this->log_event->insertLogActivity($log);
         $this->session->unset_userdata('id');
         $this->session->unset_userdata('username');
         $this->session->unset_userdata('email');
@@ -53,5 +80,24 @@ class Login extends CI_Controller {
         $this->session->sess_destroy();
         redirect(site_url('login'));
         
+    }
+
+    function get_client_ip() {
+        $ipaddress = '';
+        if (getenv('HTTP_CLIENT_IP'))
+            $ipaddress = getenv('HTTP_CLIENT_IP');
+        else if(getenv('HTTP_X_FORWARDED_FOR'))
+            $ipaddress = getenv('HTTP_X_FORWARDED_FOR');
+        else if(getenv('HTTP_X_FORWARDED'))
+            $ipaddress = getenv('HTTP_X_FORWARDED');
+        else if(getenv('HTTP_FORWARDED_FOR'))
+            $ipaddress = getenv('HTTP_FORWARDED_FOR');
+        else if(getenv('HTTP_FORWARDED'))
+           $ipaddress = getenv('HTTP_FORWARDED');
+        else if(getenv('REMOTE_ADDR'))
+            $ipaddress = getenv('REMOTE_ADDR');
+        else
+            $ipaddress = 'UNKNOWN';
+        return $ipaddress;
     }
 }

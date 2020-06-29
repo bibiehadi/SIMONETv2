@@ -8,8 +8,8 @@
 
 <div class="row" style = "margin-top: 20px">
 	<div class="col-sm-3">
-		<div class="panel panel-profile">
-			<div class="panel-body">
+		<div class="panel panel-profile" style="padding:0px">
+			<div class="panel-body" style="padding:0px">
 			<div class="name">Main Router</div>
 			<div class="info">CCR - 1036</div>
 			<div class="row" style="text-align : left; margin-top: 5px">  
@@ -39,7 +39,7 @@
 				<div class="panel panel-default">
 					<div class="panel-body">
 						<div class="about-area">
-							<h4>Network</h4>
+							<h4>Network :</h4>
 							<div class="col-sm-3">
 								<div style="text-align:center">
 									<img src="<?php echo base_url('assets/img/rb.png')?>" class="img-circle" style="width : 100px; ">
@@ -192,7 +192,7 @@
 			dataType: "JSON",
 			data: {iface:iface} ,
 			success: function(data) {	
-				console.log(data);
+				charts[id].hideLoading();
 				charts[id].xAxis[0].setCategories(data.point);
 				charts[id].series[0].setData(data.tx);
 				charts[id].series[1].setData(data.rx);
@@ -201,6 +201,7 @@
 			  console.error("Status: " + textStatus + " request: " + XMLHttpRequest); console.error("Error: " + errorThrown); 
 			}       
 		});
+		setTimeout(function(){ requestData(iface,id); }, 60000);
 		
 	}
 
@@ -220,9 +221,10 @@
 				// zoomType: 'x',
 				events: {
 					load: function () {
-					setInterval(function () {
+					// setInterval(function () {
+					// 	charts[id].showLoading();
 						requestData(interface, id);
-					}, 8000);
+					// }, 99000);
 					}				
 				},
 			},

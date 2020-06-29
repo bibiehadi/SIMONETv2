@@ -1,3 +1,152 @@
+<div class="modal fade" id="modal_log" role="dialog" >
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="modal-title">Log Activity</h4>
+            </div>
+            <div class="modal-body form">
+                    <table id="tb_simonetlog" class="table about-table " cellspacing="0" width="100%">
+                        <thead>
+                            <tr>
+                                <th>Event</th>
+                                <th>Tag</th>
+                                <th>Date Time</th>
+                                <th>From</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        </tbody>
+                    </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="modal_settings" role="dialog" >
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="modal-title">Add Device</h4>
+            </div>
+            <div class="modal-body form">
+                <div class="tab-container tab-left tab-default">
+                    <ul class="nav nav-tabs">
+                        <li class="active">
+                            <a href="#AddManualy" data-toggle="tab">Settings</a>
+                        </li>
+                        <li>
+                            <a href="#DiscoveryDevice" data-toggle="tab">Discover MikroTik</a>
+                        </li>
+                        <li>
+                            <a href="#UniFiDevice" data-toggle="tab">Discover UniFi</a>
+                        </li>
+                    </ul>
+                    <div class="tab-content">
+                        <div class="tab-pane active" id="AddManualy">
+                            <form id="form" action="＃" method="post" class="form-horizontal row-border">
+                                <input type="hidden" value="" name="id"/> 
+                            
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label">Serial Number</label>
+                                    <div class="col-sm-8">
+                                        <input type="input" name="serial" class="form-control" placeholder='Serial Number Device'>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label">IP Address</label>
+                                    <div class="col-sm-8">
+                                        <input type="input" name="address4" class="form-control" placeholder='IP Address Device' required>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label">Mac-Address</label>
+                                    <div class="col-sm-8">
+                                        <input type="input" name="mac_address" class="form-control" placeholder='Mac Address' required>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label">Platform</label>
+                                    <div class="col-sm-8">
+                                        <select name="platform" id="selector_platform" class="form-control">
+                                            <option value="">--- Select ---</option>
+                                            <option value="MikroTik">MikroTik</option>
+                                            <option value="MikroTik Switch">MikroTik Switch</option>
+                                            <option value="UniFi">UniFi</option>
+                                            <option value="Other">Other</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label">Location</label>
+                                    <div class="col-sm-8">
+                                        <select name="location" id="selector2" class="form-control">
+                                            <option value="">--- Select ---</option>
+                                            <?php foreach ($location as $row) : ?>
+                                                <option value="<?php print_r($row); ?>"><?php echo $row['nama'];?></option>
+                                            <?php endforeach; ?>
+                                        </select>
+                                    </div>
+                                </div>
+                            </form>
+                            <a type="submit" id="btnSave" data-toggle="tab" href="#addUser" class="btn btn-success pull-right" style="margin: 10px 0px 0px 0px">Save</a>
+                        </div>
+                        <div class="tab-pane" id="addUser">
+                            <table id="tb_discovery" class="table about-table " cellspacing="0" width="100%">
+                                <thead>
+                                    <tr>
+                                        <th>No</th>
+                                        <th>User</th>
+                                        <th>IP Address</th>
+                                        <th>Identity</th>
+                                        <th>Board</th>
+                                        <th>Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="tab-pane" id="DiscoveryDevice">
+                            <table id="tb_discovery" class="table about-table " cellspacing="0" width="100%">
+                                <thead>
+                                    <tr>
+                                        <th>No</th>
+                                        <th>Interface</th>
+                                        <th>IP Address</th>
+                                        <th>Identity</th>
+                                        <th>Board</th>
+                                        <th>Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="tab-pane" id="UniFiDevice">
+                            <table id="tb_unifi" class="table about-table " cellspacing="0" width="100%">
+                                <thead>
+                                    <tr>
+                                        <th>IP Address</th>
+                                        <th>Identity</th>
+                                        <th>Model</th>
+                                        <th>Version</th>
+                                        <th>Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 
     <div class="demo-options">
         <div class="demo-options-icon"><i class="ti ti-paint-bucket"></i></div>
@@ -125,5 +274,59 @@
 	<script src="https://code.highcharts.com/modules/export-data.js"></script>
 	<script src="https://code.highcharts.com/modules/accessibility.js"></script>
 <script>
+
+    table = $('#tb_simonetlog').DataTable({
+        responsive : true,
+        pageLength : 10,
+        lengthChange: false,
+        // dom: 'Trt<"bottom"ip><"clear">',
+        tableTools: {
+            "sSwfPath": "/swf/copy_csv_xls_pdf.swf"
+        },
+        order: [[ 2, "desc" ]],
+        oLanguage: {
+        "sLengthMenu": " _MENU_ ",
+        "sSearch": "<span>Search..</span> _INPUT_"
+        },
+        ajax : {
+            "url" : "<?php echo site_url('log/logEventJSON')?>",
+            "type" : "POST"
+            // "dataSrc" : ""
+        },
+        columns : [
+            {"data" : "Message"},
+            {"data" : "SysLogTag"},
+            {"data" : "DeviceReportedTime"},
+            {"data" : "FromHost"}
+        ],
+        "createdRow": function(row, data, dataIndex) {
+            if (data["SysLogTag"] == 'ipsec,error' || data["SysLogTag"] == 'ipsec,error') {
+            $(row).css("background-color", "#B9BAB8");
+            // $(row).addClass("label label-danger");
+            }
+        }
+    });
+
+    $('body').on('click','a[data-aksi="log"]',function(){
+        log();
+    })
+
+    $('body').on('click','a[data-aksi="settings"]',function(){
+        settings();
+    })
+
+    function log(){
+        $('#form')[0].reset();
+        $('.form-group').removeClass('has-error');
+        $('.help-block').empty();
+        $('#modal_log').modal('show');
+    }
+
+    function settings(){
+        $('#form')[0].reset();
+        $('.form-group').removeClass('has-error');
+        $('.help-block').empty();
+        $('#modal_settings').modal('show');
+    }
 // $('#logPopover').on('click').popover('show');
 </script>

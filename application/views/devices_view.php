@@ -30,6 +30,7 @@
                                         <div class="btn-group pull-right" role="group" aria-label="Basic example">
                                             <a class="btn btn-info" id="upgradeUnifi" data-aksi="upgradeUniFi" style="margin:10px 0 0 0px; visibility: hidden;"><i class="fa fa-arrow-circle-up"></i> Upgrade</a>
                                             <a class="btn btn-success" data-aksi="add" style="margin:10px 0 0 0px"><i class="fa fa-plus"></i></a>    
+                                            <a class="btn btn-success" data-aksi="refresh" style="margin:10px 0 0 0px"><i class="fa fa-refresh"></i></a>    
                                         </div>
                                         
                                     </div>

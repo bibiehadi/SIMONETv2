@@ -146,6 +146,11 @@ class Devices_Model extends CI_Model {
         }
     }
 
+    function updateIPUniFi($data){
+        $this->db->where('serial_number', $data['serial_number']);
+        $this->db->update('devices', array('address' => $data['address']));
+    }
+
     function updateIP($data){
         $this->db->where('serial_number', $data['serial']);
         $this->db->where('name', $data['name']);
