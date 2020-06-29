@@ -4,21 +4,32 @@
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                 <h4 class="modal-title" id="modal-title">Log Activity</h4>
+                    
             </div>
             <div class="modal-body form">
+                <div class="row ">
+                    <div class="col-sm-4 pull-right">
+                        <div class="input-group">
+                            <span class="input-group-addon">
+                                <i class="fa fa-search"></i>
+                            </span>
+                            <input class="form-control" placeholder='Search..' type="text" id="searchLog">
+                        </div>
+                    </div>
+                </div>
+                <div class="row" style="margin : 5px">
                     <table id="tb_simonetlog" class="table about-table " cellspacing="0" width="100%">
                         <thead>
                             <tr>
+                                <th style="width: 120px">Date</th>
                                 <th>Event</th>
-                                <th>Tag</th>
-                                <th>Date Time</th>
+                                <th style="width: 80px">Tag</th>
                                 <th>From</th>
                             </tr>
                         </thead>
                         <tbody>
                         </tbody>
                     </table>
-                    </div>
                 </div>
             </div>
         </div>
@@ -26,83 +37,37 @@
 </div>
 
 <div class="modal fade" id="modal_settings" role="dialog" >
-    <div class="modal-dialog">
+    <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title" id="modal-title">Add Device</h4>
+                <h4 class="modal-title" id="modal-title">Settings</h4>
             </div>
             <div class="modal-body form">
                 <div class="tab-container tab-left tab-default">
                     <ul class="nav nav-tabs">
                         <li class="active">
-                            <a href="#AddManualy" data-toggle="tab">Settings</a>
+                            <a href="#tabAdmin" data-toggle="tab">Admins</a>
                         </li>
                         <li>
-                            <a href="#DiscoveryDevice" data-toggle="tab">Discover MikroTik</a>
+                            <a href="#tabDev" data-toggle="tab">Device Auth</a>
                         </li>
                         <li>
-                            <a href="#UniFiDevice" data-toggle="tab">Discover UniFi</a>
+                            <a href="#tabSetting" data-toggle="tab">Template Default Setting</a>
                         </li>
                     </ul>
                     <div class="tab-content">
-                        <div class="tab-pane active" id="AddManualy">
-                            <form id="form" action="＃" method="post" class="form-horizontal row-border">
-                                <input type="hidden" value="" name="id"/> 
-                            
-                                <div class="form-group">
-                                    <label class="col-sm-2 control-label">Serial Number</label>
-                                    <div class="col-sm-8">
-                                        <input type="input" name="serial" class="form-control" placeholder='Serial Number Device'>
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <label class="col-sm-2 control-label">IP Address</label>
-                                    <div class="col-sm-8">
-                                        <input type="input" name="address4" class="form-control" placeholder='IP Address Device' required>
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <label class="col-sm-2 control-label">Mac-Address</label>
-                                    <div class="col-sm-8">
-                                        <input type="input" name="mac_address" class="form-control" placeholder='Mac Address' required>
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <label class="col-sm-2 control-label">Platform</label>
-                                    <div class="col-sm-8">
-                                        <select name="platform" id="selector_platform" class="form-control">
-                                            <option value="">--- Select ---</option>
-                                            <option value="MikroTik">MikroTik</option>
-                                            <option value="MikroTik Switch">MikroTik Switch</option>
-                                            <option value="UniFi">UniFi</option>
-                                            <option value="Other">Other</option>
-                                        </select>
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <label class="col-sm-2 control-label">Location</label>
-                                    <div class="col-sm-8">
-                                        <select name="location" id="selector2" class="form-control">
-                                            <option value="">--- Select ---</option>
-                                            <?php foreach ($location as $row) : ?>
-                                                <option value="<?php print_r($row); ?>"><?php echo $row['nama'];?></option>
-                                            <?php endforeach; ?>
-                                        </select>
-                                    </div>
-                                </div>
-                            </form>
-                            <a type="submit" id="btnSave" data-toggle="tab" href="#addUser" class="btn btn-success pull-right" style="margin: 10px 0px 0px 0px">Save</a>
-                        </div>
-                        <div class="tab-pane" id="addUser">
+                        <div class="tab-pane active" id="tabAdmin">
+                            <h4>Admins</h4>
+                            <hr>
                             <table id="tb_discovery" class="table about-table " cellspacing="0" width="100%">
                                 <thead>
                                     <tr>
                                         <th>No</th>
-                                        <th>User</th>
-                                        <th>IP Address</th>
-                                        <th>Identity</th>
-                                        <th>Board</th>
+                                        <th>Username</th>
+                                        <th>E-mail</th>
+                                        <th>Role</th>
+                                        <th>Status</th>
                                         <th>Action</th>
                                     </tr>
                                 </thead>
@@ -110,15 +75,16 @@
                                 </tbody>
                             </table>
                         </div>
-                        <div class="tab-pane" id="DiscoveryDevice">
-                            <table id="tb_discovery" class="table about-table " cellspacing="0" width="100%">
+                        <div class="tab-pane" id="tabDev">
+                            <h4>Device Authentication</h4>
+                            <hr>
+                            <table id="tb_deviceAuth" class="table about-table " cellspacing="0" width="100%">
                                 <thead>
                                     <tr>
-                                        <th>No</th>
-                                        <th>Interface</th>
-                                        <th>IP Address</th>
-                                        <th>Identity</th>
-                                        <th>Board</th>
+                                        <th>ID</th>
+                                        <th>Username</th>
+                                        <th>Password</th>
+                                        <th>Port</th>
                                         <th>Action</th>
                                     </tr>
                                 </thead>
@@ -126,14 +92,15 @@
                                 </tbody>
                             </table>
                         </div>
-                        <div class="tab-pane" id="UniFiDevice">
-                            <table id="tb_unifi" class="table about-table " cellspacing="0" width="100%">
+                        <div class="tab-pane" id="tabSetting">
+                            <h4>Template Setting</h4>
+                            <hr>
+                            <table id="tb_settings" class="table about-table " cellspacing="0" width="100%">
                                 <thead>
                                     <tr>
-                                        <th>IP Address</th>
-                                        <th>Identity</th>
-                                        <th>Model</th>
-                                        <th>Version</th>
+                                        <th>Id</th>
+                                        <th>Comment</th>
+                                        <th>Script</th>
                                         <th>Action</th>
                                     </tr>
                                 </thead>
@@ -275,17 +242,16 @@
 	<script src="https://code.highcharts.com/modules/accessibility.js"></script>
 <script>
 
-    table = $('#tb_simonetlog').DataTable({
+    tableLog = $('#tb_simonetlog').DataTable({
         responsive : true,
-        pageLength : 10,
+        pageLength : 100,
         lengthChange: false,
-        // dom: 'Trt<"bottom"ip><"clear">',
-        tableTools: {
-            "sSwfPath": "/swf/copy_csv_xls_pdf.swf"
-        },
-        order: [[ 2, "desc" ]],
+        dom: 'Trt<"bottom"ip><"clear">',
+        // order: [[ 2, "desc" ]],
+        scrollY: "300px",
+        scrollCollapse: true,
+        // paging: false,
         oLanguage: {
-        "sLengthMenu": " _MENU_ ",
         "sSearch": "<span>Search..</span> _INPUT_"
         },
         ajax : {
@@ -294,9 +260,9 @@
             // "dataSrc" : ""
         },
         columns : [
+            {"data" : "DeviceReportedTime"},
             {"data" : "Message"},
             {"data" : "SysLogTag"},
-            {"data" : "DeviceReportedTime"},
             {"data" : "FromHost"}
         ],
         "createdRow": function(row, data, dataIndex) {
@@ -306,6 +272,10 @@
             }
         }
     });
+
+    $('#searchLog').keyup(function(){
+            tableLog.search($(this).val()).draw() ;
+        })
 
     $('body').on('click','a[data-aksi="log"]',function(){
         log();
@@ -327,6 +297,33 @@
         $('.form-group').removeClass('has-error');
         $('.help-block').empty();
         $('#modal_settings').modal('show');
+    }
+
+    function getadmins(){
+        var url = "<?php echo site_url('dashboard/getAdmins')?>";
+
+        $.ajax({
+            url : url,
+            type: "POST",
+            dataType: "JSON",
+            success: function(data)
+            {
+                if(data.status) 
+                {
+                    var trHTML = '';
+                    $.each(data, function (i, item) {
+                        trHTML += '<tr><td>' + item.rank + '</td><td>' + item.content + '</td><td>' + item.UID + '</td></tr>';
+                    });
+                    $('#records_table').append(trHTML);
+                }
+            },
+            error: function (jqXHR, textStatus, errorThrown)
+            {
+                console.log("Error getResource");
+            }
+        });
+
+        setTimeout(function(){ getResource(); }, 5000);
     }
 // $('#logPopover').on('click').popover('show');
 </script>

@@ -17,7 +17,6 @@
                                             <button type="button" class="btn btn-primary" data-aksi="unifi">UniFi</button>
                                         </div>
                                         <div class="btn-group pull-right" id="tools">
-
                                         </div>
                                         <div class="col-md-2 pull-right" style="margin:10px 0 0 0">
                                             <div class="input-group">
@@ -420,7 +419,6 @@
     }
 
     function upgradeUnifis(){
-        alert('jancok');
         if(confirm('Anda yakin ingin mengupgrade semua device UniFi?')){        
             var xhr = $.post('<?php echo site_url('devices/upgradeAllUnifi/') ?>',function(respon){
                     if(respon.status){

@@ -6,7 +6,7 @@ class Bandwidth extends CI_Controller {
     public function __construct()
     {
         parent::__construct();
-        $this->load->model('bandwidth_model','bandwidth');
+        $this->load->model('Bandwidth_Model','bandwidth');
     }
 
     public function index(){

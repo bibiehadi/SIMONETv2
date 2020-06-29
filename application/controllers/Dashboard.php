@@ -9,9 +9,9 @@ class Dashboard extends CI_Controller {
         if($this->session->userdata('username')== null){
             redirect(site_url('login'),'refresh');
         }
-        $this->load->model('bandwidth_model', 'bandwidth');
-        $this->load->model('hotspot_model', 'hotspot');
-        $this->load->model('devices_model', 'devices');
+        $this->load->model('Bandwidth_Model', 'bandwidth');
+        $this->load->model('Hotspot_Model', 'hotspot');
+        $this->load->model('Devices_Model', 'devices');
         
         
     }
@@ -93,6 +93,22 @@ class Dashboard extends CI_Controller {
             return $error;
         }
     }
+
+    function getAdmins(){
+        $data = $this->dashboard->getAdmins();
+        echo json_encode($data);
+    }
+
+    function getDeviceAuth(){
+        $data = $this->dashboard->getDeviceAuth();
+        echo json_encode($data);
+    }
+
+    function getTemplateConfig(){
+        $data = $this->dashboard->getTemplateConfig();
+        echo json_encode($data);
+    }
+    
 }
 
 /* End of file Controllername.php */

@@ -11,8 +11,8 @@ class Hotspot extends CI_Controller {
         if($this->session->userdata('username')=== null){
             redirect('login');
         }
-        $this->load->model('hotspot_model','hotspot');
-        $this->load->model('devices_model','devices');
+        $this->load->model('Hotspot_Model','hotspot');
+        $this->load->model('Devices_Model','devices');
     }
     
 

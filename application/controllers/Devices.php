@@ -17,10 +17,9 @@ class Devices extends CI_Controller {
             redirect('login');
         }
         date_default_timezone_set('Asia/Jakarta');
-        $this->load->model('devices_model','devices');
-        $this->load->model('mikrotik_model','mikrotik');
-        $this->load->model('log_model', 'log_event');
-        
+        $this->load->model('Devices_Model','devices');
+        $this->load->model('Mikrotik_model','Mikrotik');
+        $this->load->model('log_model', 'log_event');   
     }
     
 
