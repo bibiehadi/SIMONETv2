@@ -9,6 +9,8 @@ class Dashboard extends CI_Controller {
         if($this->session->userdata('username')== null){
             redirect(site_url('login'),'refresh');
         }
+        $this->load->model('Dashboard_Model', 'dashboard');
+        
         $this->load->model('Bandwidth_Model', 'bandwidth');
         $this->load->model('Hotspot_Model', 'hotspot');
         $this->load->model('Devices_Model', 'devices');
@@ -96,17 +98,32 @@ class Dashboard extends CI_Controller {
 
     function getAdmins(){
         $data = $this->dashboard->getAdmins();
-        echo json_encode($data);
+        foreach($data as $r){
+            $r['aksi'] = "<a href='javascript:;' data-aksi='edit' data-id='".$r['id']."'><i class='fa fa-pencil-square-o'></i></a>
+            <a href='javascript:;' data-aksi='hapus' data-id='".$r['id']."' style='color : rgb(218,86,80)'><i class='fa fa-trash-o'></i></a>";
+            $_data[] = $r;
+        }
+        echo json_encode(array("status" => TRUE, "data" => $_data));
     }
 
     function getDeviceAuth(){
         $data = $this->dashboard->getDeviceAuth();
-        echo json_encode($data);
+        foreach($data as $r){
+            $r['aksi'] = "<a href='javascript:;' data-aksi='edit' data-id='".$r['id']."'><i class='fa fa-pencil-square-o'></i></a>
+            <a href='javascript:;' data-aksi='hapus' data-id='".$r['id']."' style='color : rgb(218,86,80)'><i class='fa fa-trash-o'></i></a>";
+            $_data[] = $r;
+        }
+        echo json_encode(array("status" => TRUE, "data" => $_data));
     }
 
     function getTemplateConfig(){
         $data = $this->dashboard->getTemplateConfig();
-        echo json_encode($data);
+        foreach($data as $r){
+            $r['aksi'] = "<a href='javascript:;' data-aksi='edit' data-id='".$r['id']."'><i class='fa fa-pencil-square-o'></i></a>
+            <a href='javascript:;' data-aksi='hapus' data-id='".$r['id']."' style='color : rgb(218,86,80)'><i class='fa fa-trash-o'></i></a>";
+            $_data[] = $r;
+        }
+        echo json_encode(array("status" => TRUE, "data" => $_data));
     }
     
 }

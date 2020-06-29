@@ -53,15 +53,15 @@
                             <a href="#tabDev" data-toggle="tab">Device Auth</a>
                         </li>
                         <li>
-                            <a href="#tabSetting" data-toggle="tab">Template Default Setting</a>
+                            <a href="#tabConfig" data-toggle="tab">Template Router Config</a>
                         </li>
                     </ul>
                     <div class="tab-content">
                         <div class="tab-pane active" id="tabAdmin">
                             <h4>Admins</h4>
                             <hr>
-                            <table id="tb_discovery" class="table about-table " cellspacing="0" width="100%">
-                                <thead>
+                            <table id="tb_admins" class="table about-table " cellspacing="0" width="100%">
+                                <!-- <thead> -->
                                     <tr>
                                         <th>No</th>
                                         <th>Username</th>
@@ -70,9 +70,9 @@
                                         <th>Status</th>
                                         <th>Action</th>
                                     </tr>
-                                </thead>
-                                <tbody>
-                                </tbody>
+                                <!-- </thead> -->
+                                <!-- <tbody>
+                                </tbody> -->
                             </table>
                         </div>
                         <div class="tab-pane" id="tabDev">
@@ -92,10 +92,10 @@
                                 </tbody>
                             </table>
                         </div>
-                        <div class="tab-pane" id="tabSetting">
-                            <h4>Template Setting</h4>
+                        <div class="tab-pane" id="tabConfig">
+                            <h4>Template Router MikroTik Configuration</h4>
                             <hr>
-                            <table id="tb_settings" class="table about-table " cellspacing="0" width="100%">
+                            <table id="tb_config" class="table about-table " cellspacing="0" width="100%">
                                 <thead>
                                     <tr>
                                         <th>Id</th>
@@ -286,17 +286,18 @@
     })
 
     function log(){
-        $('#form')[0].reset();
         $('.form-group').removeClass('has-error');
         $('.help-block').empty();
         $('#modal_log').modal('show');
     }
 
     function settings(){
-        $('#form')[0].reset();
         $('.form-group').removeClass('has-error');
         $('.help-block').empty();
         $('#modal_settings').modal('show');
+        getadmins();
+        getDeviceAuth();
+        getTemplateConfig();
     }
 
     function getadmins(){
@@ -311,10 +312,39 @@
                 if(data.status) 
                 {
                     var trHTML = '';
-                    $.each(data, function (i, item) {
-                        trHTML += '<tr><td>' + item.rank + '</td><td>' + item.content + '</td><td>' + item.UID + '</td></tr>';
+                    $.each(data.data, function (i, item) {
+                        if(item.status == '1'){
+                            trHTML += '<tr><td>' + item.id + '</td><td>' + item.username + '</td><td>' + item.email + '</td><td>' + item.role + '</td><td>' + 'Active' + '</td><td>' + item.aksi + '</td></tr>';
+                        }else{
+                            trHTML += '<tr><td>' + item.id + '</td><td>' + item.username + '</td><td>' + item.email + '</td><td>' + item.role + '</td><td>' + 'Disabled' + '</td><td>' + item.aksi + '</td></tr>';
+                        }
                     });
-                    $('#records_table').append(trHTML);
+                    $('#tb_admins').append(trHTML);
+                }
+            },
+            error: function (jqXHR, textStatus, errorThrown)
+            {
+                console.log("Error getAdmins");
+            }
+        });
+    }
+
+    function getDeviceAuth(){
+        var url = "<?php echo site_url('dashboard/getDeviceAuth')?>";
+
+        $.ajax({
+            url : url,
+            type: "POST",
+            dataType: "JSON",
+            success: function(data)
+            {
+                if(data.status) 
+                {
+                    var trHTML = '';
+                    $.each(data.data, function (i, item) {
+                            trHTML += '<tr><td>' + item.id + '</td><td>' + item.username + '</td><td>' + item.password + '</td><td>' + item.port + '</td><td>' + item.aksi + '</td></tr>';
+                    });
+                    $('#tb_deviceAuth').append(trHTML);
                 }
             },
             error: function (jqXHR, textStatus, errorThrown)
@@ -322,8 +352,32 @@
                 console.log("Error getResource");
             }
         });
-
-        setTimeout(function(){ getResource(); }, 5000);
     }
+    function getTemplateConfig(){
+        var url = "<?php echo site_url('dashboard/getTemplateConfig')?>";
+
+        $.ajax({
+            url : url,
+            type: "POST",
+            dataType: "JSON",
+            success: function(data)
+            {
+                if(data.status) 
+                {
+                    var trHTML = '';
+                    $.each(data.data, function (i, item) {
+                            trHTML += '<tr><td>' + item.id + '</td><td>' + item.comment + '</td><td>' + item.script + '</td><td>' + item.aksi + '</td></tr>';
+                    });
+                    $('#tb_config').append(trHTML);
+                }
+            },
+            error: function (jqXHR, textStatus, errorThrown)
+            {
+                console.log("Error getResource");
+            }
+        });
+    }
+
+    
 // $('#logPopover').on('click').popover('show');
 </script>

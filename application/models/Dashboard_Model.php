@@ -4,14 +4,14 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 class Dashboard_Model extends CI_Model {
 
-    function getUsers(){
+    function getAdmins(){
         if($data = $this->db->get('admin')){
 			return $data->result_array();
 		}else{
 			return false;
 		}
     }
-    function getDeviceAut(){
+    function getDeviceAuth(){
         if($data = $this->db->get('devices_user')){
 			return $data->result_array();
 		}else{

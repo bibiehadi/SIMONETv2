@@ -1,4 +1,4 @@
-<?php $this->load->view('templates/headersidebar_view'); ?>
+<?php $this->load->view('Templates/headersidebar_view'); ?>
    </div>
                 </div>
                 <div class="static-content-wrapper">
@@ -170,7 +170,7 @@
     </div>
 </footer>
     </body>
-    <?php $this->load->view('templates/footer_view'); ?>
+    <?php $this->load->view('Templates/footer_view'); ?>
 <script>
 	var charts = {};
 	var chart;
@@ -187,7 +187,7 @@
 	function requestData(iface, id) 
 	{
 		$.ajax({
-			url: '<?php echo site_url("dashboard/interface");?>',     						
+			url: '<?php echo site_url("Dashboard/interface");?>',     						
 			type: "POST",
 			dataType: "JSON",
 			data: {iface:iface} ,
@@ -300,7 +300,7 @@
 	}
 
 	function getResource(){
-        var url = "<?php echo site_url('devices/getResource')?>";
+        var url = "<?php echo site_url('Devices/getResource')?>";
 
         $.ajax({
             url : url,
@@ -330,7 +330,7 @@
         setTimeout(function(){ getResource(); }, 5000);
     }
 	function getTotal(){
-        var url = "<?php echo site_url('dashboard/total')?>";
+        var url = "<?php echo site_url('Dashboard/total')?>";
 
         $.ajax({
             url : url,

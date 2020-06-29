@@ -1,4 +1,4 @@
-<?php $this->load->view('templates/headersidebar_view'); ?>
+<?php $this->load->view('Templates/headersidebar_view'); ?>
 </div>
     </div>
     <div class="static-content-wrapper">
@@ -53,7 +53,7 @@
     </div>
 </footer>
 
-<?php $this->load->view('templates/footer_view'); ?>
+<?php $this->load->view('Templates/footer_view'); ?>
 <script type="text/javascript">
     table = $('#tb_aktif').DataTable({
         responsive : true,

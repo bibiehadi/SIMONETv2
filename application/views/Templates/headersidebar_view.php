@@ -52,100 +52,6 @@
 	</div><!-- logo-area -->
 
 	<ul class="nav navbar-nav toolbar pull-right">
-        <li class="dropdown toolbar-icon-bg hidden-xs">
-			<a href="#" class="hasnotifications dropdown-toggle" data-toggle='dropdown'><span class="icon-bg"><i class="fa fa-envelope"></i></span><span
-			class="badge badge-deeporange">2</span></a>
-			<div class="dropdown-menu notifications arrow">
-				<div class="topnav-dropdown-header">
-					<span>Messages</span>
-				</div>
-				<div class="scroll-pane">
-					<ul class="media-list scroll-content">
-						<li class="media notification-message">
-							<a href="#">
-								<div class="media-left">
-									<img class="img-circle avatar" src="http://placehold.it/300&text=Placeholder" alt="" />
-								</div>
-								<div class="media-body">
-									<h4 class="notification-heading"><strong>Vincent Keller</strong> <span class="text-gray">‒ Design should be ...</span></h4>
-									<span class="notification-time">2 mins ago</span>
-								</div>
-							</a>
-						</li>
-						<li class="media notification-message">
-							<a href="#">
-								<div class="media-left">
-									<img class="img-circle avatar" src="http://placehold.it/300&text=Placeholder" alt="" />
-								</div>
-								<div class="media-body">
-									<h4 class="notification-heading"><strong>Frend Pratt</strong> <span class="text-gray">‒ I will start with the ...</span></h4>
-									<span class="notification-time">40 mins ago</span>
-								</div>
-							</a>
-						</li>
-						<li class="media notification-message">
-							<a href="#">
-								<div class="media-left">
-									<img class="img-circle avatar" src="http://placehold.it/300&text=Placeholder" alt="" />
-								</div>
-								<div class="media-body">
-									<h4 class="notification-heading"><strong>Cynthia Hines</strong> <span class="text-gray">‒ Interior bits are ...</span></h4>
-									<span class="notification-time">6 hours ago</span>
-								</div>
-							</a>
-						</li>
-						<li class="media notification-message">
-							<a href="#">
-								<div class="media-left">
-									<img class="img-circle avatar" src="http://placehold.it/300&text=Placeholder" alt="" />
-								</div>
-								<div class="media-body">
-									<h4 class="notification-heading"><strong>Robin Horton</strong> <span class="text-gray">‒ Are you even ...</span></h4>
-									<span class="notification-time">8 days ago</span>
-								</div>
-							</a>
-						</li>
-						<li class="media notification-message">
-							<a href="#">
-								<div class="media-left">
-									<img class="img-circle avatar" src="http://placehold.it/300&text=Placeholder" alt="" />
-								</div>
-								<div class="media-body">
-									<h4 class="notification-heading"><strong>Amanda Torrez</strong> <span class="text-gray">‒ The message is ...</span></h4>
-									<span class="notification-time">16 hours ago</span>
-								</div>
-							</a>
-						</li>
-						<li class="media notification-message">
-							<a href="#">
-								<div class="media-left">
-									<img class="img-circle avatar" src="http://placehold.it/300&text=Placeholder" alt="" />
-								</div>
-								<div class="media-body">
-									<h4 class="notification-heading"><strong>Khan Farhan</strong> <span class="text-gray">‒ Expected the stuff ...</span></h4>
-									<span class="notification-time">2 days ago</span>
-								</div>
-							</a>
-						</li>
-						<li class="media notification-message">
-							<a href="#">
-								<div class="media-left">
-									<img class="img-circle avatar" src="http://placehold.it/300&text=Placeholder" alt="" />
-								</div>
-								<div class="media-body">
-									<h4 class="notification-heading"><strong>Will Whedon</strong> <span class="text-gray">‒ The movie of this ...</span></h4>
-									<span class="notification-time">4 days ago</span>
-								</div>
-							</a>
-						</li>
-					</ul>
-				</div>
-				<div class="topnav-dropdown-footer">
-					<a href="#">See all messages</a>
-				</div>
-			</div>
-		</li>
-		
 		<li class="dropdown toolbar-icon-bg">
 			<a href="#" class="hasnotifications dropdown-toggle" data-toggle='dropdown'><span class="icon-bg"><i class="fa fa-bell"></i></span><span class="badge badge-deeporange">2</span></a>
 			<div class="dropdown-menu notifications arrow">
@@ -222,13 +128,7 @@
 				<img class="img-circle" src="<?php echo base_url('') ?>assets/img/anu.png" alt="" />
 			</a>
 			<ul class="dropdown-menu userinfo arrow">
-				<li><a href="#/"><i class="fa fa-user"></i><span>Profile</span><span class="badge badge-info pull-right">80%</span></a></li>
-				<li><a href="#/"><i class="fa fa-panel"></i><span>Account</span></a></li>
 				<li><a href="#/" data-aksi="settings"><i class="fa fa-cog"></i><span>Settings</span></a></li>
-				<li class="divider"></li>
-				<li><a href="#/"><i class="fa fa-stats-up"></i><span>Earnings</span></a></li>
-				<li><a href="#/"><i class="fa fa-view-list-alt"></i><span>Statement</span></a></li>
-				<li><a href="#/"><i class="fa fa-money"></i><span>Withdrawals</span></a></li>
 				<li class="divider"></li>
 				<li><a href="<?php echo site_url('login/logout') ?>"><i class="fa fa-shift-right"></i><span>Sign Out</span></a></li>
 			</ul>
