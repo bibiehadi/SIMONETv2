@@ -8,6 +8,10 @@
             </div>
             <div class="modal-body form">
                 <div class="row ">
+                    <div class="col-sm-8">
+                        <button type="submit" id="btnSave" onClick="save()" class="btn btn-success">Save</button>
+                        <button type="submit" id="btnSave" onClick="save()" class="btn btn-success">Save</button>
+                    </div>
                     <div class="col-sm-4 pull-right">
                         <div class="input-group">
                             <span class="input-group-addon">
@@ -17,7 +21,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="row" style="margin : 5px">
+                <div class="row" style="margin : 10px">
                     <table id="tb_simonetlog" class="table about-table " cellspacing="0" width="100%">
                         <thead>
                             <tr>
@@ -49,9 +53,9 @@
                         <li class="active">
                             <a href="#tabAdmin" data-toggle="tab">Admins</a>
                         </li>
-                        <li>
+                        <!-- <li>
                             <a href="#tabDev" data-toggle="tab">Device Auth</a>
-                        </li>
+                        </li> -->
                         <li>
                             <a href="#tabConfig" data-toggle="tab">Template Router Config</a>
                         </li>
@@ -63,7 +67,6 @@
                             <table id="tb_admins" class="table about-table " cellspacing="0" width="100%">
                                 <!-- <thead> -->
                                     <tr>
-                                        <th>No</th>
                                         <th>Username</th>
                                         <th>E-mail</th>
                                         <th>Role</th>
@@ -74,6 +77,41 @@
                                 <!-- <tbody>
                                 </tbody> -->
                             </table>
+                            <a href="#tabAddAdmin" data-aksi="#tabAddAdmin" data-toggle="tab" class="btn btn-default" style="margin: 10px 0px 0px 0px"><i class="fa fa-plus"></i> Add Admin</a>
+                        </div>
+                        <div class="tab-pane" id="tabAddAdmin">
+                            <form id="formAdmin" action="＃" method="post" class="form-horizontal row-border">
+                                <input type="hidden" value="" name="idAdmin"/> 
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label">Username</label>
+                                    <div class="col-sm-8">
+                                        <input type="input" name="userAdmin" class="form-control" placeholder='Username'>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label">Password</label>
+                                    <div class="col-sm-8">
+                                        <input type="input" name="passwordAdmin" class="form-control" placeholder='Password'>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label">E-mail</label>
+                                    <div class="col-sm-8">
+                                        <input type="input" name="emailAdmin" class="form-control" placeholder='Email' required>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label">Role</label>
+                                    <div class="col-sm-8">
+                                    <select name="roleAdmin" class="form-control">
+                                            <option value="">--- Select ---</option>
+                                            <option value="adm">Administrator</option>
+                                            <option value="read">Read Only</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </form>
+                            <a type="submit" data-aksi="saveAdmin" id="btnSaveAdmin" class="btn btn-success pull-right" style="margin: 10px 0px 0px 0px">Save</a>
                         </div>
                         <div class="tab-pane" id="tabDev">
                             <h4>Device Authentication</h4>
@@ -91,6 +129,31 @@
                                 <tbody>
                                 </tbody>
                             </table>
+                            <a href="#tabAddAuth" data-toggle="tab" class="btn btn-default" style="margin: 10px 0px 0px 0px"><i class="fa fa-plus"></i> Add Device Auth</a>
+                        </div>
+                        <div class="tab-pane" id="tabAddAuth">
+                            <form id="formAuth" action="＃" method="post" class="form-horizontal row-border">
+                                <input type="hidden" value="" name="id"/> 
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label">Username</label>
+                                    <div class="col-sm-8">
+                                        <input type="input" name="userAuth" class="form-control" placeholder='Username'>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label">Password</label>
+                                    <div class="col-sm-8">
+                                        <input type="input" name="passwordAuth" class="form-control" placeholder='Password' required>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label">Port</label>
+                                    <div class="col-sm-8">
+                                        <input type="input" name="port" class="form-control" placeholder='Port' required>
+                                    </div>
+                                </div>
+                            </form>
+                            <a type="submit" id="btnSave" onClick="save()" class="btn btn-success pull-right" style="margin: 10px 0px 0px 0px">Save</a>
                         </div>
                         <div class="tab-pane" id="tabConfig">
                             <h4>Template Router MikroTik Configuration</h4>
@@ -98,7 +161,7 @@
                             <table id="tb_config" class="table about-table " cellspacing="0" width="100%">
                                 <thead>
                                     <tr>
-                                        <th>Id</th>
+                                        <!-- <th>Id</th> -->
                                         <th>Comment</th>
                                         <th>Script</th>
                                         <th>Action</th>
@@ -107,6 +170,25 @@
                                 <tbody>
                                 </tbody>
                             </table>
+                            <a href="#tabAddConfig" data-toggle="tab" class="btn btn-default" style="margin: 10px 0px 0px 0px"><i class="fa fa-plus"></i> Add Template Config</a>
+                        </div>
+                        <div class="tab-pane" id="tabAddConfig">
+                            <form id="formConfig" action="＃" method="post" class="form-horizontal row-border">
+                                <input type="hidden" value="" name="id"/> 
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label">Comment</label>
+                                    <div class="col-sm-8">
+                                        <input type="input" name="userAdmin" class="form-control" placeholder='Username'>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label">Script</label>
+                                    <div class="col-sm-8">
+                                        <input type="input" name="email" class="form-control" placeholder='Email' required>
+                                    </div>
+                                </div>
+                            </form>
+                            <a type="submit" id="btnSave" onClick="save()" class="btn btn-success pull-right" style="margin: 10px 0px 0px 0px">Save</a>
                         </div>
                     </div>
                 </div>
@@ -274,8 +356,8 @@
     });
 
     $('#searchLog').keyup(function(){
-            tableLog.search($(this).val()).draw() ;
-        })
+        tableLog.search($(this).val()).draw() ;
+    })
 
     $('body').on('click','a[data-aksi="log"]',function(){
         log();
@@ -284,6 +366,62 @@
     $('body').on('click','a[data-aksi="settings"]',function(){
         settings();
     })
+
+    $('body').on('click','a[data-aksi="#tabAddAdmin"]',function(){
+        save_methodAdmin = 'add';
+        $('[name="userAdmin"]').val('');
+        $('[name="passwordAdmin"]').val('');
+        $('[name="emailAdmin"]').val('');
+        $('[name="roleAdmin"]').val('');
+        $('[name="statusAdmin"]').val('');
+    })
+
+    $('body').on('click','a[data-aksi="#tabAddAuth"]',function(){
+        $('[name="userAuth"]').val('');
+        $('[name="passwordAuth"]').val('');
+        $('[name="portAuth"]').val('');
+    })
+
+    $('body').on('click','a[data-aksi="#tabAddConfig"]',function(){
+        $('[name="comment"]').val('');
+        $('[name="script"]').val('');
+    })
+
+    $('body').on('click','a[data-aksi="editAdmin"]',function(){
+        var id= $(this).attr('data-id');
+        editAdmin(id);
+    })
+
+    $('body').on('click','a[data-aksi="saveAdmin"]',function(){
+        saveAdmin();
+        $('#tabAdmin').tab('show');
+    })
+
+    $('body').on('click','a[data-aksi="hapusAdmin"]',function(){
+        var id= $(this).attr('data-id');
+        deleteAdmin(id);
+    });
+
+    $('body').on('click','a[data-aksi="editAuth"]',function(){
+        var id= $(this).attr('data-id');
+        // editProfile(id);
+    })
+
+    $('body').on('click','a[data-aksi="hapusAuth"]',function(){
+        var id= $(this).attr('data-id');
+        // deleteUser(id);
+    });
+
+    $('body').on('click','a[data-aksi="editConfig"]',function(){
+        var id= $(this).attr('data-id');
+        // editProfile(id);
+    })
+
+    $('body').on('click','a[data-aksi="hapusConfig"]',function(){
+        var id= $(this).attr('data-id');
+        // deleteUser(id);
+    });
+    
 
     function log(){
         $('.form-group').removeClass('has-error');
@@ -311,13 +449,10 @@
             {
                 if(data.status) 
                 {
+                    $('#tb_admins').empty();
                     var trHTML = '';
                     $.each(data.data, function (i, item) {
-                        if(item.status == '1'){
-                            trHTML += '<tr><td>' + item.id + '</td><td>' + item.username + '</td><td>' + item.email + '</td><td>' + item.role + '</td><td>' + 'Active' + '</td><td>' + item.aksi + '</td></tr>';
-                        }else{
-                            trHTML += '<tr><td>' + item.id + '</td><td>' + item.username + '</td><td>' + item.email + '</td><td>' + item.role + '</td><td>' + 'Disabled' + '</td><td>' + item.aksi + '</td></tr>';
-                        }
+                    trHTML += '<tr><td>' + item.username + '</td><td>' + item.email + '</td><td>' + item.role + '</td><td>' + item.aksi + '</td></tr>';
                     });
                     $('#tb_admins').append(trHTML);
                 }
@@ -364,9 +499,10 @@
             {
                 if(data.status) 
                 {
+                    $('#tb_config').empty();
                     var trHTML = '';
                     $.each(data.data, function (i, item) {
-                            trHTML += '<tr><td>' + item.id + '</td><td>' + item.comment + '</td><td>' + item.script + '</td><td>' + item.aksi + '</td></tr>';
+                            trHTML += '<tr><td>' + item.comment + '</td><td>' + item.script + '</td><td>' + item.aksi + '</td></tr>';
                     });
                     $('#tb_config').append(trHTML);
                 }
@@ -376,6 +512,76 @@
                 console.log("Error getResource");
             }
         });
+    }
+
+    
+    function editAdmin(id){
+        save_methodAdmin = 'update';
+        var data = {id : id};
+
+        $.post('<?php echo site_url('dashboard/getAdminByID/') ?>',data,function(respon){
+            if(respon.status){
+                $('[name="idAdmin"]').val(respon.data.id);
+                $('[name="userAdmin"]').val(respon.data.username);
+                $('[name="passwordAdmin"]').val('');
+                $('[name="emailAdmin"]').val(respon.data.email);
+                $('[name="roleAdmin"]').val(respon.data.role);
+            }
+            else{ alert('error get data'+id);
+            }
+        },'json').fail(function(){
+            alert('error get data form ajax');
+        })
+    }
+
+    function saveAdmin(){
+        $('#btnSaveAdmin').text('saving...'); //change button text
+        $('#btnSaveAdmin').attr('disabled',true); //set button disable 
+        var url;
+    
+        if(save_methodAdmin == 'add') {
+            url = "<?php echo site_url('dashboard/addAdmin')?>";
+        } else {
+            url = "<?php echo site_url('dashboard/setAdmin')?>";
+        }
+
+        $.ajax({
+            url : url,
+            type: "POST",
+            data: $('#formAdmin').serialize(),
+            dataType: "JSON",
+            success: function(data)
+            {
+                if(data.status) 
+                {
+                    getadmins();
+                }
+                $('#btnSaveAdmin').text('save'); 
+                $('#btnSaveAdmin').attr('disabled',false); 
+            },
+            error: function (jqXHR, textStatus, errorThrown)
+            {
+                alert('Gagal menyimpan user profile');
+                $('#btnSaveAdmin').text('save'); 
+                $('#btnSaveAdmin').attr('disabled',false); 
+            }
+        });
+    }
+
+
+    function deleteAdmin(id){
+        var data = {id : id};
+        if(confirm('Anda yakin ingin menghapus data ini ?')){
+            $.post('<?php echo site_url('dashboard/delAdmin/') ?>',data,function(respon){
+                if(respon.status){
+                    getadmins();
+                }
+                else{ alert('error delete this data '+id);
+                }
+            },'json').fail(function(){
+                alert('error delete this data');
+            })
+        }
     }
 
     

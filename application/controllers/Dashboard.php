@@ -99,18 +99,74 @@ class Dashboard extends CI_Controller {
     function getAdmins(){
         $data = $this->dashboard->getAdmins();
         foreach($data as $r){
-            $r['aksi'] = "<a href='javascript:;' data-aksi='edit' data-id='".$r['id']."'><i class='fa fa-pencil-square-o'></i></a>
-            <a href='javascript:;' data-aksi='hapus' data-id='".$r['id']."' style='color : rgb(218,86,80)'><i class='fa fa-trash-o'></i></a>";
+            $r['aksi'] = "<a href='#tabAddAdmin' data-toggle='tab' data-aksi='editAdmin' data-id='".$r['id']."'><i class='fa fa-pencil-square-o'></i></a>
+            <a href='javascript:;' data-toggle='tab' data-aksi='hapusAdmin' data-id='".$r['id']."' style='color : rgb(218,86,80)'><i class='fa fa-trash-o'></i></a>";
             $_data[] = $r;
         }
         echo json_encode(array("status" => TRUE, "data" => $_data));
     }
 
+    function getAdminByID(){
+        $id = $this->input->post('id');
+        $data = $this->dashboard->getAdminbyID($id);
+        echo json_encode(array("status" => TRUE, "data" => $data));
+    }
+
+    function setAdmin(){
+        // funtion untuk merubah data user profile di mikrotik
+        $id = $this->input->post('idAdmin');
+        if($this->input->post('passwordAdmin')!=''){
+            $data = array(
+                'username' => $this->input->post('userAdmin'),
+                'password' => $this->input->post('passwordAdmin'),
+                'email' => $this->input->post('emailAdmin'),
+                'role' => $this->input->post('roleAdmin'),
+            );
+        }else{
+            $data = array(
+                'username' => $this->input->post('userAdmin'),
+                'email' => $this->input->post('emailAdmin'),
+                'role' => $this->input->post('roleAdmin'),
+            );
+        }
+        if($this->dashboard->setAdmin($id,$data)){
+            echo json_encode(array("status" => TRUE));
+        }else{
+            echo json_encode(array("status" => FALSE));
+        }
+    }
+
+    function addAdmin(){
+        // funtion untuk menambah data user profile di mikrotik 
+        $data = array(
+            'username' => $this->input->post('userAdmin'),
+            'password' => $this->input->post('passwordAdmin'),
+            'email' => $this->input->post('emailAdmin'),
+            'role' => $this->input->post('roleAdmin')
+        );
+        if($this->dashboard->addAdmin($data)){
+            echo json_encode(array("status" => TRUE));
+        }else{
+            echo json_encode(array("status" => FALSE));
+        }
+        
+    }
+
+    function delAdmin(){
+        // funtion untuk menghapust user profile di mikrotik dan database
+        $id = $this->input->post('id');
+        if($this->dashboard->delAdmin($id)){
+            echo json_encode(array("status" => TRUE));
+        }else{
+            echo json_encode(array("status" => FALSE));
+        }
+    }
+
     function getDeviceAuth(){
         $data = $this->dashboard->getDeviceAuth();
         foreach($data as $r){
-            $r['aksi'] = "<a href='javascript:;' data-aksi='edit' data-id='".$r['id']."'><i class='fa fa-pencil-square-o'></i></a>
-            <a href='javascript:;' data-aksi='hapus' data-id='".$r['id']."' style='color : rgb(218,86,80)'><i class='fa fa-trash-o'></i></a>";
+            $r['aksi'] = "<a href='javascript:;' data-aksi='editAuth' data-id='".$r['id']."'><i class='fa fa-pencil-square-o'></i></a>
+            <a href='javascript:;' data-aksi='hapusAuth' data-id='".$r['id']."' style='color : rgb(218,86,80)'><i class='fa fa-trash-o'></i></a>";
             $_data[] = $r;
         }
         echo json_encode(array("status" => TRUE, "data" => $_data));
@@ -119,8 +175,8 @@ class Dashboard extends CI_Controller {
     function getTemplateConfig(){
         $data = $this->dashboard->getTemplateConfig();
         foreach($data as $r){
-            $r['aksi'] = "<a href='javascript:;' data-aksi='edit' data-id='".$r['id']."'><i class='fa fa-pencil-square-o'></i></a>
-            <a href='javascript:;' data-aksi='hapus' data-id='".$r['id']."' style='color : rgb(218,86,80)'><i class='fa fa-trash-o'></i></a>";
+            $r['aksi'] = "<a href='javascript:;' data-aksi='editConfig' data-id='".$r['id']."'><i class='fa fa-pencil-square-o'></i></a>
+            <a href='javascript:;' data-aksi='hapusConfig' data-id='".$r['id']."' style='color : rgb(218,86,80)'><i class='fa fa-trash-o'></i></a>";
             $_data[] = $r;
         }
         echo json_encode(array("status" => TRUE, "data" => $_data));

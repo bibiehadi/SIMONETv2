@@ -745,10 +745,20 @@ class Devices extends CI_Controller {
         $loginresults     = $unifi_connection->login();
         $aps_array        = $unifi_connection->list_devices();  
         foreach($aps_array as $ap){
+            if(isset($ap->name)){
                 $_ap['address'] = $ap->ip;
+                $_ap['identity'] = $ap->name;
+                if(isset($ap->uptime)){
+                    $_ap['uptime'] = $this->time_elapsed_B($ap->uptime); 
+                }else{
+                    $_ap['uptime'] = null;    
+                }
+                $_ap['version'] = $ap->version;
                 $_ap['serial_number'] = $ap->serial;
-                $this->devices->updateIPUniFi($_ap);
+                $this->devices->updateDataUniFi($_ap);
+            }
         }
+        echo json_encode(array("status" => TRUE));
     }
 
     function upgradeAllUniFi(){

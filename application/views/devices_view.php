@@ -239,6 +239,10 @@
         upgradeUnifis();
     });
 
+    $('body').on('click','a[data-aksi="refresh"]',function(){
+        syncUnifi();
+    });
+
     setInterval(() => {
         reload_table();
     }, 60000);
@@ -416,6 +420,22 @@
                 })
             }
         })
+    }
+
+    function syncUnifi(){
+        $.skylo('start');
+            $.ajax({
+                url: "<?php echo site_url('devices/syncIPUniFiAll/') ?>",
+                type: "POST",
+                dataType: "JSON",
+                success: function(data){
+                    reload_table();
+                    $.skylo('end');
+                },
+                error: function (jqXHR, textStatus, errorThrown){
+                    alert('Error!!');
+                }
+            })
     }
 
     function upgradeUnifis(){

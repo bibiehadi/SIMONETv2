@@ -197,19 +197,19 @@
     }
 
     function syncProfile(){
-            $.skylo('start');
-            $.ajax({
-                url: "<?php echo site_url('hotspot/syncUserHotspot/') ?>",
-                type: "POST",
-                dataType: "JSON",
-                success: function(data){
-                    reload_table();
-                    $.skylo('end');
-                },
-                error: function (jqXHR, textStatus, errorThrown){
-                    alert('Error!!');
-                }
-            })
+        $.skylo('start');
+        $.ajax({
+            url: "<?php echo site_url('hotspot/syncUserHotspot/') ?>",
+            type: "POST",
+            dataType: "JSON",
+            success: function(data){
+                reload_table();
+                $.skylo('end');
+            },
+            error: function (jqXHR, textStatus, errorThrown){
+                alert('Error!!');
+            }
+        })
     }
 
     function deleteUser(id){
