@@ -4,13 +4,15 @@
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                 <h4 class="modal-title" id="modal-title">Log Activity</h4>
-                    
             </div>
             <div class="modal-body form">
                 <div class="row ">
                     <div class="col-sm-8">
-                        <button type="submit" id="btnSave" onClick="save()" class="btn btn-success">Save</button>
-                        <button type="submit" id="btnSave" onClick="save()" class="btn btn-success">Save</button>
+                        <div class="btn-group" role="group" aria-label="Basic example">
+                            <button type="button" class="btn btn-primary" data-aksi="allLog">All</button>
+                            <button type="button" class="btn btn-primary" data-aksi="main">Main Router</button>
+                            <button type="button" class="btn btn-primary" data-aksi="simonet">SIMONET</button>
+                        </div>
                     </div>
                     <div class="col-sm-4 pull-right">
                         <div class="input-group">
@@ -22,7 +24,7 @@
                     </div>
                 </div>
                 <div class="row" style="margin : 10px">
-                    <table id="tb_simonetlog" class="table about-table " cellspacing="0" width="100%">
+                    <table id="tb_simonetlog" class="table about-table " cellspacing="0" width="100%" style="font-size:11px">
                         <thead>
                             <tr>
                                 <th style="width: 120px">Date</th>
@@ -56,21 +58,20 @@
                         <!-- <li>
                             <a href="#tabDev" data-toggle="tab">Device Auth</a>
                         </li> -->
-                        <li>
-                            <a href="#tabConfig" data-toggle="tab">Template Router Config</a>
-                        </li>
+                        <!-- <li>
+                            <a href="#tabConfig" data-toggle="tab">Template Config</a>
+                        </li> -->
                     </ul>
                     <div class="tab-content">
                         <div class="tab-pane active" id="tabAdmin">
                             <h4>Admins</h4>
                             <hr>
-                            <table id="tb_admins" class="table about-table " cellspacing="0" width="100%">
+                            <table id="tb_admins" class="table about-table " cellspacing="0" width="100%" style="font-size:11px">
                                 <!-- <thead> -->
                                     <tr>
                                         <th>Username</th>
                                         <th>E-mail</th>
                                         <th>Role</th>
-                                        <th>Status</th>
                                         <th>Action</th>
                                     </tr>
                                 <!-- </thead> -->
@@ -115,6 +116,7 @@
                         </div>
                         <div class="tab-pane" id="tabDev">
                             <h4>Device Authentication</h4>
+                            <a href="#tabAddAuth" data-toggle="tab" class="btn btn-default pull-right" style="margin: 10px 0px 0px 0px"><i class="fa fa-plus"></i> Add Device Auth</a>
                             <hr>
                             <table id="tb_deviceAuth" class="table about-table " cellspacing="0" width="100%">
                                 <thead>
@@ -129,7 +131,6 @@
                                 <tbody>
                                 </tbody>
                             </table>
-                            <a href="#tabAddAuth" data-toggle="tab" class="btn btn-default" style="margin: 10px 0px 0px 0px"><i class="fa fa-plus"></i> Add Device Auth</a>
                         </div>
                         <div class="tab-pane" id="tabAddAuth">
                             <form id="formAuth" action="＃" method="post" class="form-horizontal row-border">
@@ -158,7 +159,7 @@
                         <div class="tab-pane" id="tabConfig">
                             <h4>Template Router MikroTik Configuration</h4>
                             <hr>
-                            <table id="tb_config" class="table about-table " cellspacing="0" width="100%">
+                            <table id="tb_config" class="table about-table " cellspacing="0" width="100%"  style="font-size:11px">
                                 <thead>
                                     <tr>
                                         <!-- <th>Id</th> -->
@@ -178,13 +179,13 @@
                                 <div class="form-group">
                                     <label class="col-sm-2 control-label">Comment</label>
                                     <div class="col-sm-8">
-                                        <input type="input" name="userAdmin" class="form-control" placeholder='Username'>
+                                        <input type="input" name="comment" class="form-control" placeholder='Comment'>
                                     </div>
                                 </div>
                                 <div class="form-group">
                                     <label class="col-sm-2 control-label">Script</label>
                                     <div class="col-sm-8">
-                                        <input type="input" name="email" class="form-control" placeholder='Email' required>
+                                        <textarea type="input" name="script" class="form-control" placeholder='Input script here..' required></textarea>
                                     </div>
                                 </div>
                             </form>
@@ -318,10 +319,11 @@
 <script src="https://cdn.datatables.net/responsive/2.2.4/js/dataTables.responsive.min.js"></script>
 <script src="https://cdn.datatables.net/responsive/2.2.4/js/responsive.bootstrap.min.js"></script>
 <script src="https://code.highcharts.com/highcharts.js"></script>
-	<script src="https://code.highcharts.com/modules/data.js"></script>
-	<script src="https://code.highcharts.com/modules/exporting.js"></script>
-	<script src="https://code.highcharts.com/modules/export-data.js"></script>
-	<script src="https://code.highcharts.com/modules/accessibility.js"></script>
+<script src="https://code.highcharts.com/modules/data.js"></script>
+<script src="https://code.highcharts.com/modules/exporting.js"></script>
+<script src="https://code.highcharts.com/modules/export-data.js"></script>
+<script src="https://code.highcharts.com/modules/accessibility.js"></script>
+
 <script>
 
     tableLog = $('#tb_simonetlog').DataTable({
@@ -329,7 +331,7 @@
         pageLength : 100,
         lengthChange: false,
         dom: 'Trt<"bottom"ip><"clear">',
-        // order: [[ 2, "desc" ]],
+        order: [[ 0, "desc" ]],
         scrollY: "300px",
         scrollCollapse: true,
         // paging: false,
@@ -358,6 +360,18 @@
     $('#searchLog').keyup(function(){
         tableLog.search($(this).val()).draw() ;
     })
+
+    $('body').on('click','button[data-aksi="allLog"]',function(){
+        tableLog.search('').draw();
+    });
+
+    $('body').on('click','button[data-aksi="main"]',function(){
+        tableLog.search('10.10.10.1').draw();   
+    });
+    
+    $('body').on('click','button[data-aksi="simonet"]',function(){
+        tableLog.search('SIMONETapp').draw();
+    });
 
     $('body').on('click','a[data-aksi="log"]',function(){
         log();
@@ -449,7 +463,7 @@
             {
                 if(data.status) 
                 {
-                    $('#tb_admins').empty();
+                    $('#tb_admins tr td').remove();
                     var trHTML = '';
                     $.each(data.data, function (i, item) {
                     trHTML += '<tr><td>' + item.username + '</td><td>' + item.email + '</td><td>' + item.role + '</td><td>' + item.aksi + '</td></tr>';
@@ -499,7 +513,7 @@
             {
                 if(data.status) 
                 {
-                    $('#tb_config').empty();
+                    $('#tb_config tr td').remove();
                     var trHTML = '';
                     $.each(data.data, function (i, item) {
                             trHTML += '<tr><td>' + item.comment + '</td><td>' + item.script + '</td><td>' + item.aksi + '</td></tr>';
@@ -555,6 +569,8 @@
                 if(data.status) 
                 {
                     getadmins();
+                    $('.tab-container').find('.tab-pane').removeClass('active');
+                    $('.tab-container').find('#tabAdmin').addClass('active');
                 }
                 $('#btnSaveAdmin').text('save'); 
                 $('#btnSaveAdmin').attr('disabled',false); 

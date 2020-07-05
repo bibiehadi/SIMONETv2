@@ -103,6 +103,8 @@ class Dashboard extends CI_Controller {
             <a href='javascript:;' data-toggle='tab' data-aksi='hapusAdmin' data-id='".$r['id']."' style='color : rgb(218,86,80)'><i class='fa fa-trash-o'></i></a>";
             $_data[] = $r;
         }
+        echo "<pre>";
+        print_r($_data);
         echo json_encode(array("status" => TRUE, "data" => $_data));
     }
 

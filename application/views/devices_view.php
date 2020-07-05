@@ -139,7 +139,7 @@
                             <button type="submit" id="btnSave" onClick="save()" class="btn btn-success pull-right" style="margin: 10px 0px 0px 0px">Save</button>
                         </div>
                         <div class="tab-pane" id="DiscoveryDevice">
-                            <table id="tb_discovery" class="table about-table " cellspacing="0" width="100%">
+                            <table id="tb_discovery" class="table about-table " cellspacing="0" width="100%" style="font-size:11px">
                                 <thead>
                                     <tr>
                                         <th>No</th>
@@ -155,7 +155,7 @@
                             </table>
                         </div>
                         <div class="tab-pane" id="UniFiDevice">
-                            <table id="tb_unifi" class="table about-table " cellspacing="0" width="100%">
+                            <table id="tb_unifi" class="table about-table " cellspacing="0" width="100%" style="font-size:11px">
                                 <thead>
                                     <tr>
                                         <th>IP Address</th>

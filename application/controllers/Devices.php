@@ -198,25 +198,46 @@ class Devices extends CI_Controller {
                             <i class="ti ti-check"></i>&nbsp; <strong>Well Done!</strong> Data Device '.$device['identity'].' Berhasil Dirubah
                             <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
                             </div>');
+                        $log = array(
+                            'Message' =>  'Device '.$data['identity'].' changed by '.$this->session->userdata('username'),
+                            'SysLogTag' => 'system,simonet',
+                            'ReceivedAt' => date("Y-m-d H:i:s"),
+                            'DeviceReportedTime' => date("Y-m-d H:i:s"),
+                            'FromHost' => 'SIMONETapp'
+                        );
+                        $this->log_event->insertLogActivity($log);
+                        $this->devices->setDevice($data);
                         echo json_encode(array("status" => TRUE, "identity" => $write));
                     }else{
                         echo json_encode(array("status" => FALSE, "data" => $device));
                     }    
                 }catch(exeption $e){
-                    echo $e;
+                    echo json_encode(array("status" => FALSE, "error" => $e));
                 }
+            }else{
+                $data = array(
+                    'serial_number' => $this->input->post('serial'),
+                    'address' => $this->input->post('address'),
+                    'id_device' => $this->input->post('masterdevice'),
+                    'id_location' => $this->input->post('location')  
+                );
+                $log = array(
+                    'Message' =>  'Device '.$device['identity'].' changed by '.$this->session->userdata('username'),
+                    'SysLogTag' => 'system,simonet',
+                    'ReceivedAt' => date("Y-m-d H:i:s"),
+                    'DeviceReportedTime' => date("Y-m-d H:i:s"),
+                    'FromHost' => 'SIMONETapp'
+                );
+                $this->log_event->insertLogActivity($log);
+                $this->devices->setDevice($data);
+                $this->session->set_flashdata('detail_device', '<div class="alert alert-dismissable alert-success">
+                    <i class="ti ti-check"></i>&nbsp; <strong>Well Done!</strong> Data Device '.$device['identity'].' Berhasil Dirubah
+                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+                    </div>');
+            
+                echo json_encode(array("status" => TRUE));
             }
-            $log = array(
-                'Message' =>  'Device '.$data['identity'].' changed by '.$this->session->userdata('username'),
-                'SysLogTag' => 'system,simonet',
-                'ReceivedAt' => date("Y-m-d H:i:s"),
-                'DeviceReportedTime' => date("Y-m-d H:i:s"),
-                'FromHost' => 'SIMONETapp'
-            );
-            $this->log_event->insertLogActivity($log);
-            echo json_encode(array("status" => TRUE));
-            $this->devices->setDevice($data);
-        }elseif($this->input->post('identity') == null){
+        }else{
             $data = array(
                 'serial_number' => $this->input->post('serial'),
                 'address' => $this->input->post('address'),
@@ -224,7 +245,7 @@ class Devices extends CI_Controller {
                 'id_location' => $this->input->post('location')  
             );
             $log = array(
-                'Message' =>  'Device '.$data['serial_number'].' changed by '.$this->session->userdata('username'),
+                'Message' =>  'Device '.$device['identity'].' changed by '.$this->session->userdata('username'),
                 'SysLogTag' => 'system,simonet',
                 'ReceivedAt' => date("Y-m-d H:i:s"),
                 'DeviceReportedTime' => date("Y-m-d H:i:s"),
@@ -238,12 +259,6 @@ class Devices extends CI_Controller {
                 </div>');
         
             echo json_encode(array("status" => TRUE));
-        }else{
-            echo json_encode(array("status" => False));
-            $this->session->set_flashdata('detail_device', '<div class="alert alert-dismissable alert-danger">
-                <i class="ti ti-check"></i>&nbsp; <strong>Well Done!</strong> Data Device '.$device['identity'].' Gagal Dirubah
-                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
-                </div>');
         }
     }
 

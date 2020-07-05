@@ -55,6 +55,7 @@ class Dashboard_Model extends CI_Model {
     }
 
     function getTemplateConfig(){
+		$this->db->where('id !=', '1');
         if($data = $this->db->get('devices_configuration')){
 			return $data->result_array();
 		}else{

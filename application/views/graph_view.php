@@ -79,10 +79,11 @@ Highcharts.getJSON(
         xAxis: {
             type: 'datetime',
             categories : data.point,
+
             // tickInterval: 60
             
             // labels: {
-            //     data : data.point,
+                // data : Date.parse(data.point),
             // format: '{value:%Y-%m-%d}',
             // rotation: 45,
             // align: 'left'

@@ -14,6 +14,7 @@ class Devices_Model extends CI_Model {
     }
 
     function getDevices(){
+        $this->db->order_by('identity', 'asc');
         if($data = $this->db->get('devices')){
 			return $data->result_array();
 		}else{
@@ -34,6 +35,16 @@ class Devices_Model extends CI_Model {
         $this->db->where($id);
         if($data = $this->db->get('devices')){
 			return $data->row_array();
+		}else{
+			return false;
+		}
+    }
+
+    function getLinks($id){
+        $this->db->select('id');
+        $this->db->where($id);
+        if($data = $this->db->get('devices')){
+			return $data->result_array();
 		}else{
 			return false;
 		}

@@ -44,7 +44,7 @@
 		                        <div class="col-xs-12">
 		                        	<div class="input-group">							
 										<span class="input-group-addon">
-											<i class="ti ti-user"></i>
+											<i class="fa fa-user"></i>
 										</span>
 										<input name="username" type="text" class="form-control" placeholder="Username" data-parsley-minlength="6" placeholder="At least 6 characters" required>
 									</div>
@@ -55,14 +55,14 @@
 		                        <div class="col-xs-12">
 		                        	<div class="input-group">
 										<span class="input-group-addon">
-											<i class="ti ti-key"></i>
+											<i class="fa fa-key"></i>
 										</span>
 										<input name="password" type="password" class="form-control" id="exampleInputPassword1" placeholder="Password">
 									</div>
 		                        </div>
 							</div>
 
-							<div class="form-group mb-n">
+							<!-- <div class="form-group mb-n">
 								<div class="col-xs-12">
 									<a href="extras-forgotpassword.html" class="pull-left">Forgot password?</a>
 									<div class="checkbox-inline icheck pull-right p-n">
@@ -72,7 +72,7 @@
 										</label>
 									</div>
 								</div>
-							</div>
+							</div> -->
 						
 					<!-- </div> -->
 					<!-- <div class="panel-footer"> -->
