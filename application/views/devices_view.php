@@ -9,7 +9,7 @@
                         <div class="row">
                             <div class="col-md-12">
                                 <div class="panel panel-default">
-                                    <? echo $this->session->flashdata('devices') ?>
+                                    <?php echo $this->session->flashdata('devices') ?>
                                     <div class="panel-heading">    
                                         <div class="btn-group" role="group" aria-label="Basic example">
                                             <button type="button" class="btn btn-primary" data-aksi="all">All</button>

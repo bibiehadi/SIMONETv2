@@ -18,15 +18,15 @@ class Devices extends CI_Controller {
         }
         date_default_timezone_set('Asia/Jakarta');
         $this->load->model('Devices_Model','devices');
-        $this->load->model('Mikrotik_model','Mikrotik');
-        $this->load->model('log_model', 'log_event');   
+        $this->load->model('Mikrotik_Model','Mikrotik');
+        $this->load->model('Log_Model', 'log_event');   
     }
     
 
     public function index()
     {
-        // $data['discovery'] = $this->discoveryDevices();
-        // $data['unifiDevices'] = $this->getUnifiDevices();
+        //$data['discovery'] = $this->discoveryDevices();
+        //$data['unifiDevices'] = $this->getUnifiDevices();
         $data['location'] = $this->getLocation();
         $this->load->view('devices_view',$data);
         

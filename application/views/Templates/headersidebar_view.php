@@ -29,8 +29,8 @@
 	<link type="text/css" href="<?php echo base_url('') ?>assets/plugins/progress-skylo/skylo.css" rel="stylesheet">
     
 	<link href="https://cdn.datatables.net/responsive/2.2.4/css/responsive.bootstrap.min.css" rel="stylesheet" type="text/css" />
-	<link rel="stylesheet" href="<?echo base_url('assets/plugins/') ?>next-bower/css/next.min.css">
-	<script type="text/javascript" src="<?echo base_url('assets/plugins/') ?>next-bower/js/next.min.js"></script>
+	<link rel="stylesheet" href="<?php echo base_url('') ?>assets/plugins/next-bower/css/next.min.css">
+	<script type="text/javascript" src="<?php echo base_url('') ?>assets/plugins/next-bower/js/next.min.js"></script>
 	<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/css/select2.min.css" rel="stylesheet" />
 
     </head>
@@ -47,7 +47,7 @@
 				</span>
 			</a>
 		</span>
-		<img src="<? echo base_url('assets/img/logo-STIKI.png') ?>" alt="" style="width: 45px; margin: 5px">
+		<img src="<?php echo base_url('assets/img/logo-STIKI.png') ?>" alt="" style="width: 45px; margin: 5px">
 
 		<!-- <a class="navbar-brand" href=""></a> -->
 		
