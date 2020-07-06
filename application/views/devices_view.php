@@ -27,7 +27,7 @@
                                             </div>
                                         </div>
                                         <div class="btn-group pull-right" role="group" aria-label="Basic example">
-                                            <a class="btn btn-info" id="upgradeUnifi" data-aksi="upgradeUniFi" style="margin:10px 0 0 0px; visibility: hidden;"><i class="fa fa-arrow-circle-up"></i> Upgrade</a>
+                                            <!-- <a class="btn btn-info" id="upgradeUnifi" data-aksi="upgradeUniFi" style="margin:10px 0 0 0px; visibility: hidden;"><i class="fa fa-arrow-circle-up"></i> Upgrade</a> -->
                                             <a class="btn btn-success" data-aksi="add" style="margin:10px 0 0 0px"><i class="fa fa-plus"></i></a>    
                                             <a class="btn btn-success" data-aksi="refresh" style="margin:10px 0 0 0px"><i class="fa fa-refresh"></i></a>    
                                         </div>
@@ -216,28 +216,28 @@
         }
     });
 
-        $('#myInputTextField').keyup(function(){
-            table.search($(this).val()).draw() ;
-        })
+    $('#myInputTextField').keyup(function(){
+        table.search($(this).val()).draw() ;
+    })
 
-    $('body').on('click','button[data-aksi="all"]',function(){
-        table.search('').draw();   
-        $('#upgradeUnifi').css('visibility', 'hidden');
-    });
+    // $('body').on('click','button[data-aksi="all"]',function(){
+    //     table.search('').draw();   
+    //     $('#upgradeUnifi').css('visibility', 'hidden');
+    // });
 
-    $('body').on('click','button[data-aksi="mikrotik"]',function(){
-        table.search('MikroTik').draw();   
-        $('#upgradeUnifi').css('visibility', 'hidden');
-    });
+    // $('body').on('click','button[data-aksi="mikrotik"]',function(){
+    //     table.search('MikroTik').draw();   
+    //     $('#upgradeUnifi').css('visibility', 'hidden');
+    // });
     
-    $('body').on('click','button[data-aksi="unifi"]',function(){
-        table.search('UniFi').draw();
-        $('#upgradeUnifi').css('visibility', 'visible');   
-    });
+    // $('body').on('click','button[data-aksi="unifi"]',function(){
+    //     table.search('UniFi').draw();
+    //     $('#upgradeUnifi').css('visibility', 'visible');   
+    // });
 
-    $('body').on('click','a[data-aksi="upgradeUniFi"]',function(){
-        upgradeUnifis();
-    });
+    // $('body').on('click','a[data-aksi="upgradeUniFi"]',function(){
+    //     upgradeUnifis();
+    // });
 
     $('body').on('click','a[data-aksi="refresh"]',function(){
         syncUnifi();
@@ -328,10 +328,11 @@
         syncIdentity();
     });
 
-    $('table#tb_devices').on('click','tbody tr',function(){
+    $('table#tb_devices').on('dblclick','tbody tr',function(){
         var serial = $(this).find('td:eq(4)').html();
         var url = '<?php echo site_url('devices/detaildevice')?>';
-        var form = $('<form action="' + url + '" method="post" target="_blank">' +
+        // var form = $('<form action="' + url + '" method="post" target="_blank">' +
+        var form = $('<form action="' + url + '" method="post" >' +
         '<input type="hidden" name="serial" value="'+serial+'" />' +
         '</form>');
         $('body').append(form);
@@ -466,7 +467,6 @@
         table3.ajax.reload(null,false);
     }
 </script>
-
 
 </body>
 </html>

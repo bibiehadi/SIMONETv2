@@ -120,6 +120,65 @@
 
                 // console.log(topologyData);	
 
+    (function(nx){
+        nx.define('ExtendedNode', nx.graphic.Topology.Node, {
+            view: function (view) {
+                view.content.push({
+                    // name to retrieve the object
+                    "name": "deviceDownBadge",
+                    // inherit from "Circle" class
+                    "type": "nx.graphic.Circle",
+                    "props": {
+                        // radius
+                        "r": 5,
+                        // background color
+                        "fill": "#ff0000",
+                        // should be invisible by default
+                        "visible": false
+                    }
+                });
+                return view;
+            },
+            methods: {
+
+                // called when the model is about to initialize
+                'setModel': function (model) {
+                    this.inherited(model);
+                    var status = model['_data']['status'];
+                    // draw/not draw the badge based on status
+                    if (status == 'Connected'){
+                        
+                        this._hideDownBadge();
+                    }else{
+                        this._showDownBadge();
+                    }
+                },
+
+                // display the red badge
+                "_showDownBadge": function () {
+                    // view of badge
+                    var badge = this.view("deviceDownBadge");
+
+                    // set properties
+                    badge.sets({
+                        // make visible
+                        "visible": true,
+                        // set X offset
+                        "cx": -5,
+                        // set Y offset
+                        "cy": 5
+                    });
+
+                },
+
+                // make the badge invisible
+                "_hideDownBadge": function () {
+                    this.view("deviceDownBadge").set("visible", false);
+                }
+            }
+        });
+    })(nx);
+
     (function (nx) {
 	nx.define('MyTopology', nx.graphic.Topology, {
 		methods: {
@@ -162,7 +221,9 @@
 					// if true, two nodes can have more than one link
 					'supportMultipleLink': true,
 					// enable scaling
-					"scalable": true
+                    "scalable": true,
+                    // extended node
+					"nodeInstanceClass": "ExtendedNode"
 				});
 			}
 		}
@@ -173,8 +234,8 @@
     // instantiate Topology class
     var topology = new MyTopology();
 
-    topology.registerIcon("rb", "<?php echo base_url('assets/img/rb.png')?>", 40, 48);
-    topology.registerIcon("unifi", "<?php echo base_url('assets/img/unifi.png')?>", 40, 48);
+    topology.registerIcon("rb", "<?php echo base_url('assets/img/rb.png')?>", 40, 40);
+    topology.registerIcon("unifi", "<?php echo base_url('assets/img/unifi.png')?>", 40, 40);
     // load topology data from app/data.js
     topology.data(topologyData);
 

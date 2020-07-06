@@ -103,8 +103,8 @@ class Dashboard extends CI_Controller {
             <a href='javascript:;' data-toggle='tab' data-aksi='hapusAdmin' data-id='".$r['id']."' style='color : rgb(218,86,80)'><i class='fa fa-trash-o'></i></a>";
             $_data[] = $r;
         }
-        echo "<pre>";
-        print_r($_data);
+        // echo "<pre>";
+        // print_r($_data);
         echo json_encode(array("status" => TRUE, "data" => $_data));
     }
 
@@ -117,10 +117,11 @@ class Dashboard extends CI_Controller {
     function setAdmin(){
         // funtion untuk merubah data user profile di mikrotik
         $id = $this->input->post('idAdmin');
+        $pass = $this->input->post('passwordAdmin');
         if($this->input->post('passwordAdmin')!=''){
             $data = array(
                 'username' => $this->input->post('userAdmin'),
-                'password' => $this->input->post('passwordAdmin'),
+                'password' => md5($pass),
                 'email' => $this->input->post('emailAdmin'),
                 'role' => $this->input->post('roleAdmin'),
             );

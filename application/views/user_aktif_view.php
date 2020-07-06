@@ -15,6 +15,14 @@
                                 <div class="panel panel-default">
                                     <div class="panel-heading">
                                         <h2>Data User Active</h2>
+                                        <div class="col-md-2 pull-right" style="margin:10px 0 0 0">
+                                            <div class="input-group">
+                                                <span class="input-group-addon">
+                                                    <i class="fa fa-search"></i>
+                                                </span>
+                                                <input class="form-control" placeholder='Search..' type="text" id="searchUserActiveField">
+                                            </div>
+                                        </div>
                                         <a class="btn btn-info pull-right" data-aksi="reload" href="javascript:;" style="margin : 10px"><i class="fa fa-refresh"></i></a>
                                     </div>
                                     <div class="panel-body ">
@@ -61,6 +69,7 @@
         "sLengthMenu": " _MENU_ ",
         "sSearch": "Search..."
         },
+        dom: 'Trt<"bottom"ip><"clear">',
         ajax : {
             "url" : "<?php echo site_url('hotspot/useractiveJSON')?>",
             "type" : "POST"
@@ -78,6 +87,11 @@
             {"data" : "aksi"}
         ],
     });
+
+    $('#searchUserActiveField').keyup(function(){
+        table.search($(this).val()).draw() ;
+    })
+
     $('body').on('click','a[data-aksi="reload"]',function(){
         reload_table();
     });
@@ -85,6 +99,8 @@
         var id= $(this).attr('data-id');
         deleteUser(id);
     });
+    
+
     
 
     function deleteUser(id){

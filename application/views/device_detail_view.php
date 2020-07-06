@@ -56,9 +56,9 @@
                                         <div class="panel-heading">
                                             <div class="row">
                                                 <div class="col-md-6" >
-                                                    <h2>Detail Device</h2>
+                                                    <!-- <h2>Detail Device</h2> -->
                                                     <form class="form-inline" action="<?php echo site_url('devices/detaildevice');?>" method="post" id="deviceForm" style="">
-                                                        <select name="serial" id="device" class="custom-select custom-select-sm" style="width: 120px;color: #03a9f4; border: 0px; outline: 0px; background: #fafafa; margin-left :10px">
+                                                        <select name="serial" id="device" class="select-device" style="width: 200px;color: #03a9f4; border: 0px; outline: 0px; background: #fafafa; margin-left :10px">
                                                             <?php foreach ($list_devices as $row) {
                                                                 if($row['serial_number'] == $serial_number){?>
                                                                     <option selected value="<?php echo $row['serial_number']; ?> "><?php echo $row['identity'];?></option>
@@ -370,6 +370,10 @@
 
 
 <script type="text/javascript">
+
+    $(document).ready(function(){
+        $('.select-device').select2();
+    })
     if('<? echo $platform?>' == 'MikroTik'){
         getResource();
     }

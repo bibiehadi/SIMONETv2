@@ -31,6 +31,7 @@
 	<link href="https://cdn.datatables.net/responsive/2.2.4/css/responsive.bootstrap.min.css" rel="stylesheet" type="text/css" />
 	<link rel="stylesheet" href="<?echo base_url('assets/plugins/') ?>next-bower/css/next.min.css">
 	<script type="text/javascript" src="<?echo base_url('assets/plugins/') ?>next-bower/js/next.min.js"></script>
+	<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/css/select2.min.css" rel="stylesheet" />
 
     </head>
 
@@ -131,7 +132,7 @@
 			<ul class="dropdown-menu userinfo arrow">
 				<li><a href="#/" data-aksi="settings"><i class="fa fa-cog"></i><span>Settings</span></a></li>
 				<li class="divider"></li>
-				<li><a href="<?php echo site_url('login/logout') ?>"><i class="fa fa-shift-right"></i><span>Sign Out</span></a></li>
+				<li><a href="<?php echo site_url('login/logout') ?>"><i class="fa fa-sign-out"></i><span>Sign Out</span></a></li>
 			</ul>
 		</li>
 
@@ -162,6 +163,7 @@
 									<li class="nav-separator"><span>Explore</span></li>
 									<li><a href="<?php echo site_url('dashboard'); ?>"><i class="fa fa-tachometer"></i><span>Dashboard</span></a></li>	
 									<li><a href="<?php echo site_url('devices'); ?>"><i class="fa fa-hdd-o"></i><span>Devices</span></a></li>	
+									<li><a href="<?php echo site_url('topology'); ?>"><i class="fa fa-map-o"></i><span>Topology</span></a></li>	
 									<li><a href="#"><i class="fa fa-area-chart" style="bold"></i><span>Statistic</span></a></li>	
 									<li><a href="javascript:;"><i class="fa fa-users"></i><span>Hotspot</span></a>
 										<ul class="acc-menu">

@@ -15,8 +15,16 @@
                                 <div class="panel panel-default">
                                     <div class="panel-heading">
                                         <h2>Data User Hotspot</h2>
-                                        <a class="btn btn-success pull-right" data-aksi="add" style="margin : 10px 10px 0px 10px"><i class="fa fa-plus"></i></a>
-                                        <a class="btn btn-info pull-right" data-aksi="sync" href="javascript:;" style="margin : 10px 10px"><i class="fa fa-refresh"></i> Refresh</a>
+                                        <div class="col-md-2 pull-right" style="margin:10px 0 0 0">
+                                            <div class="input-group">
+                                                <span class="input-group-addon">
+                                                    <i class="fa fa-search"></i>
+                                                </span>
+                                                <input class="form-control" placeholder='Search..' type="text" id="searchUserField">
+                                            </div>
+                                        </div>
+                                        <a class="btn btn-success pull-right" data-aksi="add" style="margin : 10px 0px 0px 10px"><i class="fa fa-plus"></i></a>
+                                        <a class="btn btn-info pull-right" data-aksi="sync" href="javascript:;" style="margin : 10px 0px"><i class="fa fa-refresh"></i> Refresh</a>
                                     </div>
                                     <div class="panel-body">
                                         <table id="tb_hotspot" class="table table-striped table-bordered" cellspacing="0" width="100%">
@@ -108,6 +116,7 @@
         "sLengthMenu": " _MENU_ ",
         "sSearch": "Search..."
         },
+        dom: 'Trt<"bottom"ip><"clear">',
         ajax : {
             "url" : "<?php echo site_url('hotspot/userhotspotJSON')?>",
             "type" : "POST"
@@ -124,6 +133,11 @@
             {"data" : "aksi"}
         ],
     });
+
+        
+    $('#searchUserField').keyup(function(){
+        table.search($(this).val()).draw() ;
+    })
 
     $('body').on('click','a[data-aksi="add"]',function(){
         addUser();
