@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>Avenxo Admin Theme</title>
+    <title><?php echo $this->config->item('program'); ?></title>
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no">
     <meta name="apple-mobile-web-app-capable" content="yes">
@@ -33,6 +33,8 @@
 	<script type="text/javascript" src="<?php echo base_url('') ?>assets/plugins/next-bower/js/next.min.js"></script>
 	<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/css/select2.min.css" rel="stylesheet" />
 
+	<link rel="shortcut icon" href="<?php echo base_url(); ?>assets/img/favicon.ico">
+
     </head>
 
     <body class="animated-content sidebar-collapsed">
@@ -46,10 +48,11 @@
 					<i class="fa fa-bars"></i>
 				</span>
 			</a>
-		</span>
-		<img src="<?php echo base_url('assets/img/logo-STIKI.png') ?>" alt="" style="width: 45px; margin: 5px">
-
-		<!-- <a class="navbar-brand" href=""></a> -->
+		</span>		
+		<a class="navbar-brand" href="#">
+            <span><img src="<?php echo base_url('assets/img/logo-infra.png'); ?>"/></span>
+            Infranet
+        </a>
 		
 	</div><!-- logo-area -->
 
@@ -163,8 +166,8 @@
 									<li class="nav-separator"><span>Explore</span></li>
 									<li><a href="<?php echo site_url('dashboard'); ?>"><i class="fa fa-tachometer"></i><span>Dashboard</span></a></li>	
 									<li><a href="<?php echo site_url('devices'); ?>"><i class="fa fa-hdd-o"></i><span>Devices</span></a></li>	
-									<li><a href="<?php echo site_url('topology'); ?>"><i class="fa fa-map-o"></i><span>Topology</span></a></li>	
-									<li><a href="#"><i class="fa fa-area-chart" style="bold"></i><span>Statistic</span></a></li>	
+									<li><a href="<?php echo site_url('topology'); ?>"><i class="fa fa-laptop"></i><span>Topology</span></a></li>	
+									<li><a href="#"><i class="fa fa-bar-chart" style="bold"></i><span>Statistic</span></a></li>	
 									<li><a href="javascript:;"><i class="fa fa-users"></i><span>Hotspot</span></a>
 										<ul class="acc-menu">
 												<li><a href="<?php echo site_url('hotspot/userhotspot'); ?>">User Hotspot</a></li>

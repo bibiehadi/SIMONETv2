@@ -29,15 +29,14 @@
         
         
 <div class="container" id="login-form">
-	<!-- <a href="index.html" class="login-logo"></a> -->
-		<div class="row" style="margin : 200px auto 20px auto">
+	<a href="<?php echo base_url(); ?>" class="login-logo"><img src="<?php echo base_url(); ?>assets/img/logo-infra.png"></a>
+		<div class="row">
 			<div class="col-md-4 col-md-offset-4">
 				<div class="panel panel-default">
-					<!-- <div class="panel-heading">
-						<h2>Login Form</h2>
-					</div> -->
+					<div class="panel-heading">
+						<h2>Login Infranet</h2>
+					</div> 
 					<div class="panel-body">
-					<a href="" ><img src="<?php echo base_url('');?>assets/img/logo-stiki.png" style="margin: 10px auto 20px auto; display: block; width: 70px"></a>
 					<?php echo $this->session->flashdata('login') ?>
 						<form action="<?php echo site_url('login/auth');?>" method="post" class="form-horizontal" id="validate-form" >
 							<div class="form-group mb-md">
@@ -77,7 +76,7 @@
 					<!-- </div> -->
 					<!-- <div class="panel-footer"> -->
 						<div class="clearfix">
-							<input type="submit" class="btn btn-primary pull-right" value="Login" style="width : 100%">
+							<input type="submit" class="btn btn-primary pull-right" value="Login">
 						</div>
 						</form>
 					</div>

@@ -220,20 +220,20 @@
         table.search($(this).val()).draw() ;
     })
 
-    // $('body').on('click','button[data-aksi="all"]',function(){
-    //     table.search('').draw();   
+     $('body').on('click','button[data-aksi="all"]',function(){
+         table.search('').draw();   
     //     $('#upgradeUnifi').css('visibility', 'hidden');
-    // });
+     });
 
-    // $('body').on('click','button[data-aksi="mikrotik"]',function(){
-    //     table.search('MikroTik').draw();   
+     $('body').on('click','button[data-aksi="mikrotik"]',function(){
+         table.search('MikroTik').draw();   
     //     $('#upgradeUnifi').css('visibility', 'hidden');
-    // });
+     });
     
-    // $('body').on('click','button[data-aksi="unifi"]',function(){
-    //     table.search('UniFi').draw();
+     $('body').on('click','button[data-aksi="unifi"]',function(){
+         table.search('UniFi').draw();
     //     $('#upgradeUnifi').css('visibility', 'visible');   
-    // });
+     });
 
     // $('body').on('click','a[data-aksi="upgradeUniFi"]',function(){
     //     upgradeUnifis();
