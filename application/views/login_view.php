@@ -2,7 +2,7 @@
 <html lang="en" class="coming-soon">
 <head>
     <meta charset="utf-8">
-    <title>Login Form</title>
+    <title><?php echo $this->config->item('program'); ?></title>
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no">
     <meta name="apple-mobile-web-app-capable" content="yes">
@@ -22,7 +22,7 @@
     <![endif]-->
 
     <!-- The following CSS are included as plugins and can be removed if unused-->
-    
+    <link rel="shortcut icon" href="<?php echo base_url(); ?>assets/img/favicon.ico">
     </head>
 
     <body class="focused-form animated-content">
@@ -34,7 +34,7 @@
 			<div class="col-md-4 col-md-offset-4">
 				<div class="panel panel-default">
 					<div class="panel-heading">
-						<h2>Login Infranet</h2>
+						<h2>Login Infranet</h2>						
 					</div> 
 					<div class="panel-body">
 					<?php echo $this->session->flashdata('login') ?>
@@ -43,7 +43,7 @@
 		                        <div class="col-xs-12">
 		                        	<div class="input-group">							
 										<span class="input-group-addon">
-											<i class="fa fa-user"></i>
+											<i class="ti ti-user"></i>
 										</span>
 										<input name="username" type="text" class="form-control" placeholder="Username" data-parsley-minlength="6" placeholder="At least 6 characters" required>
 									</div>
@@ -54,7 +54,7 @@
 		                        <div class="col-xs-12">
 		                        	<div class="input-group">
 										<span class="input-group-addon">
-											<i class="fa fa-key"></i>
+											<i class="ti ti-key"></i>
 										</span>
 										<input name="password" type="password" class="form-control" id="exampleInputPassword1" placeholder="Password">
 									</div>
