@@ -1,182 +1,91 @@
 <?php $this->load->view('Templates/headersidebar_view'); ?>
-   </div>
-                </div>
-                <div class="static-content-wrapper">
-                    <div class="static-content">
-                        <div class="page-content">
-                            <div class="container-fluid">
-
-<div class="row" style = "margin-top: 20px">
-	<div class="col-sm-3">
-		<div class="panel panel-profile" style="padding:0px">
-			<div class="panel-body" style="padding:0px">
-			<div class="name">Main Router</div>
-			<div class="info">CCR - 1036</div>
-			<div class="row" style="text-align : left; margin-top: 5px">  
-				<div class="info">CPU</div>
-				<div class="progress" style="height: 20px">
-					<div id="cpu" class="progress-bar"></div>
-				</div>
-				<div class="info">Memory</div>
-				<div class="progress" style="height: 20px">
-					<div id="mem" class="progress-bar"></div>
-				</div>
-				<div class="col-md-6">
-					<div class="info">CPU Temp : </div> 
-					<p id="volt"></p>
-				</div>
-				<div class="col-md-6">
-					<div class="info">Temperature : </div> 
-					<p id="temp"></p>
-				</div>
-			</div>
-			</div>
-		</div><!-- panel -->
-	</div><!-- col-sm-3 -->
-	<div class="col-sm-9">
-		<div class="tab-content">
-			<div class="tab-pane active" id="tab-about">
-				<div class="panel panel-default">
-					<div class="panel-body">
-						<div class="about-area">
-							<!-- <h4>Network :</h4> -->
-							<div class="col-sm-3">
-								<div style="text-align:center">
-									<img src="<?php echo base_url('assets/img/rb.png')?>" class="img-circle" style="width : 120px; ">
-									<h4 style="color: black;">Routerboard</h4>
-									<h3 id="totalRouter">.../...</h3>
-									<h4>Unit</h4>
-								</div>
-							</div>
-							<div class="col-sm-3">
-								<div style="text-align:center">
-									<img src="<?php echo base_url('assets/img/unifi.png')?>" class="img-circle" style="width : 120px; ">
-									<h4 style="color: black;">UniFi</h4>
-									<h3 id="totalAP">.../...</h3>
-									<h4>Unit</h4>
-								</div>
-							</div>
-							<div class="col-sm-3">
-								<div style="text-align:center">
-									<img src="<?php echo base_url('assets/img/clients.png')?>" class="img" style="width : 120px; ">
-									<h4 style="color: black;">Users Connect</h4>
-									<h3 id="totalConnect">.../...</h3>
-									<h4>Device</h4>
-								</div>
-							</div>
-							<div class="col-sm-3">
-								<div style="text-align:center">
-									<img src="<?php echo base_url('assets/img/users.png')?>" class="img" style="width : 120px; ">
-									<h4 style="color: black;">User Login</h4>
-									<h3 id="totalLogin">.../...</h3>
-									<h4>User</h4>
-								</div>
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>
-		</div><!-- .tab-content -->
-	</div><!-- col-sm-8 -->
 </div>
-
-<div data-widget-group="group1">
-	<div class="row">
-		<div class="col-md-6">
-			<div class="panel panel-bluegray" data-widget='{"id" : "wiget9", "draggable": "false"}'>
-				<div class="panel-heading">
-					<h2>Indosat</h2>
-					<div class="panel-ctrls button-icon-bg" 
-						data-actions-container="" 
-						data-action-collapse='{"target": ".panel-body"}'
-						data-action-colorpicker=''
-						data-action-refresh-demo='{"type": "circular"}'
-						>
-					</div>
-				</div>
-				<div class="panel-editbox" data-widget-controls=""></div>
-				<div class="panel-body">
-					<div class="mychart" id="chart1" style="height: 272px;" class="mt-sm mb-sm" data-interface="Indosat"></div>
-				</div>
-			</div>
-		</div>
-
-		<div class="col-md-6">
-			<div class="panel panel-bluegray" data-widget='{"draggable": "false"}'>
-				<div class="panel-heading">
-					<h2>MyRep BPro 100</h2>
-					<div class="panel-ctrls button-icon-bg" 
-						data-actions-container="" 
-						data-action-collapse='{"target": ".panel-body"}'
-						data-action-colorpicker=''
-						data-action-refresh-demo='{"type": "circular"}'
-						>
-					</div>
-				</div>
-				<div class="panel-body">
-					<div class="mychart" id="chart2" style="height: 272px;" class="mt-sm mb-sm" data-interface="BPro100"></div>
-				</div>
-			</div>
-		</div>
-
-	</div>
-	<div class="row">
-		<div class="col-md-6">
-			<div class="panel panel-bluegray" data-widget='{"id" : "wiget9", "draggable": "false"}'>
-				<div class="panel-heading">
-					<h2>MyRep B300</h2>
-					<div class="panel-ctrls button-icon-bg" 
-						data-actions-container="" 
-						data-action-collapse='{"target": ".panel-body"}'
-						data-action-colorpicker=''
-						data-action-refresh-demo='{"type": "circular"}'
-						>
-					</div>
-				</div>
-				<div class="panel-editbox" data-widget-controls=""></div>
-				<div class="panel-body">
-					<div class="mychart" id="chart3" style="height: 272px;" class="mt-sm mb-sm" data-interface="B300"></div>
-				</div>
-			</div>
-		</div>
-
-		<div class="col-md-6">
-			<div class="panel panel-bluegray" data-widget='{"draggable": "false"}'>
-				<div class="panel-heading">
-					<h2>MyRep B100</h2>
-					<div class="panel-ctrls button-icon-bg" 
-						data-actions-container="" 
-						data-action-collapse='{"target": ".panel-body"}'
-						data-action-colorpicker=''
-						data-action-refresh-demo='{"type": "circular"}'
-						>
-					</div>
-				</div>
-				<div class="panel-body">
-					<div class="mychart" id="chart4" style="height: 272px;" class="mt-sm mb-sm" data-interface="B100"></div>
-				</div>
-			</div>
-		</div>
-
-	</div>
-
-</div>
-
-                            </div> <!-- .container-fluid -->
-                        </div> <!-- #page-content -->
-                    </div>
-                    <footer role="contentinfo">
-    <div class="clearfix">
-        <ul class="list-unstyled list-inline pull-left">
-            <li><h6 style="margin: 0;">&copy; 2015 Avenxo</h6></li>
-        </ul>
-        <button class="pull-right btn btn-link btn-xs hidden-print" id="back-to-top"><i class="ti ti-arrow-up"></i></button>
     </div>
-</footer>
-    </body>
-    <?php $this->load->view('Templates/footer_view'); ?>
-<script>
-	var charts = {};
+    <div class="static-content-wrapper">
+        <div class="static-content">
+            <div class="page-content">
+                <div class="container-fluid" style="margin-top: 10px">
+                    <!-- <div data-widget-group="group1"> -->
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="panel panel-default">
+                                    <div class="panel-heading">    
+                                        <div class="btn-group" role="group" aria-label="Basic example">
+                                            <button type="button" class="btn btn-primary" data-aksi="all">All</button>
+                                            <button type="button" class="btn btn-primary" data-aksi="mikrotik">MikroTik</button>
+                                            <button type="button" class="btn btn-primary" data-aksi="unifi">UniFi</button>
+                                        </div>
+                                        <div class="btn-group pull-right" id="tools">
+                                        </div>
+                                        <div class="col-md-2 pull-right" style="margin:10px 0 0 0">
+                                            <div class="input-group">
+                                                <span class="input-group-addon">
+                                                    <i class="fa fa-search"></i>
+                                                </span>
+                                                <input class="form-control" placeholder='Search..' type="text" id="myInputTextField">
+                                            </div>
+                                        </div>
+                                        <div class="btn-group pull-right" role="group" aria-label="Basic example">
+                                            <!-- <a class="btn btn-info" id="upgradeUnifi" data-aksi="upgradeUniFi" style="margin:10px 0 0 0px; visibility: hidden;"><i class="fa fa-arrow-circle-up"></i> Upgrade</a> -->
+                                            <a class="btn btn-success" data-aksi="add" style="margin:10px 0 0 0px"><i class="fa fa-plus"></i></a>    
+                                            <a class="btn btn-success" data-aksi="refresh" style="margin:10px 0 0 0px"><i class="fa fa-refresh"></i></a>    
+                                        </div>
+                                    </div>
+                                    <div class="panel-body">
+                                        <div class="row">
+                                            <div class="panel panel-bluegray" data-widget='{"id" : "wiget9", "draggable": "false"}'>
+                                                <h5>Resource</h5>
+                                                <div class="mychart" id="chartResource" style="height: 200px;" class="mt-sm mb-sm" data-interface="Resource"></div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="panel panel-bluegray" data-widget='{"id" : "wiget9", "draggable": "false"}'>
+                                                <h5>Indosat</h5>
+                                                <div class="mychart" id="chart1" style="height: 200px;" class="mt-sm mb-sm" data-interface="Indosat"></div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="panel panel-bluegray" data-widget='{"id" : "wiget9", "draggable": "false"}'>
+                                                <h5>MyRepublic Pro 100</h5>
+                                                <div class="mychart" id="chart2" style="height: 200px;" class="mt-sm mb-sm" data-interface="BPro100"></div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="panel panel-bluegray" data-widget='{"id" : "wiget9", "draggable": "false"}'>
+                                                <h5>MyRepublic 300</h5>
+                                                <div class="mychart" id="chart3" style="height: 200px;" class="mt-sm mb-sm" data-interface="B300"></div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="panel panel-bluegray" data-widget='{"id" : "wiget9", "draggable": "false"}'>
+                                                <h5>MyRepublic 100</h5>
+                                                <div class="mychart" id="chart4" style="height: 200px;" class="mt-sm mb-sm" data-interface="B100"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    <!-- </div> -->
+                </div> 
+                        <!-- </div>  -->
+                    <!-- </div> -->
+                <!-- <footer role="contentinfo">
+                    <div class="clearfix">
+                        <ul class="list-unstyled list-inline pull-left">
+                            <li><h6 style="margin: 0;">&copy; 2015 Avenxo</h6></li>
+                        </ul>
+                        <button class="pull-right btn btn-link btn-xs hidden-print" id="back-to-top"><i class="ti ti-arrow-up"></i></button>
+                    </div>
+                </footer> -->
+
+
+
+<?php $this->load->view('Templates/footer_view'); ?>
+
+
+<script type="text/javascript">
+var charts = {};
 	var chart;
 	$(document).ready(function() {
 		$('.mychart').each(function(){
@@ -184,14 +93,14 @@
 		})
 		
 		$('.highcharts-credits').hide();
-		getResource();
-		getTotal();
+		// getResource();
+		// getTotal();
 	});
 
 	function requestData(iface, id) 
 	{
 		$.ajax({
-			url: '<?php echo site_url("Dashboard/interface");?>',     						
+			url: '<?php echo site_url("Bandwidth/lineGraph");?>',     						
 			type: "POST",
 			dataType: "JSON",
 			data: {iface:iface} ,
@@ -368,5 +277,7 @@
 
         setTimeout(function(){ getTotal(); }, 5000);
     }
-	</script>
+</script>
+
+</body>
 </html>

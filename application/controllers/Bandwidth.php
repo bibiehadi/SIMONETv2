@@ -10,7 +10,7 @@ class Bandwidth extends CI_Controller {
     }
 
     public function index(){
-        $this->load->view('graph_view');
+        $this->load->view('statistic_view');
     }
 
     public function lineGraph()
@@ -18,8 +18,8 @@ class Bandwidth extends CI_Controller {
         // echo 'Default Timezone: ' . date('d-m-Y H:i:s') . '</br>';
         date_default_timezone_set('Asia/Jakarta');
         // echo 'Indonesian Timezone: ' . date('d-m-Y H:i:s');
-        $interface = "BPro100";
-        $first_date = "2020-06-20";
+        $interface = $this->input->post('iface');
+        $first_date = "2020-07-01";
         $last_date = date("Y-m-d H:i:s");
         $graphs = $this->bandwidth->get_data(array('interface' => $interface, 'first_date' => $first_date, 'last_date' => $last_date));
         // echo '<pre>';

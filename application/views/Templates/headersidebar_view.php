@@ -49,7 +49,7 @@
 				</span>
 			</a>
 		</span>		
-		<a class="navbar-brand" href="#">
+		<a class="navbar-brand" href="<?php echo site_url();?>">
             <span><img src="<?php echo base_url('assets/img/logo-infra.png'); ?>"/></span>
             Infranet
         </a>
@@ -167,7 +167,7 @@
 									<li><a href="<?php echo site_url('dashboard'); ?>"><i class="fa fa-tachometer"></i><span>Dashboard</span></a></li>	
 									<li><a href="<?php echo site_url('devices'); ?>"><i class="fa fa-hdd-o"></i><span>Devices</span></a></li>	
 									<li><a href="<?php echo site_url('topology'); ?>"><i class="fa fa-laptop"></i><span>Topology</span></a></li>	
-									<li><a href="#"><i class="fa fa-bar-chart" style="bold"></i><span>Statistic</span></a></li>	
+									<li><a href="<?php echo site_url('bandwidth'); ?>"><i class="fa fa-bar-chart" style="bold"></i><span>Statistic</span></a></li>	
 									<li><a href="javascript:;"><i class="fa fa-users"></i><span>Hotspot</span></a>
 										<ul class="acc-menu">
 												<li><a href="<?php echo site_url('hotspot/userhotspot'); ?>">User Hotspot</a></li>
