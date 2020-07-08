@@ -99,7 +99,7 @@
 									<li><a href="<?php echo site_url('dashboard'); ?>"><i class="ti ti-home"></i><span>Dashboard</span></a></li>	
 									<li><a href="<?php echo site_url('devices'); ?>"><i class="ti ti-harddrive"></i><span>Devices</span></a></li>	
 									<li><a href="<?php echo site_url('topology'); ?>"><i class="ti ti-map"></i><span>Topology</span></a></li>	
-									<li><a href="#"><i class="ti ti-stats-up" style="bold"></i><span>Statistic</span></a></li>	
+									<li><a href="<?php echo site_url('statistic'); ?>"><i class="ti ti-stats-up" style="bold"></i><span>Statistic</span></a></li>	
 									<li><a href="javascript:;"><i class="ti ti-rss"></i><span>Hotspot</span></a>
 										<ul class="acc-menu">
 												<li><a href="<?php echo site_url('hotspot/userhotspot'); ?>">User Hotspot</a></li>

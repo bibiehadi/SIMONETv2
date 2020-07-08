@@ -11,7 +11,7 @@ class Dashboard extends CI_Controller {
         }
         $this->load->model('Dashboard_Model', 'dashboard');
         
-        $this->load->model('Bandwidth_Model', 'bandwidth');
+        $this->load->model('Statistic_Model', 'statistic');
         $this->load->model('Hotspot_Model', 'hotspot');
         $this->load->model('Devices_Model', 'devices');
         
@@ -28,7 +28,7 @@ class Dashboard extends CI_Controller {
     {
         $ether = $this->input->post('iface');
         date_default_timezone_set('Asia/Jakarta');
-        $graphs = $this->bandwidth->getTrafficDashboard($ether);
+        $graphs = $this->statistic->getTrafficDashboard($ether);
         $row = array (
             'tx' => array(), 
 			'rx' => array(), 

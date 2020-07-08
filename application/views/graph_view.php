@@ -54,7 +54,7 @@
 
 <script>
 Highcharts.getJSON(
-    '<? echo site_url('bandwidth/lineGraph')?>',
+    '<? echo site_url('statistic/lineGraphResource')?>',
         function (data) {  
             console.log(data);
         Highcharts.chart('container', {
@@ -65,20 +65,24 @@ Highcharts.getJSON(
         title: {
             text: 'Bandwidth'
         },
-        legend: {
-            layout: 'vertical',
-            align: 'left',
-            verticalAlign: 'top',
-            x: 100,
-            y: 70,
-            floating: true,
-            // borderWidth: 1,
-            backgroundColor:
-                Highcharts.defaultOptions.legend.backgroundColor || '#FFFFFF'
-        },
+        // legend: {
+        //     layout: 'vertical',
+        //     align: 'left',
+        //     verticalAlign: 'top',
+        //     x: 100,
+        //     y: 70,
+        //     floating: true,
+        //     // borderWidth: 1,
+        //     backgroundColor:
+        //         Highcharts.defaultOptions.legend.backgroundColor || '#FFFFFF'
+        // },
         xAxis: {
             type: 'datetime',
             categories : data.point,
+            tickmarkPlacement: 'on',
+            title: {
+                enabled: false
+            }
 
             // tickInterval: 60
             
@@ -93,18 +97,19 @@ Highcharts.getJSON(
             // title: {
             //     text: 'Y-Axis'
             // }
-            minPadding: 0.2,
-			maxPadding: 0.2,
-			title: {text: null},
-			labels: {
-			  formatter: function () {      
-				var bytes = this.value;                          
-				var sizes = ['b/s', 'kb/s', 'Mb/s', 'Gb/s', 'Tb/s'];
-				if (bytes == 0) return '0 bps';
-				var i = parseInt(Math.floor(Math.log(bytes) / Math.log(1024)));
-				return parseFloat((bytes / Math.pow(1024, i)).toFixed(2)) + ' ' + sizes[i];                    
-			  },
-			},    
+            // minPadding: 0.2,
+			// maxPadding: 0.2,
+			// title: {text: null},
+            format: '{value}%'
+			// labels: {
+			//   formatter: function () {      
+			// 	var bytes = this.value;                          
+			// 	var sizes = ['b/s', 'kb/s', 'Mb/s', 'Gb/s', 'Tb/s'];
+			// 	if (bytes == 0) return '0 bps';
+			// 	var i = parseInt(Math.floor(Math.log(bytes) / Math.log(1024)));
+			// 	return parseFloat((bytes / Math.pow(1024, i)).toFixed(2)) + ' ' + sizes[i];                    
+			//   },
+			// },    
         },
         plotOptions: {
             area: {
@@ -128,11 +133,11 @@ Highcharts.getJSON(
             enabled: true
         },
         series: [{
-            name: 'Tx',
-            data: data.tx
+            name: 'CPU',
+            data: data.cpu
         }, {
-            name: 'Rx',
-            data: data.rx
+            name: 'Memory',
+            data: data.memory
         }]
     });
 })

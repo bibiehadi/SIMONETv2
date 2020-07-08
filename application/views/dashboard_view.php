@@ -347,13 +347,13 @@
 					if(data.data['router']< data.data['allrouter']){
 						$('#totalRouter').css("color", "red").text(data.data['router']+'/'+data.data['allrouter']);
 					}else{
-						$('#totalRouter').text(data.data['allrouter']);	
+						$('#totalRouter').css("color", "#0386d2").text(data.data['allrouter']);	
 					}
                     
 					if(data.data['ap']< data.data['allap']){
 						$('#totalAP').css("color", "red").text(data.data['ap']+'/'+data.data['allap']);
 					}else{
-						$('#totalAP').text(data.data['allap']);	
+						$('#totalAP').css("color", "#0386d2").text(data.data['allap']);	
 					}
                     $('#totalConnect').text(data.data['connect']);
                     $('#totalLogin').text(data.data['login']);
