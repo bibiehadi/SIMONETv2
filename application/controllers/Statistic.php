@@ -20,8 +20,8 @@ class Statistic extends CI_Controller {
         date_default_timezone_set('Asia/Jakarta');
         // echo 'Indonesian Timezone: ' . date('d-m-Y H:i:s');
         $interface = $this->input->post('iface');
-        $first_date = "2020-06-20 00:00:00";
-        $last_date = date("Y-m-d H:i:s");
+        $first_date = $this->input->post('start');
+        $last_date = $this->input->post('end');
         $graphs = $this->statistic->getDataInterface(array('interface' => $interface, 'first_date' => $first_date, 'last_date' => $last_date));
         // echo '<pre>';
         // print_r($graph);
@@ -50,8 +50,10 @@ class Statistic extends CI_Controller {
     public function lineGraphResource()
     {
         date_default_timezone_set('Asia/Jakarta');
-        $first_date = "2020-06-20 00:00:00";
+        $first_date = "2020-07-08 00:00:00";
         $last_date = date("Y-m-d H:i:s");
+        $first_date = $this->input->post('start');
+        $last_date = $this->input->post('end');
         $graphs = $this->statistic->getDataResource(array('first_date' => $first_date, 'last_date' => $last_date));
         // echo '<pre>';
         // print_r($graph);
@@ -62,8 +64,8 @@ class Statistic extends CI_Controller {
         );
         foreach($graphs as $graph){
             $time = date('Y-m-d H:i:s', strtotime($graph->time));
-            $row['cpu'][] = [strtotime($graph->time)*1000,round($graph->cpu)];
-			$row['memory'][] = [strtotime($graph->time)*1000,(round($graph->memory)/8455716864)*100];
+            $row['cpu'][] = [strtotime($graph->time)*1000,round($graph->cpu,2)];
+			$row['memory'][] = [strtotime($graph->time)*1000,round(($graph->memory/8455716864)*100,2)];
             // $row['point'][] = date('H:i:s', strtotime($graph->time));
             // if(date('H:i:s', strtotime($graph->time))=='00:00:00'){
             

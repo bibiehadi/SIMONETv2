@@ -323,8 +323,12 @@
 <script src="https://code.highcharts.com/modules/exporting.js"></script>
 <script src="https://code.highcharts.com/modules/export-data.js"></script>
 <script src="https://code.highcharts.com/modules/accessibility.js"></script>
+<script type="text/javascript" src="<?php echo base_url('') ?>assets/plugins/form-daterangepicker/moment.min.js"></script>              			<!-- Moment.js for Date Range Picker -->
+<script type="text/javascript" src="<?php echo base_url('') ?>assets/plugins/form-daterangepicker/daterangepicker.js"></script>     				<!-- Date Range Picker -->
+
 <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/js/select2.min.js"></script>
 <script>
+   
 
     tableLog = $('#tb_simonetlog').DataTable({
         responsive : true,

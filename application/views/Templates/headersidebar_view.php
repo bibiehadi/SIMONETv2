@@ -22,7 +22,7 @@
         <script type="text/javascript" src="assets/js/placeholder.min.js"></script>
     <![endif]-->
     <!-- The following CSS are included as plugins and can be removed if unused-->
-    
+    <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.18.1/moment.min.js"></script> -->
 	<link type="text/css" href="<?php echo base_url('') ?>assets/plugins/switchery/switchery.css" rel="stylesheet">   							<!-- Switchery -->
 	<link rel="stylesheet" href="<?php echo base_url('') ?>assets/plugins/datatables/dataTables.bootstrap.css">
 	<link rel="stylesheet" href="<?php echo base_url('') ?>assets/plugins/datatables/dataTables.css">
@@ -32,6 +32,7 @@
 	<link rel="stylesheet" href="<?php echo base_url('') ?>assets/plugins/next-bower/css/next.min.css">
 	<script type="text/javascript" src="<?php echo base_url('') ?>assets/plugins/next-bower/js/next.min.js"></script>
 	<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/css/select2.min.css" rel="stylesheet" />
+	<link type="text/css" href="<?php echo base_url('') ?>assets/plugins/form-daterangepicker/daterangepicker-bs3.css" rel="stylesheet">    <!-- DateRangePicker -->
 
 	<link rel="shortcut icon" href="<?php echo base_url(); ?>assets/img/favicon.ico">
 
