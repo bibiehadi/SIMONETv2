@@ -21,7 +21,7 @@ class Hotspot_Model extends CI_Model {
     }
 
     function getUserHotspotByID($id){
-        $this->db->like($id);
+        $this->db->where($id);
         if($data = $this->db->get('user_hotspot')){
 			return $data->row();
 		}else{

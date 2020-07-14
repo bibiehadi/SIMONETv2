@@ -4,11 +4,11 @@
     <div class="static-content-wrapper">
         <div class="static-content">
             <div class="page-content">
-                <ol class="breadcrumb">
+                <!-- <ol class="breadcrumb">
                     <li><a href="index.html">Hotspot</a></li>
                     <li class="active"><a href="#">User Hotspot</a></li>
-                </ol>
-                <div class="container-fluid">
+                </ol> -->
+                <div class="container-fluid" style="margin-top: 10px">
                     <div data-widget-group="group1">
                         <div class="row">
                             <div class="col-md-12">
@@ -86,7 +86,7 @@
                     </div>
                 </div>
                 <div class="form-group">
-                    <label class="col-sm-2 control-label">Name</label>
+                    <label class="col-sm-2 control-label">User Profile</label>
                     <div class="col-sm-8">
                         <select name="profile" id="selector2" class="form-control">
                             <option value="">--- Select ---</option>
@@ -143,6 +143,12 @@
         addUser();
     })
 
+    $('body').on('click','a[data-aksi="edit"]',function(){
+        var char= $(this).attr('data-id');
+        var id = char.split('*');
+        editUser(id[1]);
+    })
+
     $('body').on('click','a[data-aksi="hapus"]',function(){
         var id= $(this).attr('data-id');
         deleteUser(id);
@@ -152,19 +158,19 @@
         syncProfile();
     });
 
-    $('table#tb_hotspot').on('click','tbody tr',function(){
-        var username = $(this).find('td:eq(0)').html();
-        var res = username.split("@",1);
-        // location.href='<?php echo site_url('hotspot/userhotspotdetail')?>/'+res;
+    // $('table#tb_hotspot').on('click','tbody tr',function(){
+    //     var username = $(this).find('td:eq(0)').html();
+    //     var res = username.split("@",1);
+    //     // location.href='<?php echo site_url('hotspot/userhotspotdetail')?>/'+res;
         
-        // var id= $(this).attr('data-id');
-        var url = '<?php echo site_url('hotspot/userhotspotdetail')?>';
-        var form = $('<form action="' + url + '" method="post">' +
-        '<input type="hidden" name="name" value="'+username+'" />' +
-        '</form>');
-        $('body').append(form);
-        form.submit();
-    })
+    //     // var id= $(this).attr('data-id');
+    //     var url = '<?php echo site_url('hotspot/userhotspotdetail')?>';
+    //     var form = $('<form action="' + url + '" method="post">' +
+    //     '<input type="hidden" name="name" value="'+username+'" />' +
+    //     '</form>');
+    //     $('body').append(form);
+    //     form.submit();
+    // })
 
     function addUser(){
         save_method= 'add';
@@ -173,6 +179,31 @@
         $('.help-block').empty();
         $('#modal_form').modal('show');
         $('.modal-title').text('Add User Profile');
+    }
+
+    function editUser(id){
+        save_method = 'update';
+        var data = {id : id};
+        $('#form')[0].reset();
+        $('.form-group').removeClass('has-error');
+        $('.help-block').empty(); 
+        console.log(data);
+
+
+        $.post('<?php echo site_url('hotspot/getUserHotspotByID/') ?>',data,function(respon){
+            if(respon){
+                $('[name="id"]').val(respon.id);
+                $('[name="name"]').val(respon.name);
+                $('[name="password"]').val(respon.password);
+                $('[name="profile"]').val(respon.profile);
+                $('#modal_form').modal('show');
+                $('.modal-title').text('Edit User Profile');
+            }
+            else{ alert('error delete this data');
+            }
+        },'json').fail(function(){
+            alert('error get data form ajax');
+        })
     }
 
     function save(){

@@ -45,7 +45,8 @@ class Hotspot extends CI_Controller {
             $r['password'] = '************************';
             $r['bytes_in'] = byte_format($r['bytes_in']); 
             $r['bytes_out'] = byte_format($r['bytes_out']); 
-            $r['aksi'] = "<a href='javascript:;' data-aksi='hapus' data-id='".$r['id']."' style='color : rgb(218,86,80)'><i class='fa fa-trash-o'></i></a>";
+            $r['aksi'] = "<a href='javascript:;' data-aksi='edit' data-id='".$r['id']."'><i class='fa fa-pencil-square-o'></i></a>
+                <a href='javascript:;' data-aksi='hapus' data-id='".$r['id']."' style='color : rgb(218,86,80)'><i class='fa fa-trash-o'></i></a>";
             $_data[] = $r;
         }
         $output = array(
@@ -85,7 +86,7 @@ class Hotspot extends CI_Controller {
     function getUserHotspotByID(){
         // function untuk mengget data user hotspot by id
         $id = $this->input->post('id');
-        $data = $this->hotspot->getuserhotspotbyid(array('id'=> $id.'%'));
+        $data = $this->hotspot->getuserhotspotbyid(array('id'=> '*'.$id));
         if($data){
             echo json_encode($data);
         }

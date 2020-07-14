@@ -23,11 +23,13 @@ class Statistic extends CI_Controller {
         $first_date = $this->input->post('start');
         $last_date = $this->input->post('end');
         $graphs = $this->statistic->getDataInterface(array('interface' => $interface, 'first_date' => $first_date, 'last_date' => $last_date));
+        $stat = $this->statistic->getStatisticInterface(array('interface'=> $interface ,'first_date' => $first_date, 'last_date' => $last_date));
         // echo '<pre>';
         // print_r($graph);
         $row = array (
             'tx' => array(), 
-			'rx' => array()
+            'rx' => array(),
+            'stat' => $stat
         );
         foreach($graphs as $graph){
             $row['tx'][] = [strtotime($graph->time)*1000,round($graph->tx)];
@@ -50,17 +52,19 @@ class Statistic extends CI_Controller {
     public function lineGraphResource()
     {
         date_default_timezone_set('Asia/Jakarta');
-        $first_date = "2020-07-08 00:00:00";
         $last_date = date("Y-m-d H:i:s");
         $first_date = $this->input->post('start');
         $last_date = $this->input->post('end');
         $graphs = $this->statistic->getDataResource(array('first_date' => $first_date, 'last_date' => $last_date));
+        $stat = $this->statistic->getStatisticResource(array('first_date' => $first_date, 'last_date' => $last_date));
+        
         // echo '<pre>';
         // print_r($graph);
         $row = array (
             'cpu' => array(), 
 			'memory' => array(), 
-			'point' => array() 
+            'point' => array(),
+            'stat' => $stat
         );
         foreach($graphs as $graph){
             $time = date('Y-m-d H:i:s', strtotime($graph->time));
@@ -79,6 +83,12 @@ class Statistic extends CI_Controller {
         // echo $last_date;
         // print_r($time = date('H:i:s', strtotime($first_date)));
         echo json_encode($row);
+    }
+
+    function getStatistic(){
+        print_r($this->statistic->getStatisticInterface(array('interface'=>'Indosat' ,'first_date' => '2020-07-12', 'last_date' => '2020-07-13')));
+        print_r($this->statistic->getStatisticResource(array('first_date' => '2020-07-12', 'last_date' => '2020-07-13')));
+
     }
 }
 

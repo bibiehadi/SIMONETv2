@@ -368,6 +368,26 @@
         var data = device;
         bootbox.confirm('Anda yakin ingin menambahkan device ini ke database ?', function(result){
             if(result){
+                if(device.platform=='MikroTik'){
+                    bootbox.confirm('Anda ingin menconfigurasi device ini dengan config default ?', function(result){
+                        if(result){
+                            $.ajax({
+                                url: "<?php echo site_url('devices/setdefaultconfigmikrotik/') ?>",
+                                type: "POST",
+                                data: {
+                                    ip: device['address']
+                                },
+                                dataType: "JSON",
+                                success: function(data){
+                                    alert('success configurating this router!!')
+                                },
+                                error: function (jqXHR, textStatus, errorThrown){
+                                    alert('Gagal menconfigurasi router!!');
+                                }
+                            })
+                        }
+                    })
+                }
                 $.post('<?php echo site_url('devices/addDeviceByDiscovery/') ?>',data,function(respon){
                 if(respon.status){
                     $('#modal_form').modal('hide');

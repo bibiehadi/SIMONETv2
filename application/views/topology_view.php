@@ -21,78 +21,8 @@
 
 <?php $this->load->view('Templates/footer_view'); ?>
 <script>
-    
-
     var topologyData = {"nodes": [], "links": []};
     getData();
-
-    // {
-    //     "nodes": [
-    //         {
-    //             "id": 0,
-    //             "name": "HQ"
-    //         },
-    //         {
-    //             "id": 1,
-    //             "name": "Mars"
-    //         },
-    //         {
-    //             "id": 2,
-    //             "name": "Saturn"
-    //         },
-    //         {
-    //             "id": 3,
-    //             "name": "Pluto"
-    //         },
-    //         {
-    //             "id": 4,
-    //             "name": "Bumi"
-    //         }
-    //     ],
-    //     "links": [
-    //         {
-    //             "id": 0,
-    //             "source": 0,
-    //             "target": 1
-    //         },
-    //         {
-    //             "id": 1,
-    //             "source": 0,
-    //             "target": 2
-    //         },
-    //         {
-    //             "id": 2,
-    //             "source": 0,
-    //             "target": 3
-    //         },
-    //         {
-    //             "id": 3,
-    //             "source": 1,
-    //             "target": 2
-    //         },
-    //         {
-    //             "id": 4,
-    //             "source": 2,
-    //             "target": 3
-    //         },
-    //         {
-    //             "id": 5,
-    //             "source": 3,
-    //             "target": 1
-    //         },
-    //         {
-    //             "id": 6,
-    //             "source": 4,
-    //             "target": 2
-    //         },
-    //         {
-    //             "id": 7,
-    //             "source": 4,
-    //             "target": 1
-    //         }
-    //     ]
-    // };
-
 
     function getData(){
         $.ajax({
@@ -196,8 +126,12 @@
                             // console.log(;
 							if(typeof platform == "string" && platform == "MikroTik"){
                                 return "rb";
+                            }else if(typeof platform == "string" && platform == "MikroTik CCR"){
+                                return "ccr";    
                             }else if(typeof platform == "string" && platform == "UniFi"){
                                 return "unifi";    
+                            }else if(typeof platform == "string" && platform == "UniFi Switch"){
+                                return "unifiswitch";    
                             }
 
 						},
@@ -235,7 +169,9 @@
     var topology = new MyTopology();
 
     topology.registerIcon("rb", "<?php echo base_url('assets/img/rb.png')?>", 40, 40);
+    topology.registerIcon("ccr", "<?php echo base_url('assets/img/CCR.ico')?>", 80, 80);
     topology.registerIcon("unifi", "<?php echo base_url('assets/img/unifi.png')?>", 40, 40);
+    topology.registerIcon("unifiswitch", "<?php echo base_url('assets/img/UnifiSwitch.ico')?>", 40, 40);
     // load topology data from app/data.js
     topology.data(topologyData);
 
@@ -246,6 +182,8 @@
     app.container(document.getElementById("topology-container"));
 })(nx);
 $('.n-topology').appendTo($('.container-topology'));
+$('.n-topology').css('width','100%');
+$('.n-topology').css('hight','100%');
 </script>
 
 </body>

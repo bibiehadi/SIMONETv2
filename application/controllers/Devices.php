@@ -57,22 +57,26 @@ class Devices extends CI_Controller {
         $data = $this->devices->getdevices();
         $_data = array();
             foreach($data as $r){
-                $r['address'] = '<span style="color: #03a9f4">'.$r['address'].'</span>';
-                if($r['status'] == 'Connected'){
-                    $r['status'] = '<span class="badge" style="color: #39cc64; background-color: transparent; border: 1px solid">Connected</span>';
-                }elseif ($r['status'] == 'Disconnected') {
-                    $r['status'] = '<span class="badge" style="color: #f03a3e; background-color: transparent; border: 1px solid">Disconnected </span>';
-                }elseif ($r['status'] == 'Reboot') {
-                    $r['status'] = '<span class="badge" style="color: #ffdb1a; background-color: transparent; border: 1px solid">Reboot </span>';
+                if($r['id'] != '1'){
+                    $r['address'] = '<span style="color: #03a9f4">'.$r['address'].'</span>';
+                    if($r['status'] == 'Connected'){
+                        $r['status'] = '<span class="badge" style="color: #39cc64; background-color: transparent; border: 1px solid">Connected</span>';
+                    }elseif ($r['status'] == 'Disconnected') {
+                        $r['status'] = '<span class="badge" style="color: #f03a3e; background-color: transparent; border: 1px solid">Disconnected </span>';
+                    }elseif ($r['status'] == 'Reboot') {
+                        $r['status'] = '<span class="badge" style="color: #ffdb1a; background-color: transparent; border: 1px solid">Reboot </span>';
+                    }
+                    if($r['platform'] == "UniFi"){
+                        $r['img'] = '<img src="'.base_url('assets/img/unifi.ico').'" style="width: 30px">';
+                    }elseif($r['platform'] == "UniFi Switch"){
+                        $r['img'] = '<img src="'.base_url('assets/img/UnifiSwitch.ico').'" style="width: 30px">';
+                    }elseif($r['platform'] == "MikroTik" || $r['platform'] == "MikroTik Switch"){
+                        $r['img'] = '<img src="'.base_url('assets/img/rb.ico').'" style="width: 30px">';
+                    }else{
+                        $r['img'] = null;
+                    }
+                    $_data[] = $r;
                 }
-                if($r['platform'] == "UniFi"){
-                    $r['img'] = '<img src="'.base_url('assets/img/unifi.ico').'" style="width: 30px">';
-                }elseif($r['platform'] == "MikroTik" || $r['platform'] == "MikroTik Switch"){
-                    $r['img'] = '<img src="'.base_url('assets/img/rb.ico').'" style="width: 30px">';
-                }else{
-                    $r['img'] = null;
-                }
-                $_data[] = $r;
             }
         $output = array(
             "draw" => $this->input->post('draw'),
@@ -101,7 +105,7 @@ class Devices extends CI_Controller {
     }
 
     function addDeviceByDiscovery(){
-        if($this->input->post('platform') == "UniFi"){
+        if($this->input->post('platform') == "UniFi" || $this->input->post('platform') == "UniFi Switch"){
             $data = array(
                 'address' => $this->input->post('address'),
                 'mac_address' => $this->input->post('mac_address'),
@@ -650,6 +654,25 @@ class Devices extends CI_Controller {
         }
     }
 
+    function setDefaultConfigMikroTik(){
+        $ip = $this->input->post('ip');
+        $ssh = new Net_SSH2($ip);
+		if (!$ssh->login('admin', '')) {
+		    exit('Login Failed');
+		}
+		$config = $this->db->query("select * from devices_configuration");
+		$cfg = $config->result_array(); 
+		foreach ($cfg as $key) {
+            if($key['id']!='1'){
+                try {
+                    $ssh->exec($key['script']);
+                } catch (Exception $e) {
+                    echo $e;
+                }
+            }
+        }
+        echo json_encode(array("status" => TRUE, "ip" => $ip));
+    }
 
 // UNIFI 
     function getUnifiDevices(){
@@ -669,8 +692,11 @@ class Devices extends CI_Controller {
                     $_ap['serial'] = $ap->serial;
                     $_ap['version'] = $ap->version;
                     $_ap['model'] = $ap->model;
-                    $_ap['platform'] = 'UniFi';
-                    $_ap['mac'] = $ap->mac;
+                    if($ap->model == 'US8P60'){
+                        $_ap['platform'] = 'UniFi Switch';
+                    }else{
+                        $_ap['platform'] = 'UniFi';
+                    }$_ap['mac'] = $ap->mac;
                     if(isset($ap->uptime)){
                         $_ap['uptime'] = $this->time_elapsed_B($ap->uptime); 
                     }else{
@@ -714,7 +740,11 @@ class Devices extends CI_Controller {
                 $_ap['serial_number'] = $ap->serial;
                 $_ap['version'] = $ap->version;
                 $_ap['model'] = $ap->model;
-                $_ap['platform'] = 'UniFi';
+                if($ap->model == 'US8P60'){
+                    $_ap['platform'] = 'UniFi Switch';
+                }else{
+                    $_ap['platform'] = 'UniFi';
+                }
                 $_ap['mac'] = $ap->mac;
                 if(isset($ap->uptime)){
                     $_ap['uptime'] = $this->time_elapsed_B($ap->uptime); 

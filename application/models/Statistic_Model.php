@@ -21,11 +21,17 @@ class Statistic_Model extends CI_Model {
         $this->db->where('interface',$interface['interface']);
         $this->db->where('time >=',$interface['first_date']);
         $this->db->where('time <=',$interface['last_date']);
-        // $this->db->order_by('time', 'desc');
-        // $this->db->limit(2000);
-        // $this->db->limit(10);
         $data = $this->db->get('network_log');
         return $data->result();
+    }
+
+    function getStatisticInterface($interface){
+        $this->db->select('max(tx) as MaxTx, min(tx) as MinTx, avg(tx) as AvgTx, max(rx) as MaxRx, min(rx) as MinRx, avg(rx) as AvgRx');
+        $this->db->where('interface',$interface['interface']);
+        $this->db->where('time >=',$interface['first_date']);
+        $this->db->where('time <=',$interface['last_date']);
+        $data = $this->db->get('network_log');
+        return $data->row_array();
     }
 
     function getDataResource($interface){
@@ -36,6 +42,17 @@ class Statistic_Model extends CI_Model {
         // $this->db->limit(10);
         $data = $this->db->get('resource_log');
         return $data->result();
+    }
+
+    function getStatisticResource($interface){
+        $this->db->select('max(cpu) as MaxCPU, min(cpu) as MinCPU, avg(cpu) as AvgCPU, max(memory) as MaxMemory, min(memory) as MinMemory, avg(memory) as AvgMemory');
+        $this->db->where('time >=',$interface['first_date']);
+        $this->db->where('time <=',$interface['last_date']);
+        // $this->db->order_by('time', 'desc');
+        // $this->db->limit(2000);
+        // $this->db->limit(10);
+        $data = $this->db->get('resource_log');
+        return $data->row_array();
     }
 
     function getDataInterfacePerHour($interface){
