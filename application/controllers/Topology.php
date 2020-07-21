@@ -23,13 +23,19 @@ class Topology extends CI_Controller {
         $data = $this->devices->getdevices();
         $top = array();
         $links = array();
+        $status;
         foreach($data as $device){
+            if($device['address'] == '10.10.10.1'){
+                $status = 'Connected';
+            }else{
+                $status = $device['status'];
+            }
             $temp['nodes'][] = array(
                 'id' => $device['serial_number'],
                 'name' => $device['identity'],
                 'ip' => $device['address'],
                 'platform' => $device['platform'],
-                'status' => $device['status']
+                'status' => $status
             );
             $link = $this->devices->getdevicesby(array('id_device' => $device['serial_number']));
             if($link != []){

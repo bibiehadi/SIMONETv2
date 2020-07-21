@@ -1,15 +1,33 @@
 <?php $this->load->view('Templates/headersidebar_view'); ?>
+<style type="text/css" media="print">
+  @page { size: landscape; }
+</style>
 </div>
-                </div>
+    </div>  
                 <div class="static-content-wrapper">
                     <div class="static-content">
                         <div class="page-content">
                             <div class="container-fluid">
-                                <div class="container-topology cols-sm-12">
-
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="panel panel-default">
+                                        <div class="panel-heading"> 
+                                            <h2>Logical Network Topology</h2>
+                                            <a class="btn btn-success pull-right" data-aksi="print" style="margin:10px 0 0 0px"><i class="fa fa-print"></i></a> 
+                                        </div>
+                                        <div class="panel-body">
+                                            <div class="container-topology cols-sm-12" id="divPrint">
+                                                <div id="topology-container"></div>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
 
-                    <div id="topology-container"></div>
+
 <footer role="contentinfo">
     <div class="clearfix">
         <ul class="list-unstyled list-inline pull-left">
@@ -126,7 +144,7 @@
                             // console.log(;
 							if(typeof platform == "string" && platform == "MikroTik"){
                                 return "rb";
-                            }else if(typeof platform == "string" && platform == "MikroTik CCR"){
+                            }else if(typeof platform == "string" && platform == "CCR"){
                                 return "ccr";    
                             }else if(typeof platform == "string" && platform == "UniFi"){
                                 return "unifi";    
@@ -183,7 +201,26 @@
 })(nx);
 $('.n-topology').appendTo($('.container-topology'));
 $('.n-topology').css('width','100%');
-$('.n-topology').css('hight','100%');
+$('.n-topology svg').css('width','100%');
+$('body').on('click','a[data-aksi="print"]',function(){
+    // $("#divPrint").show();  
+    javascript:window.print();
+    // printDiv()
+});
+
+function printDiv(){
+		var divToPrint=document.getElementById('divPrint');
+
+		var newWin=window.open('','Print-Window');
+
+		newWin.document.open();
+
+		newWin.document.write('<html><body onload="window.print()"><h2 style="text-align:center">Statistic</h2>'+divToPrint.innerHTML+'</body></html>');
+
+		newWin.document.close();
+
+		setTimeout(function(){newWin.close();},10);
+	}
 </script>
 
 </body>

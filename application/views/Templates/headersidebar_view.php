@@ -24,10 +24,13 @@
     <!-- The following CSS are included as plugins and can be removed if unused-->
     <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.18.1/moment.min.js"></script> -->
 	<link type="text/css" href="<?php echo base_url('') ?>assets/plugins/switchery/switchery.css" rel="stylesheet">   							<!-- Switchery -->
-	<link rel="stylesheet" href="<?php echo base_url('') ?>assets/plugins/datatables/dataTables.bootstrap.css">
+	<!-- <link rel="stylesheet" href="<?php echo base_url('') ?>assets/plugins/datatables/dataTables.bootstrap.css"> -->
 	<link rel="stylesheet" href="<?php echo base_url('') ?>assets/plugins/datatables/dataTables.css">
 	<link type="text/css" href="<?php echo base_url('') ?>assets/plugins/progress-skylo/skylo.css" rel="stylesheet">
+    <link type="text/css" href="<?php echo base_url('') ?>assets/plugins/pines-notify/pnotify.css" rel="stylesheet"> 		<!-- PNotify -->
     
+	<!-- <link href="https://cdn.datatables.net/1.10.21/css/dataTables.bootstrap.min.css" rel="stylesheet" type="text/css" /> -->
+	<link href="https://cdn.datatables.net/buttons/1.6.2/css/buttons.bootstrap.min.css" rel="stylesheet" type="text/css" />
 	<link href="https://cdn.datatables.net/responsive/2.2.4/css/responsive.bootstrap.min.css" rel="stylesheet" type="text/css" />
 	<link rel="stylesheet" href="<?php echo base_url('') ?>assets/plugins/next-bower/css/next.min.css">
 	<script type="text/javascript" src="<?php echo base_url('') ?>assets/plugins/next-bower/js/next.min.js"></script>
@@ -35,7 +38,41 @@
 	<link type="text/css" href="<?php echo base_url('') ?>assets/plugins/form-daterangepicker/daterangepicker-bs3.css" rel="stylesheet">    <!-- DateRangePicker -->
 
 	<link rel="shortcut icon" href="<?php echo base_url(); ?>assets/img/favicon.ico">
+	<style>
+		.page {
+    width: 21cm;
+    min-height: 29.7cm;
+    padding: 2cm;
+    margin: 1cm auto;
+    border: 1px #D3D3D3 solid;
+    border-radius: 5px;
+    background: white;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+}
+.subpage {
+    padding: 1cm;
+    border: 5px red solid;
+    height: 237mm;
+    outline: 2cm #FFEAEA solid;
+}
 
+@page {
+    size: A4;
+    margin: 0;
+}
+@media print {
+    .page {
+        margin: 0;
+        border: initial;
+        border-radius: initial;
+        width: initial;
+        min-height: initial;
+        box-shadow: initial;
+        background: initial;
+        page-break-after: always;
+    }
+}
+	</style>
     </head>
 
     <body class="animated-content sidebar-collapsed">
@@ -107,7 +144,8 @@
 												<li><a href="<?php echo site_url('hotspot/userprofile'); ?>">User Profile</a></li>
 												<li><a href="<?php echo site_url('hotspot/useractive'); ?>">User Active</a></li>
 											</ul>
-									</li>																		
+									</li>
+                                    <li><a href="javascript:;" data-aksi="log"><i class="ti ti-notepad"></i>Log Activity</span></a></li>
 								</ul>
 							</nav>
 						</div>

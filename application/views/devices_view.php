@@ -26,10 +26,10 @@
                                                 <input class="form-control" placeholder='Search..' type="text" id="myInputTextField">
                                             </div>
                                         </div>
-                                        <div class="btn-group pull-right" role="group" aria-label="Basic example">
+                                        <div class="btn-group pull-right" id="button-table" role="group" aria-label="Basic example" style="margin:10px 0 0 0px">
                                             <!-- <a class="btn btn-info" id="upgradeUnifi" data-aksi="upgradeUniFi" style="margin:10px 0 0 0px; visibility: hidden;"><i class="fa fa-arrow-circle-up"></i> Upgrade</a> -->
-                                            <a class="btn btn-success" data-aksi="add" style="margin:10px 0 0 0px"><i class="fa fa-plus"></i></a>    
-                                            <a class="btn btn-success" data-aksi="refresh" style="margin:10px 0 0 0px"><i class="fa fa-refresh"></i></a>    
+                                            <a class="btn btn-success" data-aksi="add"><i class="fa fa-plus"></i></a>    
+                                            <a class="btn btn-success" data-aksi="refresh"><i class="fa fa-refresh"></i></a>    
                                         </div>
                                         
                                     </div>
@@ -139,35 +139,65 @@
                             <button type="submit" id="btnSave" onClick="save()" class="btn btn-success pull-right" style="margin: 10px 0px 0px 0px">Save</button>
                         </div>
                         <div class="tab-pane" id="DiscoveryDevice">
-                            <table id="tb_discovery" class="table about-table " cellspacing="0" width="100%" style="font-size:11px">
-                                <thead>
-                                    <tr>
-                                        <th>No</th>
-                                        <th>Interface</th>
-                                        <th>IP Address</th>
-                                        <th>Identity</th>
-                                        <th>Board</th>
-                                        <th>Action</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                </tbody>
-                            </table>
+                            <div class="panel-heading">    
+                                <div class="col-md-4 pull-right" style="margin:10px 0 0 0">
+                                    <div class="input-group">
+                                        <span class="input-group-addon">
+                                            <i class="fa fa-search"></i>
+                                        </span>
+                                        <input class="form-control" placeholder='Search..' type="text" id="searchMikroTik">
+                                    </div>
+                                </div>
+                                <div class="btn-group pull-right" role="group" aria-label="Basic example">
+                                    <a class="btn btn-success" data-aksi="refreshMikroTik" style="margin:10px 0 0 0px"><i class="fa fa-refresh"></i></a>    
+                                </div>        
+                            </div>
+                            <div class="panel-body">
+                                <table id="tb_discovery" class="table about-table " cellspacing="0" width="100%" style="font-size:11px">
+                                    <thead>
+                                        <tr>
+                                            <th>No</th>
+                                            <th>Interface</th>
+                                            <th>IP Address</th>
+                                            <th>Identity</th>
+                                            <th>Board</th>
+                                            <th>Action</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
                         <div class="tab-pane" id="UniFiDevice">
-                            <table id="tb_unifi" class="table about-table " cellspacing="0" width="100%" style="font-size:11px">
-                                <thead>
-                                    <tr>
-                                        <th>IP Address</th>
-                                        <th>Identity</th>
-                                        <th>Model</th>
-                                        <th>Version</th>
-                                        <th>Action</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                </tbody>
-                            </table>
+                            <div class="panel-heading">    
+                                <div class="col-md-4 pull-right" style="margin:10px 0 0 0">
+                                    <div class="input-group">
+                                        <span class="input-group-addon">
+                                            <i class="fa fa-search"></i>
+                                        </span>
+                                        <input class="form-control" placeholder='Search..' type="text" id="searchUniFi">
+                                    </div>
+                                </div>
+                                <div class="btn-group pull-right" role="group" aria-label="Basic example">
+                                    <a class="btn btn-success" data-aksi="refreshUniFi" style="margin:10px 0 0 0px"><i class="fa fa-refresh"></i></a>    
+                                </div>        
+                            </div>
+                            <div class="panel-body">
+                                <table id="tb_unifi" class="table about-table " cellspacing="0" width="100%" style="font-size:11px">
+                                    <thead>
+                                        <tr>
+                                            <th>IP Address</th>
+                                            <th>Identity</th>
+                                            <th>Model</th>
+                                            <th>Version</th>
+                                            <th>Action</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -184,10 +214,49 @@
         responsive : true,
         pageLength : 50,
         lengthChange: false,
-        dom: 'Trt<"bottom"ip><"clear">',
-        tableTools: {
-            "sSwfPath": "/swf/copy_csv_xls_pdf.swf"
-        },
+        dom: 'BTrt<"bottom"ip><"clear">',
+        buttons: [
+            {
+                className: "btn btn-success",
+                extend: 'print',
+                exportOptions: {
+                    columns: [ 0, ':visible' ]
+                },
+                init: function(api, node, config) {
+                   $(node).removeClass('btn-default');
+                }
+            },
+            {
+                className: "btn btn-success",
+                extend: 'copyHtml5',
+                exportOptions: {
+                    columns: [ 0, ':visible' ]
+                },
+                init: function(api, node, config) {
+                   $(node).removeClass('btn-default');
+                }
+            },
+            {
+                className: "btn btn-success",
+                extend: 'excelHtml5',
+                exportOptions: {
+                    columns: [0, 2]
+                },
+                init: function(api, node, config) {
+                   $(node).removeClass('btn-default');
+                }
+            },
+            {
+                className: "btn btn-success",
+                extend: 'pdfHtml5',
+                exportOptions: {
+                    columns: [ 0, 2 ]
+                },
+                init: function(api, node, config) {
+                   $(node).removeClass('btn-default');
+                }
+            },
+        ],
         oLanguage: {
         "sLengthMenu": " _MENU_ ",
         "sSearch": "<span>Search..</span> _INPUT_"
@@ -215,6 +284,8 @@
             }
         }
     });
+    table.buttons().container().appendTo($('#button-table'));
+
 
     $('#myInputTextField').keyup(function(){
         table.search($(this).val()).draw() ;
@@ -252,7 +323,7 @@
     table2 = $('#tb_discovery').DataTable({
         pageLength: 5,
         responsive : true,
-        dom: '<"top"f>rt<"bottom"p><"clear">',
+        dom: '<"top">rt<"bottom"p><"clear">',
         bLengthChange : false,
         bInfo: false,
         ajax : {
@@ -275,7 +346,7 @@
         responsive : true,
         bLengthChange : false,
         bInfo: false,
-        dom: '<"top"f>rt<"bottom"p><"clear">',
+        dom: '<"top">rt<"bottom"p><"clear">',
         ajax : {
             "url" : "<?php echo site_url('devices/getUnifiDevices')?>",
             "type" : "POST"
@@ -290,8 +361,24 @@
         ],
     })
 
+    $('#searchMikroTik').keyup(function(){
+        table2.search($(this).val()).draw() ;
+    })
+
+    $('#searchUniFi').keyup(function(){
+        table3.search($(this).val()).draw() ;
+    })
+
     $('body').on('click','a[data-aksi="add"]',function(){
         addDevice();
+    })
+
+    $('body').on('click','a[data-aksi="refreshMikroTik"]',function(){
+        reload_table2();
+    })
+
+    $('body').on('click','a[data-aksi="refreshUniFi"]',function(){
+        reload_table3();
     })
 
     $('body').on('click','a[data-aksi="discovery"]',function(){

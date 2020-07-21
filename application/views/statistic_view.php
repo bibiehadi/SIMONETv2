@@ -1,4 +1,6 @@
 <?php $this->load->view('Templates/headersidebar_view'); ?>
+<style>
+</style>
 </div>
     </div>
     <div class="static-content-wrapper">
@@ -21,43 +23,44 @@
 											<!-- </div> -->
 										<!-- </form> -->
 										<a class="btn btn-success pull-right" data-aksi="refresh" style="margin:10px 0 0 0px"><i class="fa fa-refresh"></i></a> 
+										<a class="btn btn-success pull-right" data-aksi="print" style="margin:10px 0 0 0px"><i class="fa fa-print"></i></a> 
 
                                     </div>
-                                    <div class="panel-body">
+                                    <div class="panel-body" id="divPrint">
                                         <div class="row">
                                             <div style="margin: 10px">
                                                 <h5>CPU</h5>
-                                                <div class="mychartResource" id="chartCPU" style="height: 300px;" class="mt-sm mb-sm" data-interface="Resource"></div>
+                                                <div class="mychartResource" id="chartCPU" style="height: 350px;" class="mt-sm mb-sm" data-interface="Resource"></div>
                                             </div>
                                         </div>
 										<div class="row">
                                             <div style="margin: 10px">
                                                 <h5>Memory</h5>
-                                                <div class="mychartResource" id="chartMemory" style="height: 300px;" class="mt-sm mb-sm" data-interface="Resource"></div>
+                                                <div class="mychartResource" id="chartMemory" style="height: 350px;" class="mt-sm mb-sm" data-interface="Resource"></div>
                                             </div>
                                         </div>
                                         <div class="row">
                                             <div style="margin: 10px">
                                                 <h5><i class="fa fa-circle" style="color: #5cb85c"></i> Indosat</h5>
-                                                <div class="mychartInterface" id="chart1" style="height: 300px;" class="mt-sm mb-sm" data-interface="Indosat"></div>
+                                                <div class="mychartInterface" id="chart1" style="height: 350px;" class="mt-sm mb-sm" data-interface="Indosat"></div>
                                             </div>
                                         </div>
                                         <div class="row">
                                             <div style="margin: 10px">
                                                 <h5><i class="fa fa-circle" style="color: #5cb85c"></i> MyRepublic Pro 100</h5>
-                                                <div class="mychartInterface" id="chart2" style="height: 300px;" class="mt-sm mb-sm" data-interface="BPro100"></div>
+                                                <div class="mychartInterface" id="chart2" style="height: 350px;" class="mt-sm mb-sm" data-interface="BPro100"></div>
                                             </div>
                                         </div>
                                         <div class="row">
                                             <div style="margin: 10px">
                                                 <h5><i class="fa fa-circle" style="color: #5cb85c"></i> MyRepublic 300</h5>
-                                                <div class="mychartInterface" id="chart3" style="height: 300px;" class="mt-sm mb-sm" data-interface="B300"></div>
+                                                <div class="mychartInterface" id="chart3" style="height: 350px;" class="mt-sm mb-sm" data-interface="B300"></div>
                                             </div>
                                         </div>
                                         <div class="row">
                                             <div style="margin: 10px">
                                                 <h5><i class="fa fa-circle" style="color: #5cb85c"></i> MyRepublic 100</h5>
-                                                <div class="mychartInterface" id="chart4" style="height: 300px;" class="mt-sm mb-sm" data-interface="B100"></div>
+                                                <div class="mychartInterface" id="chart4" style="height: 350px;" class="mt-sm mb-sm" data-interface="B100"></div>
                                             </div>
                                         </div>
                                     </div>
@@ -88,6 +91,25 @@
 	var chartsResource = {};
 	var chartResource;
 
+	$('body').on('click','a[data-aksi="print"]',function(){
+        // $("#divPrint").show();  
+		javascript:window.print();
+		// printDiv()
+    });
+
+	function printDiv(){
+		var divToPrint=document.getElementById('divPrint');
+
+		var newWin=window.open('','Print-Window');
+
+		newWin.document.open();
+
+		newWin.document.write('<html><body onload="window.print()"><h2 style="text-align:center">Statistic</h2>'+divToPrint.innerHTML+'</body></html>');
+
+		newWin.document.close();
+
+		setTimeout(function(){newWin.close();},10);
+	}
 
 	Highcharts.setOptions({
 		global: {
@@ -125,68 +147,6 @@
 			$('.highcharts-credits').hide();
 	});
 
-	function calculateStatistics(){
-		this.series.slice(0, 2).forEach( series => {
-			const data = series.data.filter(point => point.isInside).map(point => point.y);
-
-			const statistics = [
-				data[data.length - 1],
-				Math.max.apply(null, data),
-				Math.min.apply(null, data),
-				(data.reduce((a , b)=> a + b, 0)/data.length).toFixed(1)
-			];
-
-			const legendItem = series.legendItem;
-			let i = -1;
-			// construct the legend string
-			const text = legendItem.textStr.replace(/-?\d+\.\d/g, () => statistics[++i]);
-			
-			// set the constructed text for the legend
-			legendItem.attr({
-			text: text
-			});
-		});
-	}
-
-	// function updateLegendLabel() {
-	// 	var chrt = !this.chart ? this : this.chart;
-	// 	chrt.update({
-	// 		legend: {
-	// 		labelFormatter: function() {
-	// 			var lastVal = this.yData[this.yData.length - 1],
-	// 			chart = this.chart,
-	// 			xAxis = this.xAxis,
-	// 			points = this.points,
-	// 			avg = 0,
-	// 			counter = 0,
-	// 			min, minPoint, max, maxPoint;
-
-	// 			points.forEach(function(point, inx) {
-	// 			if (point.isInside) {
-	// 				if (!min || min > point.y) {
-	// 				min = point.y;
-	// 				minPoint = point;
-	// 				}
-
-	// 				if (!max || max < point.y) {
-	// 				max = point.y;
-	// 				maxPoint = point;
-	// 				}
-
-	// 				counter++;
-	// 				avg += point.y;
-	// 			}
-	// 			});
-	// 			avg /= counter;
-
-	// 			return this.name + '<br>' + 'Now: ' + lastVal + ' °C<br>' +
-	// 			'<span style="color: red">Min: ' + min + ' °C</span><br/>' +
-	// 			'<span style="color: red">Max: ' + max + ' °C</span><br/>' +
-	// 			'<span style="color: red">Average: ' + avg.toFixed(2); + ' °C</span><br/>';
-	// 		}
-	// 		}
-	// 	});
-	// 	}
 	var maxTx = {}, minTx = {}, avgTx = {};
 	var maxRx = {}, minRx = {}, avgRx = {};
 	function requestDataInterface(iface, id, date) 
@@ -256,7 +216,7 @@
 				formatter: function () {      
 					var bytes = this.value;                          
 					var sizes = ['b/s', 'kb/s', 'Mb/s', 'Gb/s', 'Tb/s'];
-					if (bytes == 0) return '0 bps';
+					if (bytes == 0) return '0 b/s';
 					var i = parseInt(Math.floor(Math.log(bytes) / Math.log(1024)));
 					return parseFloat((bytes / Math.pow(1024, i)).toFixed(2)) + ' ' + sizes[i];                    
 				},
@@ -302,8 +262,25 @@
 				enabled :true,
 				
 			},
-			tooltip: {   
-				shared: true                                        
+			tooltip: {
+				formatter: function() {
+					var s = [];
+
+					$.each(this.points, function(i, point) {
+						var bytes = point.y;                          
+						var sizes = ['b/s', 'kb/s', 'Mb/s', 'Gb/s', 'Tb/s'];
+						if (bytes == 0) {s.push('<span style="color:#D31B22;font-weight:bold;">'+ point.series.name +' : '+
+							'0 b/s'+'<span>');}
+						else{
+							var i = parseInt(Math.floor(Math.log(bytes) / Math.log(1024)));
+							s.push(point.series.name +' : '+'<span style="color:'+point.series.color+';font-weight:bold;">'+ 
+								parseFloat((bytes / Math.pow(1024, i)).toFixed(2)) + ' ' + sizes[i] +'<span>');
+						}
+					});
+
+					return Highcharts.dateFormat('%A, %b %d, %H:%M', this.x)+ '<br>' +s.join(' <br> ');
+				},
+				shared: true
 			},
 			credits: {
 				enabled: true
@@ -433,6 +410,7 @@
 				
 			},
 			tooltip: {
+				
 				shared: true,
         		valueSuffix: ' %'                                                    
 			},
@@ -448,15 +426,15 @@
 	function convertBit(value){
 		var bits = value;                          
 		var sizes = ['b/s', 'kb/s', 'Mb/s', 'Gb/s', 'Tb/s'];
-		if (bits == 0) return '0 bps';
+		if (bits == 0) return '0 b/s';
 		var i = parseInt(Math.floor(Math.log(bits) / Math.log(1024)));
-		return parseFloat((bytes / Math.pow(1024, i)).toFixed(2)) + ' ' + sizes[i];                    
+		return parseFloat((bits / Math.pow(1024, i)).toFixed(2)) + ' ' + sizes[i];                    
 	}
 
 	function convertByte(value){
 		var bytes = value;                          
-		var sizes = ['B', 'kB', 'MB', 'GB', 'TB'];
-		if (bytes == 0) return '0 Bps';
+		var sizes = ['Byte', 'KB', 'MB', 'GB', 'TB'];
+		if (bytes == 0) return '0 Byte';
 		var i = parseInt(Math.floor(Math.log(bytes) / Math.log(1024)));
 		return parseFloat((bytes / Math.pow(1024, i)).toFixed(2)) + ' ' + sizes[i];                    
 	}

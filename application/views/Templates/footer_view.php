@@ -6,36 +6,39 @@
                 <h4 class="modal-title" id="modal-title">Log Activity</h4>
             </div>
             <div class="modal-body form">
-                <div class="row ">
-                    <div class="col-sm-8">
+                <div class="row " style="margin: 5px">
+                    <div class="panel-heading">    
+                        <div class="col-sm-3 pull-right">
+                            <div class="input-group">
+                                <span class="input-group-addon">
+                                    <i class="fa fa-search"></i>
+                                </span>
+                                <input class="form-control" placeholder='Search..' type="text" id="searchLog">
+                            </div>
+                        </div>
+                        <div class="btn-group pull-right" role="group" aria-label="Basic example">
+                            <a class="btn btn-success" data-aksi="refreshLog"><i class="fa fa-refresh"></i></a>    
+                        </div>        
                         <div class="btn-group" role="group" aria-label="Basic example">
                             <button type="button" class="btn btn-primary" data-aksi="allLog">All</button>
                             <button type="button" class="btn btn-primary" data-aksi="main">Main Router</button>
                             <button type="button" class="btn btn-primary" data-aksi="simonet">SIMONET</button>
                         </div>
                     </div>
-                    <div class="col-sm-4 pull-right">
-                        <div class="input-group">
-                            <span class="input-group-addon">
-                                <i class="fa fa-search"></i>
-                            </span>
-                            <input class="form-control" placeholder='Search..' type="text" id="searchLog">
-                        </div>
+                    <div class="panel-body">
+                        <table id="tb_simonetlog" class="table about-table " cellspacing="0" width="100%" style="font-size:11px">
+                            <thead>
+                                <tr>
+                                    <th style="width: 120px">Date</th>
+                                    <th>Event</th>
+                                    <th style="width: 80px">Tag</th>
+                                    <th>From</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            </tbody>
+                        </table>
                     </div>
-                </div>
-                <div class="row" style="margin : 10px">
-                    <table id="tb_simonetlog" class="table about-table " cellspacing="0" width="100%" style="font-size:11px">
-                        <thead>
-                            <tr>
-                                <th style="width: 120px">Date</th>
-                                <th>Event</th>
-                                <th style="width: 80px">Tag</th>
-                                <th>From</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                        </tbody>
-                    </table>
                 </div>
             </div>
         </div>
@@ -305,6 +308,7 @@
 <script type="text/javascript" src="<?php echo base_url('') ?>assets/plugins/bootstrap-timepicker/bootstrap-timepicker.js"></script>      			 -->
 
 <!-- <script type="text/javascript" src="<?php echo base_url('') ?>assets/plugins/clockface/js/clockface.js"></script>     								Clockface -->
+<script type="text/javascript" src="<?php echo base_url('') ?>assets/plugins/pines-notify/pnotify.min.js"></script> 		<!-- PNotify -->
 
 
 <!-- <script type="text/javascript" src="<?php echo base_url('') ?>assets/demo/demo-pickers.js"></script> -->
@@ -325,23 +329,24 @@
 <script src="https://code.highcharts.com/modules/accessibility.js"></script>
 <script type="text/javascript" src="<?php echo base_url('') ?>assets/plugins/form-daterangepicker/moment.min.js"></script>              			<!-- Moment.js for Date Range Picker -->
 <script type="text/javascript" src="<?php echo base_url('') ?>assets/plugins/form-daterangepicker/daterangepicker.js"></script>     				<!-- Date Range Picker -->
-
+<script type="text/javascript" src="https://cdn.datatables.net/buttons/1.6.2/js/dataTables.buttons.min.js"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/buttons/1.6.2/js/buttons.bootstrap.min.js"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/buttons/1.6.2/js/buttons.print.min.js"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/buttons/1.6.2/js/buttons.html5.min.js"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/buttons/1.6.2/js/buttons.colVis.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/js/select2.min.js"></script>
 <script>
-   
-
     tableLog = $('#tb_simonetlog').DataTable({
         responsive : true,
         pageLength : 100,
         lengthChange: false,
+        scrollY: "250px",
+        scrollCollapse: true,
         dom: 'Trt<"bottom"ip><"clear">',
         order: [[ 0, "desc" ]],
-        scrollY: "300px",
-        scrollCollapse: true,
-        // paging: false,
-        oLanguage: {
-        "sSearch": "<span>Search..</span> _INPUT_"
-        },
         ajax : {
             "url" : "<?php echo site_url('log/logEventJSON')?>",
             "type" : "POST"
@@ -354,9 +359,12 @@
             {"data" : "FromHost"}
         ],
         "createdRow": function(row, data, dataIndex) {
-            if (data["SysLogTag"] == 'ipsec,error' || data["SysLogTag"] == 'ipsec,error') {
-            $(row).css("background-color", "#B9BAB8");
-            // $(row).addClass("label label-danger");
+            if (data["SysLogTag"] == 'devices,device-up,simonet') {
+                $(row).css("color", "#2ecc71");
+            }else if(data["SysLogTag"] == 'devices,device-down,simonet') {
+                $(row).css("color", "red");
+            }else{
+                $(row).css("color", "#000");
             }
         }
     });
@@ -379,6 +387,10 @@
 
     $('body').on('click','a[data-aksi="log"]',function(){
         log();
+    })
+
+    $('body').on('click','a[data-aksi="refreshLog"]',function(){
+        reload_tableLog();
     })
 
     $('body').on('click','a[data-aksi="settings"]',function(){
@@ -445,6 +457,7 @@
         $('.form-group').removeClass('has-error');
         $('.help-block').empty();
         $('#modal_log').modal('show');
+        tableLog.search('.').draw();
     }
 
     function settings(){
@@ -602,6 +615,10 @@
                 alert('error delete this data');
             })
         }
+    }
+
+    function reload_tableLog(){
+        tableLog.ajax.reload(null,false);
     }
 
     

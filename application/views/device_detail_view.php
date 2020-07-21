@@ -526,6 +526,13 @@
                 if(respon.status){
                     // alert('sinkron data interfaces berhasil');
                     reload_table();
+                    new PNotify({
+                        title: 'Success!!',
+                        text: 'Syncron Interfaces Data Success!',
+                        type: 'success',
+                        icon: 'ti ti-check',
+                        styling: 'fontawesome'
+                    });
                 }
                 else{ alert('error delete this data');
                 }

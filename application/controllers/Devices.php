@@ -59,13 +59,18 @@ class Devices extends CI_Controller {
             foreach($data as $r){
                 if($r['id'] != '1'){
                     $r['address'] = '<span style="color: #03a9f4">'.$r['address'].'</span>';
-                    if($r['status'] == 'Connected'){
+                    if (($r['status'] == 'Connected' || $r['status'] == 'Unstable') && $r['uptime']==null && $r['platform']=='UniFi') {
+                        $r['status'] = '<span class="badge" style="color: #f03a3e; background-color: transparent; border: 1px solid">Disconnected</span>';
+                    }elseif($r['status'] == 'Connected'){
                         $r['status'] = '<span class="badge" style="color: #39cc64; background-color: transparent; border: 1px solid">Connected</span>';
                     }elseif ($r['status'] == 'Disconnected') {
-                        $r['status'] = '<span class="badge" style="color: #f03a3e; background-color: transparent; border: 1px solid">Disconnected </span>';
+                        $r['status'] = '<span class="badge" style="color: #f03a3e; background-color: transparent; border: 1px solid">Disconnected</span>';
                     }elseif ($r['status'] == 'Reboot') {
                         $r['status'] = '<span class="badge" style="color: #ffdb1a; background-color: transparent; border: 1px solid">Reboot </span>';
+                    }elseif ($r['status'] == 'Unstable') {
+                        $r['status'] = '<span class="badge" style="color: #ffdb1a; background-color: transparent; border: 1px solid">Unstable </span>';
                     }
+                    
                     if($r['platform'] == "UniFi"){
                         $r['img'] = '<img src="'.base_url('assets/img/unifi.ico').'" style="width: 30px">';
                     }elseif($r['platform'] == "UniFi Switch"){
@@ -560,7 +565,7 @@ class Devices extends CI_Controller {
                 </div>');
                 $log = array(
                     'Message' =>  'Device '.$identity.' rebooted by '.$this->session->userdata('username'),
-                    'SysLogTag' => 'system,simonet',
+                    'SysLogTag' => 'devices,system,simonet',
                     'ReceivedAt' => date("Y-m-d H:i:s"),
                     'DeviceReportedTime' => date("Y-m-d H:i:s"),
                     'FromHost' => 'SIMONETapp'

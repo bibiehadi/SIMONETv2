@@ -14,9 +14,18 @@ class Log extends CI_Controller {
     function logEventJSON(){
         // function untuk mengget semua data user hotspot dari database
         $data = $this->log_event->getLog();
+        $eventLog = array();
+        foreach($data as $log){
+            if($log['SysLogTag'] == 'devices,device-up,simonet' || $log['SysLogTag'] == 'devices,device-down,simonet' || $log['SysLogTag'] == 'devices,simonet'){
+                $log['Message'] = '<i class="ti ti-harddrive"></i> '.$log['Message'];
+            }else if($log['SysLogTag'] == 'system,simonet'){
+                $log['Message'] = '<i class="ti ti-user"></i> '.$log['Message'];
+            }
+            $eventLog[] = $log;
+        }
         $output = array(
             "draw" => $this->input->post('draw'),
-            "data" => $data,
+            "data" => $eventLog,
         );
         echo json_encode($output);
     }

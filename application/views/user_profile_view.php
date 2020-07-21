@@ -23,8 +23,10 @@
                                                 <input class="form-control" placeholder='Search..' type="text" id="searchUserProfileField">
                                             </div>
                                         </div>
-                                        <a class="btn btn-success pull-right" data-aksi="add" style="margin : 10px 0px 0px 10px"><i class="fa fa-plus"></i></a>
-                                        <a class="btn btn-info pull-right" data-aksi="sync" href="javascript:;" style="margin : 10px 0px"><i class="fa fa-refresh"></i> Refresh</a>
+                                        <div class="dt-buttonsbtn-group pull-right" id="button-table" role="group" aria-label="Basic example">
+                                            <a type="button" class="btn btn-info" data-aksi="sync" href="javascript:;"><i class="fa fa-refresh"></i> Refresh</a>
+                                            <a type="button" class="btn btn-success" data-aksi="add"><i class="fa fa-plus"></i></a>
+                                        </div>
                                     </div>
                                     <div class="panel-body">
                                         <table id="tb_profile" class="table table-striped table-bordered" cellspacing="0" width="100%">
@@ -132,7 +134,49 @@
         "sLengthMenu": " _MENU_ ",
         "sSearch": "Search..."
         },
-        dom: 'Trt<"bottom"ip><"clear">',
+        dom: 'BTrt<"bottom"ip><"clear">',
+        buttons: [
+            {
+                className: "btn btn-success",
+                extend: 'print',
+                exportOptions: {
+                    columns: [ 0, ':visible' ]
+                },
+                init: function(api, node, config) {
+                   $(node).removeClass('btn-default');
+                }
+            },
+            {
+                className: "btn btn-success",
+                extend: 'copyHtml5',
+                exportOptions: {
+                    columns: [ 0, ':visible' ]
+                },
+                init: function(api, node, config) {
+                   $(node).removeClass('btn-default');
+                }
+            },
+            {
+                className: "btn btn-success",
+                extend: 'excelHtml5',
+                exportOptions: {
+                    columns: [0, 5]
+                },
+                init: function(api, node, config) {
+                   $(node).removeClass('btn-default');
+                }
+            },
+            {
+                className: "btn btn-success",
+                extend: 'pdfHtml5',
+                exportOptions: {
+                    columns: [ 0, 5 ]
+                },
+                init: function(api, node, config) {
+                   $(node).removeClass('btn-default');
+                }
+            },
+        ],
         ajax : {
             "url" : "<?php echo site_url('hotspot/userprofileJSON')?>",
             "type" : "POST"
@@ -150,6 +194,9 @@
             {"data" : "aksi"}
         ],
     });
+
+    table.buttons().container().appendTo($('#button-table'));
+
 
     $('#searchUserProfileField').keyup(function(){
         table.search($(this).val()).draw() ;
