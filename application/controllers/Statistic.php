@@ -6,6 +6,9 @@ class Statistic extends CI_Controller {
     public function __construct()
     {
         parent::__construct();
+        if($this->session->userdata('username')== null){
+            redirect(site_url('login'),'refresh');
+        }
         $this->load->model('Statistic_Model','statistic');
     }
 
@@ -35,6 +38,39 @@ class Statistic extends CI_Controller {
             $row['tx'][] = [strtotime($graph->time)*1000,round($graph->tx)];
 			$row['rx'][] = [strtotime($graph->time)*1000,round($graph->rx)];
             // $row['point'][] = date('H:i:s', strtotime($graph->time));
+            // if(date('H:i:s', strtotime($graph->time))=='00:00:00'){
+                // $time = date('Y-m-d H:i:s', strtotime($graph->time));
+            // }else{
+                // $time = date('H:i:s', strtotime($graph->time));
+            // }
+			// $row['point'][] = $time;
+        }
+        // $result = $row;
+        // echo "<pre>";
+        // echo $last_date;
+        // print_r($time = date('H:i:s', strtotime($first_date)));
+        echo json_encode($row);
+    }
+
+    public function linePingQuality()
+    {
+        date_default_timezone_set('Asia/Jakarta');
+        $interface = $this->input->post('iface');
+        $first_date = $this->input->post('start');
+        $last_date = $this->input->post('end');
+        $graphs = $this->statistic->getQuality(array('interface' => $interface, 'first_date' => $first_date, 'last_date' => $last_date));
+        $stat = $this->statistic->getStatisticQuality(array('interface'=> $interface ,'first_date' => $first_date, 'last_date' => $last_date));
+        // echo '<pre>';
+        // print_r($graph);
+        $row = array (
+            'ping' => array(), 
+            'quality' => array(), 
+            'stat' => $stat
+        );
+        foreach($graphs as $graph){
+            $row['ping'][] = [strtotime($graph->time)*1000,$graph->ping_avg*1];
+            $row['quality'][] = [strtotime($graph->time)*1000,$graph->loss];
+            // $row['jitter'][] = $graph->jitter;
             // if(date('H:i:s', strtotime($graph->time))=='00:00:00'){
                 // $time = date('Y-m-d H:i:s', strtotime($graph->time));
             // }else{

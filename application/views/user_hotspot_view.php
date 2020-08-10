@@ -72,7 +72,7 @@
                 <h4 class="modal-title" id="modal-title">Add User Profile</h4>
             </div>
             <div class="modal-body form">
-            <form id="form" action="＃" method="post" class="form-horizontal row-border">
+            <form id="form-user" action="＃" method="post" class="form-horizontal row-border">
                 <input type="hidden" value="" name="id"/> 
                
                 <div class="form-group">
@@ -124,7 +124,7 @@
                 className: "btn btn-success",
                 extend: 'print',
                 exportOptions: {
-                    columns: [ 0, ':visible' ]
+                    columns: [ 0, 2, 3, 4, 5 ]
                 },
                 init: function(api, node, config) {
                    $(node).removeClass('btn-default');
@@ -134,7 +134,7 @@
                 className: "btn btn-success",
                 extend: 'copyHtml5',
                 exportOptions: {
-                    columns: [ 0, ':visible' ]
+                    columns: [ 0, 2, 3, 4, 5 ]
                 },
                 init: function(api, node, config) {
                    $(node).removeClass('btn-default');
@@ -144,7 +144,7 @@
                 className: "btn btn-success",
                 extend: 'excelHtml5',
                 exportOptions: {
-                    columns: [0, 2]
+                    columns: [0, 2, 3, 4, 5]
                 },
                 init: function(api, node, config) {
                    $(node).removeClass('btn-default');
@@ -154,7 +154,7 @@
                 className: "btn btn-success",
                 extend: 'pdfHtml5',
                 exportOptions: {
-                    columns: [ 0, 2 ]
+                    columns: [ 0, 2, 3, 4, 5 ]
                 },
                 init: function(api, node, config) {
                    $(node).removeClass('btn-default');
@@ -218,7 +218,7 @@
 
     function addUser(){
         save_method= 'add';
-        $('#form')[0].reset();
+        $('#form-user')[0].reset();
         $('.form-group').removeClass('has-error');
         $('.help-block').empty();
         $('#modal_form').modal('show');
@@ -228,17 +228,15 @@
     function editUser(id){
         save_method = 'update';
         var data = {id : id};
-        $('#form')[0].reset();
+        $('#form-user')[0].reset();
         $('.form-group').removeClass('has-error');
         $('.help-block').empty(); 
-        console.log(data);
-
 
         $.post('<?php echo site_url('hotspot/getUserHotspotByID/') ?>',data,function(respon){
             if(respon){
                 $('[name="id"]').val(respon.id);
                 $('[name="name"]').val(respon.name);
-                $('[name="password"]').val(respon.password);
+                $('[name="password"]').val(null);
                 $('[name="profile"]').val(respon.profile);
                 $('#modal_form').modal('show');
                 $('.modal-title').text('Edit User Profile');
@@ -260,18 +258,20 @@
         } else {
             url = "<?php echo site_url('hotspot/setuserhotspot')?>";
         }
+        console.log($('#form-user').serialize());
 
         $.ajax({
             url : url,
             type: "POST",
-            data: $('#form').serialize(),
+            data: $('#form-user').serialize(),
             dataType: "JSON",
             success: function(data)
             {
                 if(data.status) 
                 {
                     $('#modal_form').modal('hide');
-                    syncProfile();
+                    // syncProfile();
+                    reload_table();
                 }
                 $('#btnSave').text('save'); 
                 $('#btnSave').attr('disabled',false); 
@@ -287,18 +287,20 @@
 
     function syncProfile(){
         $.skylo('start');
-        $.ajax({
-            url: "<?php echo site_url('hotspot/syncUserHotspot/') ?>",
-            type: "POST",
-            dataType: "JSON",
-            success: function(data){
-                reload_table();
-                $.skylo('end');
-            },
-            error: function (jqXHR, textStatus, errorThrown){
-                alert('Error!!');
-            }
-        })
+        // $.ajax({
+        //     url: "<?php echo site_url('hotspot/syncUserHotspot/') ?>",
+        //     type: "POST",
+        //     dataType: "JSON",
+        //     success: function(data){
+        //         reload_table();
+        //         $.skylo('end');
+        //     },
+        //     error: function (jqXHR, textStatus, errorThrown){
+        //         alert('Error!!');
+        //     }
+        // })
+        reload_table();
+        $.skylo('end');
     }
 
     function deleteUser(id){

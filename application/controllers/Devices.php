@@ -571,6 +571,14 @@ class Devices extends CI_Controller {
                     'FromHost' => 'SIMONETapp'
                 );
                 $this->log_event->insertLogActivity($log);
+                $log1 = array(
+                    'Message' =>  'Device '.$identity.' was rebooted',
+                    'SysLogTag' => 'devices,device-reboot,simonet',
+                    'ReceivedAt' => date("Y-m-d H:i:s"),
+                    'DeviceReportedTime' => date("Y-m-d H:i:s"),
+                    'FromHost' => 'SIMONETapp'
+                );
+                $this->log_event->insertLogActivity($log1);
                 echo json_encode(array("status" => TRUE));
             }
         }catch(Exeption $error){
@@ -848,6 +856,14 @@ class Devices extends CI_Controller {
                 'FromHost' => 'SIMONETapp'
             );
             $this->log_event->insertLogActivity($log);
+            $log1 = array(
+                'Message' =>  'Device '.$identity.' was rebooted',
+                'SysLogTag' => 'devices,device-reboot,simonet',
+                'ReceivedAt' => date("Y-m-d H:i:s"),
+                'DeviceReportedTime' => date("Y-m-d H:i:s"),
+                'FromHost' => 'SIMONETapp'
+            );
+            $this->log_event->insertLogActivity($log1);
             $this->devices->updateStatus(array('mac_address' => $mac),array('status' => 'Reboot'));
             $this->session->set_flashdata('devices', '<div class="alert alert-dismissable alert-success">
             <i class="ti ti-check"></i>&nbsp; <strong>Well Done!</strong> Reboot Device '.$identity.' Berhasil!!

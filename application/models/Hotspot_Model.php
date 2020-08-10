@@ -3,6 +3,18 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 class Hotspot_Model extends CI_Model {
 
+    function pass($pass){
+        $this->db->select('md5(md5(password('.$pass.'))) as password');
+        $query = $this->db->get('');
+        // $query = $this->db->query('Select md5(md5(password('.$pass.')))');
+        return $query->row_array();
+    }
+
+    function addUser($data){
+        $this->db->insert('user_hotspot', $data);
+        // return $this->db->insert_id();
+    }
+
     function getUserHotspot(){
         if($data = $this->db->get('user_hotspot')){
 			return $data->result_array();
@@ -69,7 +81,7 @@ class Hotspot_Model extends CI_Model {
 
     function addUserProfile($data){
         $this->db->insert('user_profile', $data);
-        return $this->db->insert_id();
+        // return $this->db->insert_id();
     }
     
     function delUserProfile($id){

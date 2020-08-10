@@ -18,7 +18,8 @@ class Hotspot extends CI_Controller {
 
     public function index()
     {
-        
+        $a = $this->hotspot->pass('12345');
+        print_r($a);
     }
 
     public function userHotspot(){
@@ -40,14 +41,28 @@ class Hotspot extends CI_Controller {
 
     function userHotspotJSON(){
         // function untuk mengget semua data user hotspot dari database
-        $data = $this->hotspot->getuserhotspot();
-        foreach($data as $r){
-            $r['password'] = '************************';
-            $r['bytes_in'] = byte_format($r['bytes_in']); 
-            $r['bytes_out'] = byte_format($r['bytes_out']); 
-            $r['aksi'] = "<a href='javascript:;' data-aksi='edit' data-id='".$r['id']."'><i class='fa fa-pencil-square-o'></i></a>
-                <a href='javascript:;' data-aksi='hapus' data-id='".$r['id']."' style='color : rgb(218,86,80)'><i class='fa fa-trash-o'></i></a>";
-            $_data[] = $r;
+        $api = $this->routerosapi;
+        $user = $this->devices->getUserRouter(array('id' => '1111'));
+        $api->port = $user['port'];
+        $_read = array();
+        if($api->connect("10.10.10.1",$user['username'],$user['password'])){
+            $api->write('/ip/hotspot/user/print');
+            $data = $api->read();
+            $api->disconnect();
+            foreach($data as $r){
+                if($r['name']!='default-trial'){
+                    $r['password'] = '************************';
+                    $r['bytes_in'] = byte_format($r['bytes-in']); 
+                    $r['bytes_out'] = byte_format($r['bytes-out']); 
+                    if($this->session->userdata('role')==='adm'){    
+                        $r['aksi'] = "<a href='javascript:;' data-aksi='edit' data-id='".$r['.id']."'><i class='fa fa-pencil-square-o'></i></a>
+                        <a href='javascript:;' data-aksi='hapus' data-id='".$r['.id']."' style='color : rgb(218,86,80)'><i class='fa fa-trash-o'></i></a>";
+                    }else{
+                        $r['aksi'] = '';
+                    }
+                    $_data[] = $r;
+                }
+            }
         }
         $output = array(
             "draw" => $this->input->post('draw'),
@@ -58,9 +73,10 @@ class Hotspot extends CI_Controller {
 
     function addUserHotspot(){
         // funtion untuk menyimpan data user hotspot ke mikrotik
+        $pass = $this->hotspot->pass("'".$this->input->post('password')."'");
         $data = array(
             'name' => $this->input->post('name'),
-            'password' => $this->input->post('password'),
+            'password' => $pass['password'],
             'profile' => $this->input->post('profile')
         );
         try{
@@ -74,6 +90,7 @@ class Hotspot extends CI_Controller {
 			    $api->write('=profile='.$data['profile'] );
                 $write = $api->read();
                 $api->disconnect();
+                $this->hotspot->adduser($data);
                 echo json_encode(array("status" => TRUE, "data" => $data));
             }else{
                 echo json_encode(array("status" => FALSE));
@@ -100,6 +117,7 @@ class Hotspot extends CI_Controller {
             'password' => $this->input->post('password'),
             'profile' => $this->input->post('profile')  
         );
+        $pass = $this->hotspot->pass("'".$data['password']."'");
         try{
             $api = $this->routerosapi;
             $user = $this->devices->getUserRouter(array('id' => '1111'));
@@ -108,7 +126,7 @@ class Hotspot extends CI_Controller {
                 $api->write('/ip/hotspot/user/set',false);
 			    $api->write('=.id='.$data['id'],false);
 			    $api->write('=name='.$data['name'], false );
-			    $api->write('=password='.$data['password'], false );
+			    $api->write('=password='.$pass['password'], false );
 			    $api->write('=profile='.$data['profile']);
                 $write = $api->read();
                 $api->disconnect();
@@ -174,8 +192,12 @@ class Hotspot extends CI_Controller {
         $data = $this->hotspot->getuserprofile();
         $_data = array();
             foreach($data as $r){
-                $r['aksi'] = "<a href='javascript:;' data-aksi='edit' data-id='".$r['id']."'><i class='fa fa-pencil-square-o'></i></a>
-                <a href='javascript:;' data-aksi='hapus' data-id='".$r['id']."' style='color : rgb(218,86,80)'><i class='fa fa-trash-o'></i></a>";
+                if($this->session->userdata('role')==='adm'){    
+                    $r['aksi'] = "<a href='javascript:;' data-aksi='edit' data-id='".$r['id']."'><i class='fa fa-pencil-square-o'></i></a>
+                    <a href='javascript:;' data-aksi='hapus' data-id='".$r['id']."' style='color : rgb(218,86,80)'><i class='fa fa-trash-o'></i></a>";
+                }else{
+                    $r['aksi'] = '';
+                }
                 $_data[] = $r;
             }
         $output = array(

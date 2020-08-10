@@ -44,7 +44,25 @@ class Dashboard_Model extends CI_Model {
 		}else{
 			return false;
 		}
-    }
+	}
+	
+	function readNotification(){
+		$this->db->where('read', '0');
+		$this->db->update('notification', array('read' => '1'));
+	}
+
+	function clearNotification(){
+		$this->db->truncate('notification');
+	}
+
+	function getNotification(){
+		$this->db->order_by('time', 'desc');
+        if($data = $this->db->get('notification')){
+			return $data->result_array();
+		}else{
+			return false;
+		}
+	}
 
     function getDeviceAuth(){
         if($data = $this->db->get('devices_user')){

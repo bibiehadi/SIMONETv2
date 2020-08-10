@@ -25,7 +25,9 @@
                                         </div>
                                         <div class="dt-buttonsbtn-group pull-right" id="button-table" role="group" aria-label="Basic example">
                                             <a type="button" class="btn btn-info" data-aksi="sync" href="javascript:;"><i class="fa fa-refresh"></i> Refresh</a>
+                                            <?php if($this->session->userdata('role')==='adm'){ ?>
                                             <a type="button" class="btn btn-success" data-aksi="add"><i class="fa fa-plus"></i></a>
+                                            <?php } ?>
                                         </div>
                                     </div>
                                     <div class="panel-body">
@@ -140,7 +142,7 @@
                 className: "btn btn-success",
                 extend: 'print',
                 exportOptions: {
-                    columns: [ 0, ':visible' ]
+                    columns: [ 0, 3, 5 ]
                 },
                 init: function(api, node, config) {
                    $(node).removeClass('btn-default');
@@ -150,7 +152,7 @@
                 className: "btn btn-success",
                 extend: 'copyHtml5',
                 exportOptions: {
-                    columns: [ 0, ':visible' ]
+                    columns: [ 0, 3, 5 ]
                 },
                 init: function(api, node, config) {
                    $(node).removeClass('btn-default');
@@ -160,7 +162,7 @@
                 className: "btn btn-success",
                 extend: 'excelHtml5',
                 exportOptions: {
-                    columns: [0, 5]
+                    columns: [0, 3, 5]
                 },
                 init: function(api, node, config) {
                    $(node).removeClass('btn-default');
@@ -170,7 +172,7 @@
                 className: "btn btn-success",
                 extend: 'pdfHtml5',
                 exportOptions: {
-                    columns: [ 0, 5 ]
+                    columns: [ 0, 3, 5 ]
                 },
                 init: function(api, node, config) {
                    $(node).removeClass('btn-default');

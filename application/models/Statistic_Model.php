@@ -11,8 +11,8 @@ class Statistic_Model extends CI_Model {
         // $this->db->order_by('time', 'asc');
         // // $this->db->limit(2000);
         // $data = $this->db->get('network_log');
-        $data = $this->db->query( "select * from (select * from network_log where interface = '".$interface."'
-        order by time DESC LIMIT 10 ) as ether order by id ASC "
+        $data = $this->db->query( "SELECT * FROM (SELECT * FROM network_log WHERE interface = '".$interface."'
+        ORDER BY time DESC LIMIT 120 ) as ether order by id ASC "
         );
         return $data->result();
     }
@@ -34,6 +34,23 @@ class Statistic_Model extends CI_Model {
         return $data->row_array();
     }
 
+    function getQuality($interface){
+        $this->db->where('interface',$interface['interface']);
+        $this->db->where('time >=',$interface['first_date']);
+        $this->db->where('time <=',$interface['last_date']);
+        $data = $this->db->get('network_quality_log');
+        return $data->result();
+    }
+
+    function getStatisticQuality($interface){
+        $this->db->select('max(ping_avg) as MaxPing, min(ping_avg) as MinPing, avg(ping_avg) as AvgPing, max(jitter) as MaxJitter, min(jitter) as MinJitter, avg(jitter) as AvgJitter, max(loss) as MaxLoss, min(loss) as MinLoss, avg(loss) as AvgLoss');
+        $this->db->where('interface',$interface['interface']);
+        $this->db->where('time >=',$interface['first_date']);
+        $this->db->where('time <=',$interface['last_date']);
+        $data = $this->db->get('network_quality_log');
+        return $data->row_array();
+    }
+
     function getDataResource($interface){
         $this->db->where('time >=',$interface['first_date']);
         $this->db->where('time <=',$interface['last_date']);
@@ -45,7 +62,7 @@ class Statistic_Model extends CI_Model {
     }
 
     function getStatisticResource($interface){
-        $this->db->select('max(cpu) as MaxCPU, min(cpu) as MinCPU, avg(cpu) as AvgCPU, max(memory) as MaxMemory, min(memory) as MinMemory, avg(memory) as AvgMemory');
+        $this->db->select('max(cpu) as MaxCPU, min(cpu) as MinCPU, avg(cpu) as AvgCPU, max((memory/memory_capacity)*100) as MaxMemory, min((memory/memory_capacity)*100) as MinMemory, avg((memory/memory_capacity)*100) as AvgMemory');
         $this->db->where('time >=',$interface['first_date']);
         $this->db->where('time <=',$interface['last_date']);
         // $this->db->order_by('time', 'desc');
@@ -54,32 +71,6 @@ class Statistic_Model extends CI_Model {
         $data = $this->db->get('resource_log');
         return $data->row_array();
     }
-
-    function getDataInterfacePerHour($interface){
-        $query = $this->db->query("select hour(time) as time, SUM(tx) as tx, SUM(rx) as rx
-            from network_log where interface = '".$interface['interface']."'
-            and time >= '".$interface['first_date']."'
-            and time <= '".$interface['last_date']."'
-            group by hour(time)
-            "
-        );
-        return $query->result();
-
-    }
-
-    function getDataInterfacePerDay($interface){
-        $query = $this->db->query("select DATE(time) as time, SUM(tx) as tx, SUM(rx) as rx
-            from network_log where interface = '".$interface['interface']."'
-            and time >= '".$interface['first_date']."'
-            and time <= '".$interface['last_date']."'
-            GROUP BY date(time);
-            "
-        );
-        return $query->result();
-
-    }
-
-
 }
 
 /* End of file Statistic_Model.php */

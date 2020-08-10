@@ -186,10 +186,10 @@
     // instantiate Topology class
     var topology = new MyTopology();
 
-    topology.registerIcon("rb", "<?php echo base_url('assets/img/rb.png')?>", 40, 40);
-    topology.registerIcon("ccr", "<?php echo base_url('assets/img/CCR.ico')?>", 80, 80);
-    topology.registerIcon("unifi", "<?php echo base_url('assets/img/unifi.png')?>", 40, 40);
-    topology.registerIcon("unifiswitch", "<?php echo base_url('assets/img/UnifiSwitch.ico')?>", 40, 40);
+    topology.registerIcon("rb", "<?php echo base_url('assets/img/rb.png')?>", 30, 30);
+    topology.registerIcon("ccr", "<?php echo base_url('assets/img/CCR.ico')?>", 50, 50);
+    topology.registerIcon("unifi", "<?php echo base_url('assets/img/unifi.png')?>", 30, 30);
+    topology.registerIcon("unifiswitch", "<?php echo base_url('assets/img/UnifiSwitch.ico')?>", 30, 30);
     // load topology data from app/data.js
     topology.data(topologyData);
 

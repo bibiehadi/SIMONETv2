@@ -58,17 +58,20 @@
                                                 <div class="col-md-6" >
                                                     <!-- <h2>Detail Device</h2> -->
                                                     <form class="form-inline" action="<?php echo site_url('devices/detaildevice');?>" method="post" id="deviceForm" style="">
-                                                        <select name="serial" id="device" class="select-device" style="width: 200px;color: #03a9f4; border: 0px; outline: 0px; background: #fafafa; margin-left :10px">
+                                                        <div class="form-group">
+                                                        <select name="serial" id="device" class="select-device" >
                                                             <?php foreach ($list_devices as $row) {
                                                                 if($row['serial_number'] == $serial_number){?>
                                                                     <option selected value="<?php echo $row['serial_number']; ?> "><?php echo $row['identity'];?></option>
-                                                                <?} else { ?>
+                                                                <?} else if($row['identity'] != 'MainRouter'){ ?>
                                                                     <option value="<?php echo $row['serial_number']; ?>"><?php echo $row['identity'];?></option>
                                                             <?php } 
                                                             } ?>
                                                         </select>
+                                                        </div>
                                                     </form>
                                                 </div>
+                                                <?php if($this->session->userdata('role')==='adm'){    ?>
                                                 <div class="col-md-6">
                                                     <?php if($status == 'Connected' && ($platform == 'MikroTik' || $platform == 'UniFi')){?>
                                                         <a class="btn btn-warning pull-right" data-aksi="reboot" href="javascript:;" style="margin: 10px 20px 10px 0px">Reboot</a>
@@ -76,6 +79,7 @@
                                                     <a href="#tab-edit" role="tab" data-toggle="tab" class="btn btn-primary pull-right" style="margin: 10px 10px 10px 0px"><i class="fa fa-pencil-square-o"></i></a>
                                                     <a class="btn btn-danger pull-right" data-aksi="remove" href="javascript:;" style="margin: 10px"><i class="fa fa-trash"></i></a>
                                                 </div>
+                                                <?php } ?>
                                             </div>
                                         </div>
                                         <div class="panel-body">
@@ -148,6 +152,7 @@
                                             <h2><a href="#tab-about" role="tab" data-toggle="tab" style="color : #9e9e9e"><i class="fa fa-chevron-left" aria-hidden="true" ></i>Back</a> <h2>
                                             <!-- <h2>Edit</h2> -->
                                         </div>
+                                        <?php if($this->session->userdata('role')==='adm'){    ?>
                                         <div class="panel-body">
                                             <div class="row">
                                                 <div class="col-md-12">
@@ -169,28 +174,27 @@
                                                         <div class="form-group">
                                                             <label for="form-address" class="col-sm-2 control-label">Main IP Address</label>
                                                             <div class="col-sm-8 tabular-border">
-                                                                <input type="text" class="form-control" name="address" id="form-address" value="<?php echo $address; ?>">
+                                                                <input type="text" class="form-control" name="address" id="form-address" value="<?php echo $address; ?>" readonly>
                                                             </div>
                                                         </div>
                                                         <div class="form-group">
                                                             <label class="col-sm-2 control-label">Master Devices</label>
                                                             <div class="col-sm-8">
-                                                                <select name="masterdevice" id="masterdevice" class="form-control">
-                                                                    <option value="">--- Select ---</option>
-                                                                    <? foreach($list_devices as $device){ 
-                                                                        if ($device['serial_number'] == $id_device) {?>
-                                                                            <option selected value="<? echo $device['serial_number']; ?>"><? echo $device['identity'];?></option>
-                                                                        <? }else{ ?>
-                                                                            <option value="<? echo $device['serial_number']; ?>"><? echo $device['identity'];?></option>
-                                                                    <? } 
-                                                                    }?>
+                                                                <select name="masterdevice" id="masterdevice" class="select-device">
+                                                                    <?php foreach ($list_devices as $row) {
+                                                                    if($row['serial_number'] == $id_device){?>
+                                                                        <option selected value="<?php echo $row['serial_number']; ?> "><?php echo $row['identity'];?></option>
+                                                                    <?} else { ?>
+                                                                        <option value="<?php echo $row['serial_number']; ?>"><?php echo $row['identity'];?></option>
+                                                                    <?php } 
+                                                                    } ?>
                                                                 </select>
                                                             </div>
                                                         </div>
                                                         <div class="form-group">
                                                             <label class="col-sm-2 control-label">Location</label>
                                                             <div class="col-sm-8">
-                                                                <select name="location" id="location" class="form-control">
+                                                                <select name="location" id="location" class="select-device">
                                                                     <option value="">--- Select ---</option>
                                                                     <? foreach($location as $loc){ 
                                                                         if ($loc['id'] == $id_location) {?>
@@ -211,6 +215,7 @@
                                                 </div>
                                             </div>
                                         </div>
+                                        <?php } ?>
                                     </div>
                                 </div>
                                 <div class="tab-pane" id="tab-interfaces">
@@ -221,11 +226,13 @@
                                                     <div class="col-md-4" >
                                                         <h2>Interfaces</h2>
                                                     </div>
-                                                    <div class="col-md-8">
-                                                        <?php if($status == 'Connected' && $platform == 'MikroTik'){?>
-                                                        <a class="btn btn-info pull-right" data-aksi="sync" href="javascript:;" style="margin: 10px"><i class="fa fa-refresh"></i></a>
-                                                        <? }?>
-                                                    </div>
+                                                    <?php if($this->session->userdata('role')==='adm'){    ?>
+                                                        <div class="col-md-8">
+                                                            <?php if($status == 'Connected' && $platform == 'MikroTik'){?>
+                                                            <a class="btn btn-info pull-right" data-aksi="sync" href="javascript:;" style="margin: 10px"><i class="fa fa-refresh"></i></a>
+                                                            <? }?>
+                                                        </div>
+                                                    <?php } ?>
                                                 </div>
                                             </div>
                                             <div class="panel-body ">
@@ -372,7 +379,10 @@
 <script type="text/javascript">
 
     $(document).ready(function(){
-        $('.select-device').select2();
+        $('.select-device').select2({width: '100%'});
+        $(".select-device").each(function() {
+            $(this).siblings(".select2-container").css('border', '1px solid #e3e3e3;');
+        });
     })
     if('<? echo $platform?>' == 'MikroTik'){
         getResource();

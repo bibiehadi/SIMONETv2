@@ -7,7 +7,7 @@
             </div>
             <div class="modal-body form">
                 <div class="row " style="margin: 5px">
-                    <div class="panel-heading">    
+                    <div class="panel-heading" style="margin: 0px 0px 10px 0px">    
                         <div class="col-sm-3 pull-right">
                             <div class="input-group">
                                 <span class="input-group-addon">
@@ -26,10 +26,10 @@
                         </div>
                     </div>
                     <div class="panel-body">
-                        <table id="tb_simonetlog" class="table about-table " cellspacing="0" width="100%" style="font-size:11px">
+                        <table id="tb_simonetlog" class="table about-table" cellspacing="0" width="100%" style="font-size:11px">
                             <thead>
                                 <tr>
-                                    <th style="width: 120px">Date</th>
+                                    <th style="width: 150px">Date</th>
                                     <th>Event</th>
                                     <th style="width: 80px">Tag</th>
                                     <th>From</th>
@@ -339,6 +339,8 @@
 <script type="text/javascript" src="https://cdn.datatables.net/buttons/1.6.2/js/buttons.colVis.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/js/select2.min.js"></script>
 <script>
+    getNotification();
+    
     tableLog = $('#tb_simonetlog').DataTable({
         responsive : true,
         pageLength : 100,
@@ -371,6 +373,14 @@
 
     $('#searchLog').keyup(function(){
         tableLog.search($(this).val()).draw() ;
+    })
+
+    $('body').on('click','a[data-aksi="notif"]',function(){
+        readNotification();
+    })
+
+    $('body').on('click','a[data-aksi="clearNotif"]',function(){
+        clearNotification();
     })
 
     $('body').on('click','button[data-aksi="allLog"]',function(){
@@ -467,6 +477,109 @@
         getadmins();
         getDeviceAuth();
         getTemplateConfig();
+    }
+
+    function getNotification(){
+        var url = "<?php echo site_url('dashboard/getNotification')?>";
+
+        $.ajax({
+            url : url,
+            type: "POST",
+            dataType: "JSON",
+            success: function(data)
+            {
+                if(data.status)
+                {
+                    $('#notif li').remove();
+                    $('#btnnotif span').remove();
+                    var liHTML = '';
+                    var unreadCount = 0;
+                    $.each(data.data, function (i, item) {
+                        if(item.read == '0'){
+                            unreadCount++;
+                            if(item.tag == 'devices,device-up,simonet'){
+                                liHTML += '<li class="media notification-success" style="background-color:#e3dfc8;"><a href="#"><div class="media-left"><span class="notification-icon"><i class="ti ti-harddrive"></i></span></div><div class="media-body"><h4 class="notification-heading">'+ item.event +'</h4><span class="notification-time">'+ item.time +'</span></div></a></li>';
+                                new PNotify({
+                                    title: 'Device Up',
+                                    text: item.event,
+                                    type: 'success',
+                                    icon: 'ti ti-check',
+                                    styling: 'fontawesome'
+                                });
+                            }else if(item.tag == 'devices,device-down,simonet'){
+                                liHTML += '<li class="media notification-danger" style="background-color: #e3dfc8;"><a href="#"><div class="media-left"><span class="notification-icon"><i class="ti ti-harddrive"></i></span></div><div class="media-body"><h4 class="notification-heading">'+ item.event +'</h4><span class="notification-time">'+ item.time +'</span></div></a></li>';
+                                new PNotify({
+                                    title: 'Device Down',
+                                    text: item.event,
+                                    type: 'error',
+                                    icon: 'ti ti-check',
+                                    styling: 'fontawesome'
+                                });
+                            }else if(item.tag == 'devices,device-reboot,simonet'){
+                                liHTML += '<li class="media notification-warning" style="background-color: #e3dfc8;"><a href="#"><div class="media-left"><span class="notification-icon"><i class="ti ti-harddrive"></i></span></div><div class="media-body"><h4 class="notification-heading">'+ item.event +'</h4><span class="notification-time">'+ item.time +'</span></div></a></li>';
+                                new PNotify({
+                                    title: 'Device Rebooted',
+                                    text: item.event,
+                                    type: 'warning',
+                                    icon: 'ti ti-check',
+                                    styling: 'fontawesome'
+                                });
+                            }else{
+                                liHTML += '<li class="media notification-info" style="background-color: #e3dfc8;"><a href="#"><div class="media-left"><span class="notification-icon"><i class="ti ti-info"></i></span></div><div class="media-body"><h4 class="notification-heading">'+ item.event +'</h4><span class="notification-time">'+ item.time +'</span></div></a></li>';
+                                new PNotify({
+                                    title: 'Info',
+                                    text: item.event,
+                                    type: 'info',
+                                    icon: 'ti ti-check',
+                                    styling: 'fontawesome'
+                                });
+                            }
+                        }else{
+                            if(item.tag == 'devices,device-up,simonet'){
+                                liHTML += '<li class="media notification-success"><a href="#"><div class="media-left"><span class="notification-icon"><i class="ti ti-harddrive"></i></span></div><div class="media-body"><h4 class="notification-heading">'+ item.event +'</h4><span class="notification-time">'+ item.time +'</span></div></a></li>';
+                            }else if(item.tag == 'devices,device-reboot,simonet'){
+                                liHTML += '<li class="media notification-warning"><a href="#"><div class="media-left"><span class="notification-icon"><i class="ti ti-harddrive"></i></span></div><div class="media-body"><h4 class="notification-heading">'+ item.event +'</h4><span class="notification-time">'+ item.time +'</span></div></a></li>';
+                            }else if(item.tag == 'devices,device-down,simonet'){
+                                liHTML += '<li class="media notification-danger"><a href="#"><div class="media-left"><span class="notification-icon"><i class="ti ti-harddrive"></i></span></div><div class="media-body"><h4 class="notification-heading">'+ item.event +'</h4><span class="notification-time">'+ item.time +'</span></div></a></li>';
+                            }else{
+                                liHTML += '<li class="media notification-info"><a href="#"><div class="media-left"><span class="notification-icon"><i class="ti ti-info"></i></span></div><div class="media-body"><h4 class="notification-heading">'+ item.event +'</h4><span class="notification-time">'+ item.time +'</span></div></a></li>';
+                            }
+                        }
+                    });
+                    if(unreadCount== 0){
+                        $('#btnnotif').append('<span class="icon-bg"><i class="ti ti-bell"></i></span>');
+                    }else{
+                        $('#btnnotif').append('<span class="icon-bg"><i class="ti ti-bell"></i></span><span class="badge badge-deeporange">'+unreadCount+'</span>');
+                    }
+                    $('#notif').append(liHTML);
+                }
+            },
+            error: function (jqXHR, textStatus, errorThrown)
+            {
+                console.log("Error getAdmins");
+            }
+        });
+        setTimeout(function(){ getNotification(); }, 30000);
+    }
+
+    function readNotification(){
+        $.post('<?php echo site_url('dashboard/readnotification/') ?>',function(respon){
+            if(respon.status){
+                getNotification();
+            }
+        },'json').fail(function(){
+            alert('error read notif');
+        })
+    }
+
+    function clearNotification(){
+        $.post('<?php echo site_url('dashboard/clearnotification/') ?>',function(respon){
+            if(respon.status){
+                getNotification();
+            }
+        },'json').fail(function(){
+            alert('error clear notif');
+        })
     }
 
     function getadmins(){

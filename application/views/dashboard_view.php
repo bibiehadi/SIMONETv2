@@ -188,6 +188,54 @@
 		getTotal();
 	});
 
+	function convertBit(value){
+		var bits = value;                          
+		var sizes = ['b/s', 'kb/s', 'Mb/s', 'Gb/s', 'Tb/s'];
+		if (bits == 0) return '0 b/s';
+		var i = parseInt(Math.floor(Math.log(bits) / Math.log(1024)));
+		return parseFloat((bits / Math.pow(1024, i)).toFixed(2)) + ' ' + sizes[i];                    
+	}
+	
+	function updateLegendLabelTraffic() {
+		var chrt = !this.chart ? this : this.chart;
+		chrt.update({
+			legend: {
+				labelFormatter: function() {
+					var lastVal = this.yData[this.yData.length - 1],
+					chart = this.chart,
+					xAxis = this.xAxis,
+					points = this.points,
+					avg = 0,
+					counter = 0,
+					min, minPoint, max, maxPoint;
+
+					points.forEach(function(point, inx) {
+					if (point.isInside) {
+						if (!min || min > point.y) {
+						min = point.y;
+						minPoint = point;
+						}
+
+						if (!max || max < point.y) {
+						max = point.y;
+						maxPoint = point;
+						}
+
+						counter++;
+						avg += point.y;
+					}
+					});
+					avg /= counter;
+
+					return this.name + '<br>' +
+					'<span">Min: ' + convertBit(min) + ' </span><br/>' +
+					'<span">Max: ' + convertBit(max) + ' </span><br/>' +
+					'<span">Average: ' + convertBit(avg.toFixed(2)); + ' </span><br/>';
+				}
+			}
+		});
+	}
+
 	function requestData(iface, id) 
 	{
 		$.ajax({
@@ -197,7 +245,7 @@
 			data: {iface:iface} ,
 			success: function(data) {	
 				charts[id].hideLoading();
-				charts[id].xAxis[0].setCategories(data.point);
+				// charts[id].xAxis[0].setCategories(data.point);
 				charts[id].series[0].setData(data.tx);
 				charts[id].series[1].setData(data.rx);
 			},
@@ -213,22 +261,16 @@
 			var container = $('#'+id);
 			if(!container.length) return false;
 			var interface = container.data('interface');
-			console.log(interface);
-			// var title = container.data('title');
-			
 			
 			charts[id] = new Highcharts.Chart({
 			chart: {
 				renderTo: id,
-		  		animation: Highcharts.svg,
+				animation: Highcharts.svg,
+				zoomType: 'x',  
 				type: 'areaspline',
-				// zoomType: 'x',
 				events: {
 					load: function () {
-					// setInterval(function () {
-					// 	charts[id].showLoading();
 						requestData(interface, id);
-					// }, 99000);
 					}				
 				},
 			},
@@ -240,32 +282,23 @@
 			},
 			xAxis: {
 				type: 'datetime',
-				// categories : data.point,
-				// tickInterval: 60
-				
-				// labels: {
-				//     data : data.point,
-				// format: '{value:%Y-%m-%d}',
-				// rotation: 45,
-				// align: 'left'
-				// }
 			},
 			yAxis: {
-				// title: {
-				//     text: 'Y-Axis'
-				// }
 				minPadding: 0.2,
 				maxPadding: 0.2,
 				title: {text: null},
 				labels: {
-				formatter: function () {      
-					var bytes = this.value;                          
-					var sizes = ['b/s', 'kb/s', 'Mb/s', 'Gb/s', 'Tb/s'];
-					if (bytes == 0) return '0 bps';
-					var i = parseInt(Math.floor(Math.log(bytes) / Math.log(1024)));
-					return parseFloat((bytes / Math.pow(1024, i)).toFixed(2)) + ' ' + sizes[i];                    
-				},
+					formatter: function () {      
+						var bytes = this.value;                          
+						var sizes = ['b/s', 'kb/s', 'Mb/s', 'Gb/s', 'Tb/s'];
+						if (bytes == 0) return '0 bps';
+						var i = parseInt(Math.floor(Math.log(bytes) / Math.log(1024)));
+						return parseFloat((bytes / Math.pow(1024, i)).toFixed(2)) + ' ' + sizes[i];                    
+					},
 				},    
+				events: {
+					afterSetExtremes: updateLegendLabelTraffic
+					} 
 			},
 			plotOptions: {
 				area: {
@@ -284,7 +317,7 @@
 			},
 			tooltip: {
 				formatter: function() {
-					console.log(this)
+					// console.log(this)
 					var s = [];
 
 					$.each(this.points, function(i, point) {
@@ -299,7 +332,7 @@
 						}
 					});
 
-					return this.x+ '<br>' +s.join(' <br> ');
+					return Highcharts.dateFormat('%A, %b %d, %H:%M', this.x)+ '<br>' +s.join(' <br> ');
 				},
 				shared: true                                                     
 			},
@@ -328,7 +361,6 @@
             dataType: "JSON",
             success: function(data)
             {
-				console.log(data);
                 if(data.status) 
                 {
                     $('#cpu').css("width", data.data['cpu-load'] + "%").text(data.data['cpu-load'] + " %");

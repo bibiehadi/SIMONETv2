@@ -27,11 +27,13 @@
                                             </div>
                                         </div>
                                         <div class="btn-group pull-right" id="button-table" role="group" aria-label="Basic example" style="margin:10px 0 0 0px">
-                                            <!-- <a class="btn btn-info" id="upgradeUnifi" data-aksi="upgradeUniFi" style="margin:10px 0 0 0px; visibility: hidden;"><i class="fa fa-arrow-circle-up"></i> Upgrade</a> -->
-                                            <a class="btn btn-success" data-aksi="add"><i class="fa fa-plus"></i></a>    
-                                            <a class="btn btn-success" data-aksi="refresh"><i class="fa fa-refresh"></i></a>    
+                                            <?php if($this->session->userdata('role')==='adm'){    ?>
+                                                <!-- <a class="btn btn-info" id="upgradeUnifi" data-aksi="upgradeUniFi" style="margin:10px 0 0 0px; visibility: hidden;"><i class="fa fa-arrow-circle-up"></i> Upgrade</a> -->
+                                                <a class="btn btn-success" data-aksi="add"><i class="fa fa-plus"></i></a>    
+                                                <a class="btn btn-success" data-aksi="refresh"><i class="fa fa-refresh"></i></a>    
+                                            <?php } ?>
                                         </div>
-                                        
+                                            
                                     </div>
                                     <div class="panel-body">
                                         <table id="tb_devices" class="table table-hover" cellspacing="0" width="100%" style="cursor:pointer">

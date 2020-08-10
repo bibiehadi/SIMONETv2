@@ -37,7 +37,7 @@ class Login extends CI_Controller {
             );
             $this->session->set_userdata($sessdata);
 
-            if($role === 'adm'){
+            // if($role === 'adm'){
                 $log = array(
                     'Message' =>  'user '.$this->session->userdata('username').' logged in from '.$this->session->userdata('address'),
                     'SysLogTag' => 'system,simonet',
@@ -47,7 +47,7 @@ class Login extends CI_Controller {
                 );
                 $this->log_event->insertLogActivity($log);
                 redirect('dashboard');
-            }
+            // }
         }else{
             $log = array(
                 'Message' => 'login failure for user '.$this->session->userdata('username'),

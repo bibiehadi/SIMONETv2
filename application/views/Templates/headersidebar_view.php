@@ -95,6 +95,21 @@
 	</div><!-- logo-area -->
 
 	<ul class="nav navbar-nav toolbar pull-right">
+        <li class="dropdown toolbar-icon-bg">
+			<a id="btnnotif" href="#" class="hasnotifications dropdown-toggle" data-toggle='dropdown' data-aksi='notif'></a>
+			<div class="dropdown-menu notifications arrow">
+				<div class="topnav-dropdown-header">
+					<span>Notifications</span>
+				</div>
+				<div class="scroll-pane">
+					<ul class="media-list scroll-content" id="notif">
+					</ul>
+				</div>
+				<div class="topnav-dropdown-footer">
+					<a href="#" data-aksi='clearNotif'>Clear all notifications</a>
+				</div>
+			</div>
+		</li>
 		<li class="toolbar-icon-bg hidden-xs">
             <a href="javascript:;" data-aksi="log" data-toggle="tooltip" title="Log Activity"><span class="icon-bg"><i class="ti ti-notepad"></i></span></a>
         </li>
