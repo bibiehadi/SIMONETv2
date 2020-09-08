@@ -64,6 +64,7 @@ class Login extends CI_Controller {
             redirect('login');
         }
     }
+    
     function logout(){
         $log = array(
             'Message' =>  'user '.$this->session->userdata('username').' logged out from '.$this->session->userdata('address'),

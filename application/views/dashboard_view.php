@@ -104,7 +104,7 @@
 		<div class="col-md-6">
 			<div class="panel panel-bluegray" data-widget='{"draggable": "false"}'>
 				<div class="panel-heading">
-					<h2>MyRep BPro 100</h2>
+					<h2>CBN Dedicated</h2>
 					<div class="panel-ctrls button-icon-bg" 
 						data-actions-container="" 
 						data-action-collapse='{"target": ".panel-body"}'
@@ -114,7 +114,7 @@
 					</div>
 				</div>
 				<div class="panel-body">
-					<div class="mychart" id="chart2" style="height: 272px;" class="mt-sm mb-sm" data-interface="BPro100"></div>
+					<div class="mychart" id="chart2" style="height: 272px;" class="mt-sm mb-sm" data-interface="CBNDedicated"></div>
 				</div>
 			</div>
 		</div>
@@ -124,7 +124,7 @@
 		<div class="col-md-6">
 			<div class="panel panel-bluegray" data-widget='{"id" : "wiget9", "draggable": "false"}'>
 				<div class="panel-heading">
-					<h2>MyRep B300</h2>
+					<h2>CBN 1</h2>
 					<div class="panel-ctrls button-icon-bg" 
 						data-actions-container="" 
 						data-action-collapse='{"target": ".panel-body"}'
@@ -135,7 +135,7 @@
 				</div>
 				<div class="panel-editbox" data-widget-controls=""></div>
 				<div class="panel-body">
-					<div class="mychart" id="chart3" style="height: 272px;" class="mt-sm mb-sm" data-interface="B300"></div>
+					<div class="mychart" id="chart3" style="height: 272px;" class="mt-sm mb-sm" data-interface="CBN1"></div>
 				</div>
 			</div>
 		</div>
@@ -143,7 +143,7 @@
 		<div class="col-md-6">
 			<div class="panel panel-bluegray" data-widget='{"draggable": "false"}'>
 				<div class="panel-heading">
-					<h2>MyRep B100</h2>
+					<h2>CBN 2</h2>
 					<div class="panel-ctrls button-icon-bg" 
 						data-actions-container="" 
 						data-action-collapse='{"target": ".panel-body"}'
@@ -153,7 +153,7 @@
 					</div>
 				</div>
 				<div class="panel-body">
-					<div class="mychart" id="chart4" style="height: 272px;" class="mt-sm mb-sm" data-interface="B100"></div>
+					<div class="mychart" id="chart4" style="height: 272px;" class="mt-sm mb-sm" data-interface="CBN2"></div>
 				</div>
 			</div>
 		</div>

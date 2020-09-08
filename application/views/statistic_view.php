@@ -63,6 +63,24 @@
                                         </div>
 										<div class="row">
                                             <div style="margin: 10px">
+                                                <h5><i class="fa fa-circle" style="color: #5cb85c"></i> CBN Dedicated</h5>
+                                                <div class="mychartInterface" id="chart5" style="height: 350px;" class="mt-sm mb-sm" data-interface="CBNDedicated"></div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div style="margin: 10px">
+                                                <h5><i class="fa fa-circle" style="color: #5cb85c"></i> CBN 1</h5>
+                                                <div class="mychartInterface" id="chart6" style="height: 350px;" class="mt-sm mb-sm" data-interface="CBN1"></div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div style="margin: 10px">
+                                                <h5><i class="fa fa-circle" style="color: #5cb85c"></i> CBN 2</h5>
+                                                <div class="mychartInterface" id="chart7" style="height: 350px;" class="mt-sm mb-sm" data-interface="CBN2"></div>
+                                            </div>
+                                        </div>
+										<div class="row">
+                                            <div style="margin: 10px">
                                                 <h5><i class="fa fa-circle" style="color: #5cb85c"></i> Indosat Ping To google.com</h5>
                                                 <div class="mychartQuality" id="quality1" style="height: 350px;" class="mt-sm mb-sm" data-interface="Indosat"></div>
                                             </div>
@@ -85,6 +103,24 @@
                                                 <div class="mychartQuality" id="quality4" style="height: 350px;" class="mt-sm mb-sm" data-interface="B100"></div>
                                             </div>
                                         </div>
+										<div class="row">
+                                            <div style="margin: 10px">
+                                                <h5><i class="fa fa-circle" style="color: #5cb85c"></i> CBN Dedicated Ping To google.com</h5>
+                                                <div class="mychartQuality" id="quality5" style="height: 350px;" class="mt-sm mb-sm" data-interface="CBNDedicated"></div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div style="margin: 10px">
+                                                <h5><i class="fa fa-circle" style="color: #5cb85c"></i> CBN 1 Ping To google.com</h5>
+                                                <div class="mychartQuality" id="quality6" style="height: 350px;" class="mt-sm mb-sm" data-interface="CBN1"></div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div style="margin: 10px">
+                                                <h5><i class="fa fa-circle" style="color: #5cb85c"></i> CBN 2 Ping To google.com</h5>
+                                                <div class="mychartQuality" id="quality7" style="height: 350px;" class="mt-sm mb-sm" data-interface="CBN2"></div>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -105,7 +141,6 @@
 
 
 <script type="text/javascript">
-
 	var charts = {};
 	// var chart;
 	var chartsQuality = {};

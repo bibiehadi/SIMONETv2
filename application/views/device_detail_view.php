@@ -384,7 +384,7 @@
             $(this).siblings(".select2-container").css('border', '1px solid #e3e3e3;');
         });
     })
-    if('<? echo $platform?>' == 'MikroTik'){
+    if('<? echo $platform?>' == 'MikroTik' && '<? echo $status?>' == 'Connected'){
         getResource();
     }
 
