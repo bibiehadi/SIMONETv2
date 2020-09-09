@@ -153,13 +153,19 @@
 									<li><a href="<?php echo site_url('interfaces'); ?>"><i class="ti ti-image"></i><span>Interfaces</span></a></li>	
 									<li><a href="<?php echo site_url('devices'); ?>"><i class="ti ti-harddrive"></i><span>Devices</span></a></li>	
 									<li><a href="<?php echo site_url('topology'); ?>"><i class="ti ti-map"></i><span>Topology</span></a></li>	
-									<li><a href="<?php echo site_url('statistic'); ?>"><i class="ti ti-stats-up" style="bold"></i><span>Statistic</span></a></li>	
+									<li><a href="javascript:;"><i class="ti ti-stats-up" style="bold"></i><span>Statistic</span></a>
+                                        <ul class="acc-menu">
+												<li><a href="<?php echo site_url('statistic/resource'); ?>">Resource</a></li>
+												<li><a href="<?php echo site_url('statistic/bandwidth'); ?>">Bandwidth Usage</a></li>
+												<li><a href="<?php echo site_url('statistic/ping'); ?>">Ping Quality</a></li>
+                                        </ul>
+                                    </li>
 									<li><a href="javascript:;"><i class="ti ti-rss"></i><span>Hotspot</span></a>
 										<ul class="acc-menu">
 												<li><a href="<?php echo site_url('hotspot/userhotspot'); ?>">User Hotspot</a></li>
 												<li><a href="<?php echo site_url('hotspot/userprofile'); ?>">User Profile</a></li>
 												<li><a href="<?php echo site_url('hotspot/useractive'); ?>">User Active</a></li>
-											</ul>
+                                        </ul>
 									</li>
                                     <li><a href="javascript:;" data-aksi="log"><i class="ti ti-notepad"></i>Log Activity</span></a></li>
 								</ul>

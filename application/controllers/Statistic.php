@@ -13,8 +13,19 @@ class Statistic extends CI_Controller {
     }
 
     public function index(){
-        $this->load->view('statistic_view');
-        // $this->load->view('graph_view');
+        // $this->load->view('statistic_view');
+    }
+
+    public function resource(){
+        $this->load->view('statistic_resource_view');
+    }
+
+    public function bandwidth(){
+        $this->load->view('statistic_bandwidth_view');
+    }
+
+    public function ping(){
+        $this->load->view('statistic_ping_view');
     }
 
     public function lineGraphInterface()
