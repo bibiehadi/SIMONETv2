@@ -178,6 +178,14 @@
 <script>
 	var charts = {};
 	var chart;
+
+	Highcharts.setOptions({
+		global: {
+			timezoneOffset: -7 * 60
+		}
+	});
+
+	
 	$(document).ready(function() {
 		$('.mychart').each(function(){
 			interfaceChart($(this).attr('id'));
