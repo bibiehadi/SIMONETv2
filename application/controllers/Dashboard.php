@@ -14,7 +14,7 @@ class Dashboard extends CI_Controller {
         $this->load->model('Statistic_Model', 'statistic');
         $this->load->model('Hotspot_Model', 'hotspot');
         $this->load->model('Devices_Model', 'devices');
-        
+        date_default_timezone_set('Asia/Jakarta');
         
     }
     
