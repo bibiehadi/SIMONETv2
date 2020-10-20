@@ -338,6 +338,7 @@
 <script type="text/javascript" src="https://cdn.datatables.net/buttons/1.6.2/js/buttons.html5.min.js"></script>
 <script type="text/javascript" src="https://cdn.datatables.net/buttons/1.6.2/js/buttons.colVis.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/js/select2.min.js"></script>
+
 <script>
     getNotification();
     
@@ -499,40 +500,40 @@
                             unreadCount++;
                             if(item.tag == 'devices,device-up,simonet'){
                                 liHTML += '<li class="media notification-success" style="background-color:#e3dfc8;"><a href="#"><div class="media-left"><span class="notification-icon"><i class="ti ti-harddrive"></i></span></div><div class="media-body"><h4 class="notification-heading">'+ item.event +'</h4><span class="notification-time">'+ item.time +'</span></div></a></li>';
-                                new PNotify({
-                                    title: 'Device Up',
-                                    text: item.event,
-                                    type: 'success',
-                                    icon: 'ti ti-check',
-                                    styling: 'fontawesome'
-                                });
+                                // new PNotify({
+                                //     title: 'Device Up',
+                                //     text: item.event,
+                                //     type: 'success',
+                                //     icon: 'ti ti-check',
+                                //     styling: 'fontawesome'
+                                // });
                             }else if(item.tag == 'devices,device-down,simonet'){
                                 liHTML += '<li class="media notification-danger" style="background-color: #e3dfc8;"><a href="#"><div class="media-left"><span class="notification-icon"><i class="ti ti-harddrive"></i></span></div><div class="media-body"><h4 class="notification-heading">'+ item.event +'</h4><span class="notification-time">'+ item.time +'</span></div></a></li>';
-                                new PNotify({
-                                    title: 'Device Down',
-                                    text: item.event,
-                                    type: 'error',
-                                    icon: 'ti ti-check',
-                                    styling: 'fontawesome'
-                                });
+                                // new PNotify({
+                                //     title: 'Device Down',
+                                //     text: item.event,
+                                //     type: 'error',
+                                //     icon: 'ti ti-check',
+                                //     styling: 'fontawesome'
+                                // });
                             }else if(item.tag == 'devices,device-reboot,simonet'){
                                 liHTML += '<li class="media notification-warning" style="background-color: #e3dfc8;"><a href="#"><div class="media-left"><span class="notification-icon"><i class="ti ti-harddrive"></i></span></div><div class="media-body"><h4 class="notification-heading">'+ item.event +'</h4><span class="notification-time">'+ item.time +'</span></div></a></li>';
-                                new PNotify({
-                                    title: 'Device Rebooted',
-                                    text: item.event,
-                                    type: 'warning',
-                                    icon: 'ti ti-check',
-                                    styling: 'fontawesome'
-                                });
+                                // new PNotify({
+                                //     title: 'Device Rebooted',
+                                //     text: item.event,
+                                //     type: 'warning',
+                                //     icon: 'ti ti-check',
+                                //     styling: 'fontawesome'
+                                // });
                             }else{
                                 liHTML += '<li class="media notification-info" style="background-color: #e3dfc8;"><a href="#"><div class="media-left"><span class="notification-icon"><i class="ti ti-info"></i></span></div><div class="media-body"><h4 class="notification-heading">'+ item.event +'</h4><span class="notification-time">'+ item.time +'</span></div></a></li>';
-                                new PNotify({
-                                    title: 'Info',
-                                    text: item.event,
-                                    type: 'info',
-                                    icon: 'ti ti-check',
-                                    styling: 'fontawesome'
-                                });
+                                // new PNotify({
+                                //     title: 'Info',
+                                //     text: item.event,
+                                //     type: 'info',
+                                //     icon: 'ti ti-check',
+                                //     styling: 'fontawesome'
+                                // });
                             }
                         }else{
                             if(item.tag == 'devices,device-up,simonet'){

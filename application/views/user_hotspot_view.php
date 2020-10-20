@@ -104,7 +104,7 @@
                 <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
                 <button type="submit" id="btnSave" onClick="save()" class="btn btn-success">Save</button>
             </div>
-            </div>
+        </div>
     </div>
 </div>
 

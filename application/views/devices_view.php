@@ -29,6 +29,7 @@
                                         <div class="btn-group pull-right" id="button-table" role="group" aria-label="Basic example" style="margin:10px 0 0 0px">
                                             <?php if($this->session->userdata('role')==='adm'){    ?>
                                                 <!-- <a class="btn btn-info" id="upgradeUnifi" data-aksi="upgradeUniFi" style="margin:10px 0 0 0px; visibility: hidden;"><i class="fa fa-arrow-circle-up"></i> Upgrade</a> -->
+                                                <a class="btn btn-success" data-aksi="config"><i class="fa fa-wrench"></i></a>    
                                                 <a class="btn btn-success" data-aksi="add"><i class="fa fa-plus"></i></a>    
                                                 <a class="btn btn-success" data-aksi="refresh"><i class="fa fa-refresh"></i></a>    
                                             <?php } ?>
@@ -53,7 +54,6 @@
                                             </tbody>
                                         </table>
                                     </div>
-                                    
                                 </div>
                             </div>
                         </div>
@@ -203,6 +203,42 @@
                         </div>
                     </div>
                 </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="modal_config" role="dialog" >
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="modal-title">Config Device Mikrotik</h4>
+            </div>
+            <div class="modal-body form">
+                <form id="form" action="＃" method="post" class="form-horizontal row-border">
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">Devices</label>
+                        <div class="col-sm-8">
+                            <select name="platform" id="selector_platform" class="form-control">
+                                <option value="">--- Select ---</option>
+                                <option value="MikroTik">MikroTik</option>
+                                <option value="MikroTik Switch">MikroTik Switch</option>
+                                <option value="UniFi">UniFi</option>
+                                <option value="Other">Other</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">Command</label>
+                        <div class="col-sm-8">
+                            <textarea name="command" class="form-control" placeholder='' required></textarea>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="submit" id="btnApply" onClick="apply()" class="btn btn-success pull-right" style="margin: 10px 0px 0px 0px">Apply</button>
             </div>
         </div>
     </div>
@@ -371,6 +407,10 @@
         table3.search($(this).val()).draw() ;
     })
 
+    $('body').on('click','a[data-aksi="config"]',function(){
+        configDevice();
+    })
+
     $('body').on('click','a[data-aksi="add"]',function(){
         addDevice();
     })
@@ -443,6 +483,14 @@
     //         $(this).css("background-color", "green");
     //     }
     // })
+
+    function configDevice(){
+        $('#form')[0].reset();
+        $('.form-group').removeClass('has-error');
+        $('.help-block').empty();
+        $('#modal_config').modal('show');
+        $('.modal-title').text('Config Device');
+    }
 
     function addDevice(){
         save_method= 'add';

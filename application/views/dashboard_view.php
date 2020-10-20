@@ -1,10 +1,10 @@
 <?php $this->load->view('Templates/headersidebar_view'); ?>
    </div>
-                </div>
-                <div class="static-content-wrapper">
-                    <div class="static-content">
-                        <div class="page-content">
-                            <div class="container-fluid">
+	</div>
+	<div class="static-content-wrapper">
+		<div class="static-content">
+			<div class="page-content">
+				<div class="container-fluid">
 
 <div class="row" style = "margin-top: 20px">
 	<div class="col-sm-3">
@@ -45,7 +45,7 @@
 									<img src="<?php echo base_url('assets/img/rb.png')?>" class="img-circle" style="width : 120px; ">
 									<h4 style="color: black;">Routerboard</h4>
 									<h3 id="totalRouter">.../...</h3>
-									<h4>Unit</h4>
+									<h4>Units</h4>
 								</div>
 							</div>
 							<div class="col-sm-3">
@@ -53,7 +53,7 @@
 									<img src="<?php echo base_url('assets/img/unifi.png')?>" class="img-circle" style="width : 120px; ">
 									<h4 style="color: black;">UniFi</h4>
 									<h3 id="totalAP">.../...</h3>
-									<h4>Unit</h4>
+									<h4>Units</h4>
 								</div>
 							</div>
 							<div class="col-sm-3">
@@ -61,7 +61,7 @@
 									<img src="<?php echo base_url('assets/img/clients.png')?>" class="img" style="width : 120px; ">
 									<h4 style="color: black;">Users Connect</h4>
 									<h3 id="totalConnect">.../...</h3>
-									<h4>Device</h4>
+									<h4>Devices</h4>
 								</div>
 							</div>
 							<div class="col-sm-3">
@@ -69,7 +69,7 @@
 									<img src="<?php echo base_url('assets/img/users.png')?>" class="img" style="width : 120px; ">
 									<h4 style="color: black;">User Login</h4>
 									<h3 id="totalLogin">.../...</h3>
-									<h4>User</h4>
+									<h4>Users</h4>
 								</div>
 							</div>
 						</div>

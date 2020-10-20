@@ -10,11 +10,6 @@ class Hotspot_Model extends CI_Model {
         return $query->row_array();
     }
 
-    function addUser($data){
-        $this->db->insert('user_hotspot', $data);
-        // return $this->db->insert_id();
-    }
-
     function getUserHotspot(){
         if($data = $this->db->get('user_hotspot')){
 			return $data->result_array();

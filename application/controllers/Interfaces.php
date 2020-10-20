@@ -29,27 +29,17 @@ class Interfaces extends CI_Controller {
             $data = $api->read();
             $api->disconnect();
             foreach($data as $r){
-                if($r['running']== 'true'){
-                    $r['icon'] = '<span style="color: #39cc64"><i class="ti ti-link"></i></span>';
-                }else{
-                    $r['icon'] = '<span style="color: #f03a3e"><i class="ti ti-unlink"></i></span>';
-                }
-                $r['tx-byte'] = byte_format($r['tx-byte']); 
-                $r['rx-byte'] = byte_format($r['rx-byte']); 
+                if(isset($r['mac-address'])){
+                    if($r['running']== 'true'){
+                        $r['icon'] = '<span style="color: #39cc64"><i class="ti ti-link"></i></span>';
+                    }else{
+                        $r['icon'] = '<span style="color: #f03a3e"><i class="ti ti-unlink"></i></span>';
+                    }
+                    $r['tx-byte'] = byte_format($r['tx-byte']); 
+                    $r['rx-byte'] = byte_format($r['rx-byte']); 
             
-                
-            //     if($r['name']!='default-trial'){
-            //         $r['password'] = '************************';
-            //         $r['bytes_in'] = byte_format($r['bytes-in']); 
-            //         $r['bytes_out'] = byte_format($r['bytes-out']); 
-            //         if($this->session->userdata('role')==='adm'){    
-            //             $r['aksi'] = "<a href='javascript:;' data-aksi='edit' data-id='".$r['.id']."'><i class='fa fa-pencil-square-o'></i></a>
-            //             <a href='javascript:;' data-aksi='hapus' data-id='".$r['.id']."' style='color : rgb(218,86,80)'><i class='fa fa-trash-o'></i></a>";
-            //         }else{
-            //             $r['aksi'] = '';
-            //         }
                     $_data[] = $r;
-            //     }
+                }
             }
         }
         $output = array(

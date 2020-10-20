@@ -52,9 +52,6 @@ class Topology extends CI_Controller {
         }
         $top = $temp;
         echo json_encode(array("status" => TRUE, "data" => $top));
-        // echo "<pre>";
-        // echo json_encode($top);
-        // print_r($top);
     }
 
     function getLinks(){

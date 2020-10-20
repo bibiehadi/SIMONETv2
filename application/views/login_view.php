@@ -60,24 +60,9 @@
 									</div>
 		                        </div>
 							</div>
-
-							<!-- <div class="form-group mb-n">
-								<div class="col-xs-12">
-									<a href="extras-forgotpassword.html" class="pull-left">Forgot password?</a>
-									<div class="checkbox-inline icheck pull-right p-n">
-										<label for="">
-											<input type="checkbox"></input>
-											Remember me
-										</label>
-									</div>
-								</div>
-							</div> -->
-						
-					<!-- </div> -->
-					<!-- <div class="panel-footer"> -->
-						<div class="clearfix">
-							<input type="submit" class="btn btn-primary pull-right" value="Login">
-						</div>
+							<div class="clearfix">
+								<input type="submit" class="btn btn-primary pull-right" value="Login">
+							</div>
 						</form>
 					</div>
 				</div>

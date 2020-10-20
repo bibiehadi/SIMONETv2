@@ -73,9 +73,9 @@
                                                 </div>
                                                 <?php if($this->session->userdata('role')==='adm'){    ?>
                                                 <div class="col-md-6">
-                                                    <?php if($status == 'Connected' && ($platform == 'MikroTik' || $platform == 'UniFi')){?>
+                                                    <!-- <?php if($status == 'Connected' && ($platform == 'MikroTik' || $platform == 'UniFi')){?>
                                                         <a class="btn btn-warning pull-right" data-aksi="reboot" href="javascript:;" style="margin: 10px 20px 10px 0px">Reboot</a>
-                                                    <? }?>
+                                                    <? }?> -->
                                                     <a href="#tab-edit" role="tab" data-toggle="tab" class="btn btn-primary pull-right" style="margin: 10px 10px 10px 0px"><i class="fa fa-pencil-square-o"></i></a>
                                                     <a class="btn btn-danger pull-right" data-aksi="remove" href="javascript:;" style="margin: 10px"><i class="fa fa-trash"></i></a>
                                                 </div>
@@ -158,9 +158,15 @@
                                                 <div class="col-md-12">
                                                     <form class="form-horizontal tabular-form" id="editDevice">
                                                         <div class="form-group">
+                                                            <label for="form-serial" class="col-sm-2 control-label">ID</label>
+                                                            <div class="col-sm-8 tabular-border">
+                                                                <input type="text" class="form-control" name="id" id="form-serial" value="<?php echo $id;?>" readonly>
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-group">
                                                             <label for="form-serial" class="col-sm-2 control-label">Serial Number</label>
                                                             <div class="col-sm-8 tabular-border">
-                                                                <input type="text" class="form-control" name="serial" id="form-serial" value="<?php echo $serial_number;?>" readonly>
+                                                                <input type="text" class="form-control" name="serial" id="form-serial" value="<?php echo $serial_number;?>">
                                                             </div>
                                                         </div>
                                                         <?php if($status == 'Connected' && $platform == 'MikroTik'){?>
@@ -336,7 +342,7 @@
                                 <div class="form-group">
                                     <label class="col-sm-2 control-label">SerialNumber</label>
                                     <div class="col-sm-8">
-                                        <input type="input" name="serial" class="form-control" readonly>
+                                        <input type="input" name="serial" class="form-control">
                                     </div>
                                 </div>
                                 <div class="form-group">
@@ -483,7 +489,6 @@
 
     function getResource(ether){
         var url = "<?php echo site_url('devices/getResource')?>";
-
         $.ajax({
             url : url,
             type: "POST",
@@ -642,9 +647,11 @@
             dataType: "JSON",
             success: function(data)
             {
-                if(data.status) 
-                {
+                if(data.serialChange) {
+                    location.href='<?php echo site_url('devices')?>/';
+                }else{
                     location.reload();
+
                 }
                 $.skylo('end');
                 $('#btnSave').text('save'); 
@@ -795,10 +802,24 @@
 				}
 			},
 			tooltip: {
-				// formatter: function () { 
-				// 	var _0x2f7f=["\x70\x6F\x69\x6E\x74\x73","\x79","\x62\x70\x73","\x6B\x62\x70\x73","\x4D\x62\x70\x73","\x47\x62\x70\x73","\x54\x62\x70\x73","\x3C\x73\x70\x61\x6E\x20\x73\x74\x79\x6C\x65\x3D\x22\x63\x6F\x6C\x6F\x72\x3A","\x63\x6F\x6C\x6F\x72","\x73\x65\x72\x69\x65\x73","\x3B\x20\x66\x6F\x6E\x74\x2D\x73\x69\x7A\x65\x3A\x20\x31\x2E\x35\x65\x6D\x3B\x22\x3E","\x73\x79\x6D\x62\x6F\x6C\x55\x6E\x69\x63\x6F\x64\x65","\x3C\x2F\x73\x70\x61\x6E\x3E\x3C\x62\x3E","\x6E\x61\x6D\x65","\x3A\x3C\x2F\x62\x3E\x20\x30\x20\x62\x70\x73","\x70\x75\x73\x68","\x6C\x6F\x67","\x66\x6C\x6F\x6F\x72","\x3A\x3C\x2F\x62\x3E\x20","\x74\x6F\x46\x69\x78\x65\x64","\x70\x6F\x77","\x20","\x65\x61\x63\x68","\x3C\x62\x3E\x4D\x69\x6B\x68\x6D\x6F\x6E\x20\x54\x72\x61\x66\x66\x69\x63\x20\x4D\x6F\x6E\x69\x74\x6F\x72\x3C\x2F\x62\x3E\x3C\x62\x72\x20\x2F\x3E\x3C\x62\x3E\x54\x69\x6D\x65\x3A\x20\x3C\x2F\x62\x3E","\x25\x48\x3A\x25\x4D\x3A\x25\x53","\x78","\x64\x61\x74\x65\x46\x6F\x72\x6D\x61\x74","\x3C\x62\x72\x20\x2F\x3E","\x20\x3C\x62\x72\x2F\x3E\x20","\x6A\x6F\x69\x6E"];var s=[];$[_0x2f7f[22]](this[_0x2f7f[0]],function(_0x3735x2,_0x3735x3){var _0x3735x4=_0x3735x3[_0x2f7f[1]];var _0x3735x5=[_0x2f7f[2],_0x2f7f[3],_0x2f7f[4],_0x2f7f[5],_0x2f7f[6]];if(_0x3735x4== 0){s[_0x2f7f[15]](_0x2f7f[7]+ this[_0x2f7f[9]][_0x2f7f[8]]+ _0x2f7f[10]+ this[_0x2f7f[9]][_0x2f7f[11]]+ _0x2f7f[12]+ this[_0x2f7f[9]][_0x2f7f[13]]+ _0x2f7f[14])};var _0x3735x2=parseInt(Math[_0x2f7f[17]](Math[_0x2f7f[16]](_0x3735x4)/ Math[_0x2f7f[16]](1024)));s[_0x2f7f[15]](_0x2f7f[7]+ this[_0x2f7f[9]][_0x2f7f[8]]+ _0x2f7f[10]+ this[_0x2f7f[9]][_0x2f7f[11]]+ _0x2f7f[12]+ this[_0x2f7f[9]][_0x2f7f[13]]+ _0x2f7f[18]+ parseFloat((_0x3735x4/ Math[_0x2f7f[20]](1024,_0x3735x2))[_0x2f7f[19]](2))+ _0x2f7f[21]+ _0x3735x5[_0x3735x2])});return _0x2f7f[23]+ Highcharts[_0x2f7f[26]](_0x2f7f[24], new Date(this[_0x2f7f[25]]))+ _0x2f7f[27]+ s[_0x2f7f[29]](_0x2f7f[28])
-				// },
-				shared: true                                                      
+				formatter: function() {
+					var s = [];
+
+					$.each(this.points, function(i, point) {
+						var bytes = point.y;                          
+						var sizes = ['b/s', 'kb/s', 'Mb/s', 'Gb/s', 'Tb/s'];
+						if (bytes == 0) {s.push('<span style="color:#D31B22;font-weight:bold;">'+ point.series.name +' : '+
+							'0 b/s'+'<span>');}
+						else{
+							var i = parseInt(Math.floor(Math.log(bytes) / Math.log(1024)));
+							s.push(point.series.name +' : '+'<span style="color:'+point.series.color+';font-weight:bold;">'+ 
+								parseFloat((bytes / Math.pow(1024, i)).toFixed(2)) + ' ' + sizes[i] +'<span>');
+						}
+					});
+
+					return Highcharts.dateFormat('%A, %b %d, %H:%M', this.x)+ '<br>' +s.join(' <br> ');
+				},
+				shared: true
 			},
 			credits: {
 				enabled: true

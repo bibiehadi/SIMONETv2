@@ -126,6 +126,7 @@ class Devices extends CI_Controller {
             $data = array(
                 'address' => $this->input->post('address'),
                 'mac_address' => $this->input->post('mac_address'),
+                'serial_number' => strtoupper($this->random_strings(8)),
                 'identity' => $this->input->post('identity'),
                 'version' => $this->input->post('version'),
                 'uptime' => $this->input->post('uptime'),
@@ -184,17 +185,18 @@ class Devices extends CI_Controller {
 
     function setDevice(){
         // function untuk merubah data user hotspot dan menyimpannya ke mikrotik
-        $device = $this->devices->getDevice(array('serial_number' => $this->input->post('serial')));
+        $device = $this->devices->getDevice(array('id' => $this->input->post('id')));
         if($device['platform'] == 'MikroTik'){
             $user = $this->devices->getUserRouter(array('id' => '2222'));
             $data = array(
+                'id' => $this->input->post('id'),
                 'identity' => $this->input->post('identity'),
                 'serial_number' => $this->input->post('serial'),
                 'address' => $this->input->post('address'),
                 'id_device' => $this->input->post('masterdevice'),
                 'id_location' => $this->input->post('location')  
             );
-            if($data['identity'] != $device['identity']){
+            if($device['status'] == 'Connected' && ($data['identity'] != $device['identity'])){
                 try{
                     $api = $this->routerosapi;
                     $api->port = 8728;
@@ -216,15 +218,16 @@ class Devices extends CI_Controller {
                         );
                         $this->log_event->insertLogActivity($log);
                         $this->devices->setDevice($data);
-                        echo json_encode(array("status" => TRUE, "identity" => $write));
+                        echo json_encode(array("status" => TRUE, "msg" => 'identity, another data has been changed'));
                     }else{
-                        echo json_encode(array("status" => FALSE, "data" => $device));
+                        echo json_encode(array("status" => FALSE, "error" => 'connect to this device'));
                     }    
                 }catch(exeption $e){
                     echo json_encode(array("status" => FALSE, "error" => $e));
                 }
             }else{
                 $data = array(
+                    'id' => $this->input->post('id'),
                     'serial_number' => $this->input->post('serial'),
                     'address' => $this->input->post('address'),
                     'id_device' => $this->input->post('masterdevice'),
@@ -239,15 +242,20 @@ class Devices extends CI_Controller {
                 );
                 $this->log_event->insertLogActivity($log);
                 $this->devices->setDevice($data);
-                $this->session->set_flashdata('detail_device', '<div class="alert alert-dismissable alert-success">
+                $this->session->set_flashdata('devices', '<div class="alert alert-dismissable alert-success">
                     <i class="ti ti-check"></i>&nbsp; <strong>Well Done!</strong> Data Device '.$device['identity'].' Berhasil Dirubah
                     <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
                     </div>');
-            
-                echo json_encode(array("status" => TRUE));
+                if($device['serial_number'] != $this->input->post('serial')){
+                    echo json_encode(array("status" => TRUE, "serialChange" => true));
+                }else{
+                    echo json_encode(array("status" => TRUE, "serialChange" => false));
+                }
+                
             }
         }else{
             $data = array(
+                'id' => $this->input->post('id'),
                 'serial_number' => $this->input->post('serial'),
                 'address' => $this->input->post('address'),
                 'id_device' => $this->input->post('masterdevice'),
@@ -670,21 +678,23 @@ class Devices extends CI_Controller {
     function setDefaultConfigMikroTik(){
         $ip = $this->input->post('ip');
         $ssh = new Net_SSH2($ip);
-		if (!$ssh->login('admin', '')) {
-		    exit('Login Failed');
-		}
-		$config = $this->db->query("select * from devices_configuration");
-		$cfg = $config->result_array(); 
-		foreach ($cfg as $key) {
-            if($key['id']!='1'){
-                try {
-                    $ssh->exec($key['script']);
-                } catch (Exception $e) {
-                    echo $e;
+		if(!$ssh->login('admin', '')) {
+            exit('Login Failed');
+            echo json_encode(array("status" => FALSE, "ip" => $ip));
+		}else{
+            $config = $this->db->query("select * from devices_configuration");
+            $cfg = $config->result_array(); 
+            foreach ($cfg as $key) {
+                if($key['id']!='1'){
+                    try {
+                        $ssh->exec($key['script']);
+                    } catch (Exception $e) {
+                        echo $e;
+                    }
                 }
             }
+            echo json_encode(array("status" => TRUE, "ip" => $ip));
         }
-        echo json_encode(array("status" => TRUE, "ip" => $ip));
     }
 
 // UNIFI 
@@ -907,6 +917,14 @@ class Devices extends CI_Controller {
        
         return join('', $ret);
         }
+    
+    
+    function random_strings($length_of_string) { 
+    
+        // md5 the timestamps and returns substring 
+        // of specified length 
+        return substr(md5(time()), 0, $length_of_string); 
+    } 
 }
 
 /* End of file Devices.php */

@@ -9,7 +9,8 @@ class Devices_Model extends CI_Model {
     }
 
     function setDevice($data){
-        $this->db->where('serial_number', $data['serial_number']);
+        // $this->db->where('serial_number', $data['serial_number']);
+        $this->db->where('id', $data['id']);
         $this->db->update('devices', $data);
     }
 
