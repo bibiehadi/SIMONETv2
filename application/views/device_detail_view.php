@@ -73,9 +73,9 @@
                                                 </div>
                                                 <?php if($this->session->userdata('role')==='adm'){    ?>
                                                 <div class="col-md-6">
-                                                    <!-- <?php if($status == 'Connected' && ($platform == 'MikroTik' || $platform == 'UniFi')){?>
+                                                    <?php if($status == 'Connected' && ($platform == 'MikroTik' || $platform == 'UniFi')){?>
                                                         <a class="btn btn-warning pull-right" data-aksi="reboot" href="javascript:;" style="margin: 10px 20px 10px 0px">Reboot</a>
-                                                    <? }?> -->
+                                                    <? }?>
                                                     <a href="#tab-edit" role="tab" data-toggle="tab" class="btn btn-primary pull-right" style="margin: 10px 10px 10px 0px"><i class="fa fa-pencil-square-o"></i></a>
                                                     <a class="btn btn-danger pull-right" data-aksi="remove" href="javascript:;" style="margin: 10px"><i class="fa fa-trash"></i></a>
                                                 </div>
@@ -580,6 +580,9 @@
             },'json').fail(function(){
                 alert('error reboot this device');
             })
+        }else{ 
+            // loading.modal('hide');
+            $.skylo('end');
         }
     }
 
@@ -625,12 +628,17 @@
                     loading.modal('hide');
                     location.href='<?php echo site_url('devices')?>/';
                     $.skylo('end');
-                }
-                else{ alert('error delete this data');
+                }else{ 
+                    alert('error delete this data');
+                    loading.modal('hide');
+                    $.skylo('end');
                 }
             },'json').fail(function(){
                 alert('error delete this data');
             })
+        }else{ 
+            loading.modal('hide');
+            $.skylo('end');
         }
     }
 

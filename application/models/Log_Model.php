@@ -6,7 +6,7 @@ class Log_Model extends CI_Model {
 
     function getLog(){
         $this->db->order_by('DeviceReportedTime', 'desc');
-        $this->db->limit(20000);
+        $this->db->limit(2000);
         if($data = $this->db->get('SystemEvents')){
 			return $data->result_array();
 		}else{

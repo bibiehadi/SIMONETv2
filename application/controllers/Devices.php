@@ -52,6 +52,17 @@ class Devices extends CI_Controller {
         
     }
 
+    function getDevicesByPlatform(){
+        $data = $this->devices->getdevicesby(array('platform' => 'MikroTik'));
+        foreach($data as $device){
+            $r['id'] = $device['id'];
+            $r['text'] = $device['identity'];
+            $devices[] = $r;
+        }
+        echo json_encode($devices);
+
+    }
+
     function devicesJSON(){
         // funtion untuk mengget semua data user profile dari database
         $data = $this->devices->getdevices();
@@ -126,7 +137,7 @@ class Devices extends CI_Controller {
             $data = array(
                 'address' => $this->input->post('address'),
                 'mac_address' => $this->input->post('mac_address'),
-                'serial_number' => strtoupper($this->random_strings(8)),
+                'serial_number' => strtoupper($this->random_strings(3)),
                 'identity' => $this->input->post('identity'),
                 'version' => $this->input->post('version'),
                 'uptime' => $this->input->post('uptime'),

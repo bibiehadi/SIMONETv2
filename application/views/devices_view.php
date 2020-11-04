@@ -220,12 +220,8 @@
                     <div class="form-group">
                         <label class="col-sm-2 control-label">Devices</label>
                         <div class="col-sm-8">
-                            <select name="platform" id="selector_platform" class="form-control">
-                                <option value="">--- Select ---</option>
-                                <option value="MikroTik">MikroTik</option>
-                                <option value="MikroTik Switch">MikroTik Switch</option>
-                                <option value="UniFi">UniFi</option>
-                                <option value="Other">Other</option>
+                            <select name="configdevice" id="configdevice" class="select-device-ajax" multiple="multiple">
+                                <option value="">Select here</option>
                             </select>
                         </div>
                     </div>
@@ -248,6 +244,27 @@
 
 
 <script type="text/javascript">
+    $(document).ready(function(){
+        $('.select-device-ajax').select2({
+            width: '100%',
+            dropdownParent: $("#modal_config"),
+            minimumSelectionLength: 1,
+            allowClear: true,
+            ajax: {
+                url: '<?php echo site_url('devices/getDevicesByPlatform')?>',
+                dataType: 'json',
+                processResults: function (data, page) {
+                    return {
+                        results: data
+                    };
+                },
+            }
+        });
+        $(".select-device-ajax").each(function() {
+            $(this).siblings(".select2-container").css('border', '1px solid #e3e3e3;');
+        });
+    })
+
     table = $('#tb_devices').DataTable({
         responsive : true,
         pageLength : 50,

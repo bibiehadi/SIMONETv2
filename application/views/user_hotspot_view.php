@@ -270,8 +270,25 @@
                 if(data.status) 
                 {
                     $('#modal_form').modal('hide');
-                    // syncProfile();
+                    syncProfile();
                     reload_table();
+                    if(save_method == 'add') {
+                        new PNotify({
+                            title: 'Add User',
+                            text: 'Menambahkan User Hotspot Berhasil',
+                            type: 'success',
+                            icon: 'ti ti-user',
+                            styling: 'fontawesome'
+                        });
+                    } else {
+                        new PNotify({
+                            title: 'Edit User',
+                            text: 'Merubah Data User Hotspot Berhasil',
+                            type: 'success',
+                            icon: 'ti ti-user',
+                            styling: 'fontawesome'
+                        });    
+                    }
                 }
                 $('#btnSave').text('save'); 
                 $('#btnSave').attr('disabled',false); 
@@ -287,20 +304,20 @@
 
     function syncProfile(){
         $.skylo('start');
-        // $.ajax({
-        //     url: "<?php echo site_url('hotspot/syncUserHotspot/') ?>",
-        //     type: "POST",
-        //     dataType: "JSON",
-        //     success: function(data){
-        //         reload_table();
-        //         $.skylo('end');
-        //     },
-        //     error: function (jqXHR, textStatus, errorThrown){
-        //         alert('Error!!');
-        //     }
-        // })
-        reload_table();
-        $.skylo('end');
+        $.ajax({
+            url: "<?php echo site_url('hotspot/syncUserHotspot/') ?>",
+            type: "POST",
+            dataType: "JSON",
+            success: function(data){
+                reload_table();
+                $.skylo('end');
+            },
+            error: function (jqXHR, textStatus, errorThrown){
+                alert('Error!!');
+            }
+        })
+        // reload_table();
+        // $.skylo('end');
     }
 
     function deleteUser(id){
@@ -309,6 +326,13 @@
             $.post('<?php echo site_url('hotspot/delUserHotspot/') ?>',data,function(respon){
                 if(respon.status){
                     reload_table();
+                    new PNotify({
+                        title: 'Remove User',
+                        text: 'Menghapus User Hotspot Berhasil',
+                        type: 'warning',
+                        icon: 'ti ti-user',
+                        styling: 'fontawesome'
+                    });
                 }
                 else{ alert('error delete this data');
                 }

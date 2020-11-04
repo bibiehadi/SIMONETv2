@@ -75,6 +75,7 @@ class Hotspot extends CI_Controller {
         // funtion untuk menyimpan data user hotspot ke mikrotik
         $pass = $this->hotspot->pass("'".$this->input->post('password')."'");
         $data = array(
+            // 'id' => strtoupper($this->random_strings(8)),
             'name' => $this->input->post('name'),
             'password' => $pass['password'],
             'profile' => $this->input->post('profile')
@@ -90,7 +91,7 @@ class Hotspot extends CI_Controller {
 			    $api->write('=profile='.$data['profile'] );
                 $write = $api->read();
                 $api->disconnect();
-                $this->hotspot->adduser($data);
+                // $this->hotspot->addUserHotspot($data);
                 echo json_encode(array("status" => TRUE, "data" => $data));
             }else{
                 echo json_encode(array("status" => FALSE));
@@ -335,7 +336,6 @@ class Hotspot extends CI_Controller {
 
     function userActiveJSON(){
         // function untuk mengget semua data user active dari Mikrotik
-        
         try{
             $api = $this->routerosapi;
             $user = $this->devices->getUserRouter(array('id' => '1111'));
@@ -383,6 +383,12 @@ class Hotspot extends CI_Controller {
             echo $e;
         }
     }
+    function random_strings($length_of_string) { 
+    
+        // md5 the timestamps and returns substring 
+        // of specified length 
+        return substr(md5(time()), 0, $length_of_string); 
+    } 
 }
 
 /* End of file Hotspot.php */
