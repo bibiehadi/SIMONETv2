@@ -299,6 +299,23 @@
                 if(data.status) 
                 {
                     $('#modal_form').modal('hide');
+                    if(save_method == 'add') {
+                        new PNotify({
+                            title: 'Add User Profile',
+                            text: 'Menambahkan User Profile Hotspot Berhasil',
+                            type: 'success',
+                            icon: 'ti ti-user',
+                            styling: 'fontawesome'
+                        });
+                    } else {
+                        new PNotify({
+                            title: 'Edit User',
+                            text: 'Merubah Data User Profile Hotspot Berhasil',
+                            type: 'success',
+                            icon: 'ti ti-user',
+                            styling: 'fontawesome'
+                        });    
+                    }
                     syncProfile();
                 }
                 $('#btnSave').text('save'); 
@@ -318,7 +335,15 @@
         if(confirm('Anda yakin ingin menghapus data ini ?')){
             $.post('<?php echo site_url('hotspot/delUserProfile/') ?>',data,function(respon){
                 if(respon.status){
+                    new PNotify({
+                        title: 'Remove User Profile',
+                        text: 'Menghapus User Profile Hotspot Berhasil',
+                        type: 'warning',
+                        icon: 'ti ti-user',
+                        styling: 'fontawesome'
+                    });
                     reload_table();
+                    
                 }
                 else{ alert('error delete this data');
                 }

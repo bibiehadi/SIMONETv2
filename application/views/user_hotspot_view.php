@@ -309,6 +309,13 @@
             type: "POST",
             dataType: "JSON",
             success: function(data){
+                new PNotify({
+                    title: 'Sync Data User Hotspot',
+                    text: 'Sync Data User Hotspot Berhasil',
+                    type: 'success',
+                    icon: 'ti ti-user',
+                    styling: 'fontawesome'
+                }); 
                 reload_table();
                 $.skylo('end');
             },
