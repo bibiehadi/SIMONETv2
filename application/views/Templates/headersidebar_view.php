@@ -155,6 +155,7 @@
 									<li><a href="<?php echo site_url('topology'); ?>"><i class="ti ti-map"></i><span>Topology</span></a></li>	
 									<li><a href="javascript:;"><i class="ti ti-stats-up" style="bold"></i><span>Statistic</span></a>
                                         <ul class="acc-menu">
+												<li><a href="<?php echo site_url('statistic/hotspot'); ?>">Hotspot</a></li>
 												<li><a href="<?php echo site_url('statistic/resource'); ?>">Resource</a></li>
 												<li><a href="<?php echo site_url('statistic/bandwidth'); ?>">Bandwidth Usage</a></li>
 												<li><a href="<?php echo site_url('statistic/ping'); ?>">Ping Quality</a></li>

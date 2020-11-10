@@ -348,13 +348,15 @@
 				enabled: true
 			},
 			series: [{
-				name: 'Tx',
-				data: [],
-				marker: {enabled: false}
-			}, {
-				name: 'Rx',
-				data: [],
-				marker: {enabled: false}
+					name: 'Upload',
+					data: [],
+					color: '#3498db',
+					marker: {enabled: false}
+				}, {
+					name: 'Download',
+					data: [],
+					color: '#2ecc71',
+					marker: {enabled: false}
 			}],
 		})
 	}

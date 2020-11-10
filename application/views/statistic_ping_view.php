@@ -340,6 +340,9 @@
 			credits: {
 				enabled: true
 			},
+			credits: {
+				enabled: false
+			},
 			series: [{
 				name: '',
 				data: {x: [], y: [], option: []},

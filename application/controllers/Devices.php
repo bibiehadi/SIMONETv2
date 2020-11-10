@@ -936,6 +936,8 @@ class Devices extends CI_Controller {
         // of specified length 
         return substr(md5(time()), 0, $length_of_string); 
     } 
+
+    
 }
 
 /* End of file Devices.php */

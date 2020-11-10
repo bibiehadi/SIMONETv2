@@ -1,6 +1,6 @@
 <?php 
 defined('BASEPATH') OR exit('No direct script access allowed');
-
+require_once('application/libraries/Client.php');
 class Statistic extends CI_Controller {
 
     public function __construct()
@@ -10,6 +10,8 @@ class Statistic extends CI_Controller {
             redirect(site_url('login'),'refresh');
         }
         $this->load->model('Statistic_Model','statistic');
+        $this->load->model('Devices_Model','devices');
+        $this->load->model('Hotspot_Model','hotspot');
     }
 
     public function index(){
@@ -26,6 +28,11 @@ class Statistic extends CI_Controller {
 
     public function ping(){
         $this->load->view('statistic_ping_view');
+    }
+
+    public function hotspot(){
+        // $data['userCount'] = $this->getUserCount();
+        $this->load->view('statistic_hotspot_view');
     }
 
     public function lineGraphInterface()
@@ -137,6 +144,193 @@ class Statistic extends CI_Controller {
         print_r($this->statistic->getStatisticResource(array('first_date' => '2020-07-12', 'last_date' => '2020-07-13')));
 
     }
+
+    function getUserCountAPJSON(){
+        $user = $this->devices->getUserRouter(array('id' => '3333'));
+        $unifi_connection = new UniFi_API\Client($user['username'], $user['password'], 'https://10.10.10.115:8443', 'default', '5.10.25');
+        // $set_debug_mode   = $unifi_connection->set_debug(true);
+        $loginresults     = $unifi_connection->login();
+        $aps_array        = $unifi_connection->list_devices();
+
+/**
+ * output the results in HTML format
+ */     $user_tot = 0;
+        header('Content-Type: text/html; charset=utf-8');
+        foreach ($aps_array as $ap) {
+            if ($ap->type === 'uap') {
+                $aps['name'] = $ap->name;
+                $aps['y'] = $ap->num_sta;
+                $user_tot += $ap->num_sta;
+                if($ap->num_sta > 3){
+                    $stat_ap[] =$aps;
+                }
+                // echo '<b>AP name:</b>' . $ap->name . ' <b>model:</b>' . $ap->model . ' <b># connected clients:</b>' . $ap->num_sta . '<br>';
+            }
+        }
+        // return $stat_ap;
+        // echo "<pre>";
+        $output = array(
+            "draw" => $this->input->post('draw'),
+            "data" => $stat_ap,
+            "total" => $user_tot
+        );
+        echo json_encode($output);
+
+        // echo json_encode($stat_ap);    
+        // krsort($stat_ap[]['y']);
+        // echo "<pre>";
+        // print_r($stat_ap);
+        // echo json_encode($user_tot);
+    }
+
+    function getUserCount(){
+        // function untuk menghitung user yang terhubung ke jaringan
+        try{
+            $api = $this->routerosapi;
+            $user = $this->devices->getUserRouter(array('id' => '1111'));
+            $api->port = $user['port'];
+            if($api->connect("10.10.10.1",$user['username'],$user['password'])){
+                $api->write('/ip/hotspot/host/print');
+                $read = $api->read();
+                $api->disconnect();      
+                return count($read);       
+            }
+        }catch(Exeption $error){
+            return $error;
+        }
+    }
+
+    function getUserCountWLAN(){
+        $user = $this->devices->getUserRouter(array('id' => '3333'));
+        $unifi_connection = new UniFi_API\Client($user['username'], $user['password'], 'https://10.10.10.115:8443', 'default', '5.10.25');
+        // $set_debug_mode   = $unifi_connection->set_debug(true);
+        $loginresults     = $unifi_connection->login();
+        $aps_array        = $unifi_connection->list_devices();
+
+        /**
+         * output the results in HTML format
+         */     
+        $user_tot = 0;
+        // header('Content-Type: text/html; charset=utf-8');
+        foreach ($aps_array as $ap) {
+            if ($ap->type === 'uap') {
+                $user_tot += $ap->num_sta;
+            }
+        }
+        return $user_tot;
+    }
+
+    function getUserCountJSON(){
+        $wlan = $this->getUserCountWLAN();
+        $lan = $this->getUserCount()-$wlan;
+        $tot[0] = array('name' => 'LAN', 'y' => $lan);
+        $tot[1] = array('name' => 'WLAN', 'y' => $wlan);
+        echo json_encode(array('data' => $tot, 'total' => $wlan + $lan));
+    }
+
+    function getUserCountSSIDJSON(){
+        $user = $this->devices->getUserRouter(array('id' => '3333'));
+        $unifi_connection = new UniFi_API\Client($user['username'], $user['password'], 'https://10.10.10.115:8443', 'default', '5.10.25');
+        // $set_debug_mode   = $unifi_connection->set_debug(true);
+        $loginresults     = $unifi_connection->login();
+        $aps_array        = $unifi_connection->list_clients();
+
+        /**
+         * output the results in HTML format
+         */     
+        $staf_tot = 0;
+        $stiki_tot = 0;
+        $other = 0;
+        $tot = 0;
+        //         header('Content-Type: text/html; charset=utf-8');
+        foreach ($aps_array as $ap) {
+            if (isset($ap->essid)) {
+                if($ap->essid == 'staf@STIKI.wifi'){
+                    $staf_tot ++;
+                }elseif($ap->essid == '@STIKI.wifi'){
+                    $stiki_tot++;
+                }else{
+                    $other++;
+                }
+            }
+        }
+        // return $stat_ap;
+        // echo "<pre>";
+        $ssid[0] = array('name' => 'staf@STIKI.wifi', 'y' => $staf_tot);
+        $ssid[1] = array('name' => '@STIKI.wifi', 'y' => $stiki_tot);
+        $ssid[2] = array('name' => 'other', 'y' => $other);
+        $output = array(
+            "draw" => $this->input->post('draw'),
+            "data" => $ssid,
+            "total" => $staf_tot + $stiki_tot + $other
+        );
+        echo json_encode($output);    
+        // krsort($ssid);
+        // echo json_encode($ssid);    
+    }
+
+    function getUserCountRadioJSON(){
+        $user = $this->devices->getUserRouter(array('id' => '3333'));
+        $unifi_connection = new UniFi_API\Client($user['username'], $user['password'], 'https://10.10.10.115:8443', 'default', '5.10.25');
+        // $set_debug_mode   = $unifi_connection->set_debug(true);
+        $loginresults     = $unifi_connection->login();
+        $aps_array        = $unifi_connection->list_clients();
+
+        /**
+         * output the results in HTML format
+         */     
+        $na = 0;
+        $ng = 0;
+        $tot = 0;
+        //         header('Content-Type: text/html; charset=utf-8');
+        foreach ($aps_array as $ap) {
+            if (isset($ap->radio)) {
+                if($ap->radio == 'na'){
+                    $na++;
+                }elseif($ap->radio == 'ng'){
+                    $ng++;
+                }
+            }
+        }
+        $radio[0] = array('name' => '5ghz', 'y' => $na);
+        $radio[1] = array('name' => '2.4ghz', 'y' => $ng);
+        $output = array(
+            "draw" => $this->input->post('draw'),
+            "data" => $radio,
+            "total" => $na + $ng
+        );
+        echo json_encode($output);
+        // print_r($aps_array);
+    }
+
+    function getMostActiveClient(){
+        $clients = $this->hotspot->getMostActiveClient();
+        foreach($clients as $clie){
+            $clie['bytes_in'] = byte_format($clie['bytes_in']);
+            $clie['bytes_out'] = byte_format($clie['bytes_out']);
+            $client[] = $clie;
+        }
+        $output = array(
+            "draw" => $this->input->post('draw'),
+            "data" => $client
+        );
+        echo json_encode($output);   
+    }
+
+    function getMostActiveProfile(){
+        $profiles = $this->hotspot->getMostActiveProfile();
+        foreach($profiles as $pro){
+            $pro['download'] = byte_format($pro['download']);
+            $pro['upload'] = byte_format($pro['upload']);
+            $profile[] = $pro;
+        }
+        $output = array(
+            "draw" => $this->input->post('draw'),
+            "data" => $profile
+        );
+        echo json_encode($output);
+    }
+    
 }
 
 /* End of file Statistic.php */

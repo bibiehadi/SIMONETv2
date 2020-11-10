@@ -318,15 +318,17 @@
 				shared: true
 			},
 			credits: {
-				enabled: true
+				enabled: false
 			},
 			series: [{
-				name: 'Tx',
+				name: 'Upload',
 				data: [],
+				color: '#3498db',
 				marker: {enabled: false}
 			}, {
-				name: 'Rx',
+				name: 'Download',
 				data: [],
+				color: '#2ecc71',
 				marker: {enabled: false}
 			}],
 		})

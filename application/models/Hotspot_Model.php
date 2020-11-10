@@ -104,6 +104,15 @@ class Hotspot_Model extends CI_Model {
             return false;
         }
     }
+    function getMostActiveClient(){
+        $query = 'SELECT * FROM user_hotspot ORDER BY bytes_out DESC LIMIT 4';
+        return $this->db->query($query)->result_array();
+    }
+
+    function getMostActiveProfile(){
+        $query = 'SELECT `profile`, SUM(bytes_in) as upload, SUM(bytes_out) as download FROM user_hotspot GROUP BY `profile` ORDER BY download DESC LIMIT 4';
+        return $this->db->query($query)->result_array();
+    }
 }
 
 /* End of file Hotspot_Model.php */
