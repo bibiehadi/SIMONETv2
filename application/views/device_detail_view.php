@@ -187,6 +187,7 @@
                                                             <label class="col-sm-2 control-label">Master Devices</label>
                                                             <div class="col-sm-8">
                                                                 <select name="masterdevice" id="masterdevice" class="select-device">
+                                                                    <option value="">--- Select ---</option>
                                                                     <?php foreach ($list_devices as $row) {
                                                                     if($row['serial_number'] == $id_device){?>
                                                                         <option selected value="<?php echo $row['serial_number']; ?> "><?php echo $row['identity'];?></option>

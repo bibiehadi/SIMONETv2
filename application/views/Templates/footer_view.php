@@ -110,7 +110,7 @@
                                     <select name="roleAdmin" class="form-control">
                                             <option value="">--- Select ---</option>
                                             <option value="adm">Administrator</option>
-                                            <option value="read">Read Only</option>
+                                            <option value="read">Asisten</option>
                                         </select>
                                     </div>
                                 </div>

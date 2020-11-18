@@ -243,6 +243,7 @@
 			  console.error("Status: " + textStatus + " request: " + XMLHttpRequest); console.error("Error: " + errorThrown); 
 			}       
 		});
+		
 	}
 
 	function interfaceChart(id,date) { 
